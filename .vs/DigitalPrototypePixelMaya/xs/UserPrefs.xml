@@ -1,16 +1,11 @@
 ﻿<Properties StartupConfiguration="{5AF63DC7-DB4A-D5A3-0A58-16C149F1AEB8}|">
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="dc60366d-e16e-4dcb-ad96-2ba5e629f671" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="6f3953e0-f757-443a-b639-db0334ccc99e" />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/R_Scripts/R_ControllerDropDown.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/R_Scripts/R_ControlSelector.cs">
     <Files>
-      <File FileName="Assets/Printf.cs" />
-      <File FileName="Assets/Scripts/R_Scripts/R_PauseController.cs" />
-      <File FileName="Assets/Scripts/R_Scripts/R_ControllerDropDown.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/R_Scripts/R_ControlSelector.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -19,7 +14,7 @@
             <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
                 <Node name="R_Scripts" expanded="True">
-                  <Node name="R_ControllerDropDown.cs" selected="True" />
+                  <Node name="R_ControlSelector.cs" selected="True" />
                 </Node>
               </Node>
             </Node>
@@ -28,4 +23,7 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MultiItemStartupConfigurations />
 </Properties>
