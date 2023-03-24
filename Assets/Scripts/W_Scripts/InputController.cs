@@ -12,14 +12,7 @@ public class InputController : MonoBehaviour
     [SerializeField] InputAction _cameraInput = null;
     private void Update()
     {
-        if (_inputTouchscreenIsActived == true) 
-        {
-            _joysStickPad.SetActive(true);
-        }
-        if (_inputTouchscreenIsActived == false)
-        {
-            _joysStickPad.SetActive(false);
-        }
+        
     }
     void OnEnable()
     {
@@ -35,6 +28,7 @@ public class InputController : MonoBehaviour
 
     public Vector2 CameraInput() 
     {
+        
         return _cameraInput.ReadValue<Vector2>();
     }
 
@@ -57,6 +51,7 @@ public class InputController : MonoBehaviour
 
             Debug.Log("Entrando a modo screen");
         }
+        else
 
         if(value == 1) 
         {
@@ -65,6 +60,7 @@ public class InputController : MonoBehaviour
             _inputGamepadIsActived = true;
             Debug.Log("Entrando a modo gamepad");
         }
+        else
 
         if (value == 2)
         {

@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] float _cameraSensitivity= 30f;
     [SerializeField] Transform _cameraTransform= null;
     InputController _inputController= null;
+    [SerializeField] Transform _player;
 
     private void Awake()
     {
@@ -22,11 +23,14 @@ public class CameraController : MonoBehaviour
     {
         Vector2 input = _inputController.CameraInput();
 
-        transform.Rotate(Vector3.up * input.x * _cameraSensitivity * Time.deltaTime);
-
-        Vector3 angle = _cameraTransform.eulerAngles;
+        Vector2 angle = _cameraTransform.eulerAngles;
         angle.x += -input.y * _cameraSensitivity * Time.deltaTime;
+        angle.y += input.x * _cameraSensitivity * Time.deltaTime;
+        
+        
 
         _cameraTransform.eulerAngles = angle;
+        _player.Rotate(Vector3.up * input.x * _cameraSensitivity * Time.deltaTime);
+
     }
 }
