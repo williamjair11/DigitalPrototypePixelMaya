@@ -23,14 +23,8 @@ public class CameraController : MonoBehaviour
     {
         Vector2 input = _inputController.CameraInput();
 
-        Vector2 angle = _cameraTransform.eulerAngles;
-        angle.x += -input.y * _cameraSensitivity * Time.deltaTime;
-        angle.y += input.x * _cameraSensitivity * Time.deltaTime;
+        transform.Rotate(Vector3.up * input.x * _cameraSensitivity * Time.deltaTime, Space.World);
+        _cameraTransform.Rotate(Vector3.right * -input.y * _cameraSensitivity * Time.deltaTime, Space.Self);
         
-        
-
-        _cameraTransform.eulerAngles = angle;
-        _player.Rotate(Vector3.up * input.x * _cameraSensitivity * Time.deltaTime);
-
     }
 }
