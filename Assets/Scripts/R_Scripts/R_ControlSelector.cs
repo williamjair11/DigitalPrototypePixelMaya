@@ -6,6 +6,7 @@ public class R_ControlSelector : MonoBehaviour
 {
     public GameObject _PauseCanvas;
     bool _menuIsActivated = false;
+    InputController inputController = new InputController();
 
     private void Awake()
     {
@@ -16,26 +17,27 @@ public class R_ControlSelector : MonoBehaviour
     {
         if (val == 0)
         {
-            Debug.Log("Touch control enabled");
+            inputController.ChangedModeController(value: 0);
+            
         }
         else if (val == 1)
         {
-            Debug.Log("Wireless control enabled");
+            inputController.ChangedModeController(value: 1);
         }
         else if (val == 2)
         {
-            Debug.Log("Hybrid control enabled");
+            inputController.ChangedModeController(value: 2);
         }
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && _menuIsActivated == false)
+        if (Input.GetKeyDown(KeyCode.Escape) && _menuIsActivated == false)
         {
             ShowPause();
             _menuIsActivated = true;
 
         }
-        else if (Input.GetKeyDown(KeyCode.Space) && _menuIsActivated == true)
+        else if (Input.GetKeyDown(KeyCode.Escape) && _menuIsActivated == true)
         {
             QuitPause();
             _menuIsActivated = false;

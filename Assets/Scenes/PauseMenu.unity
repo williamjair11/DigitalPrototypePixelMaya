@@ -468,11 +468,11 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Tactile
+    - m_Text: Touch control
       m_Image: {fileID: 0}
-    - m_Text: Wireless
+    - m_Text: Wireless control
       m_Image: {fileID: 0}
-    - m_Text: Hybrid
+    - m_Text: Wireless control and Google Cardboard
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
