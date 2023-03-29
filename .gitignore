@@ -3,6 +3,8 @@
 # =============== #
 Temp/
 Library/
+Logs/
+UserSettings/
 
 # ===================================== #
 # Visual Studio / MonoDevelop generated #
