@@ -18,6 +18,9 @@ public class PauseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("Keyboard.current");
+        Debug.Log(Keyboard.current);
+        if(Keyboard.current != null)
         if (Keyboard.current[Key.Space].wasPressedThisFrame) 
         {
             _pause.SetActive(true);
