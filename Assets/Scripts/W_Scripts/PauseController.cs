@@ -31,42 +31,7 @@ public class PauseController : MonoBehaviour
     public void ShowPause() 
     {
         _pause.SetActive(true);
-    }
-
-    public void HandleInputData(int val)
-    {
-        if (val == 0)
-        {
-            UpdateController(val);
-        }
-        else if (val == 1)
-        {
-            UpdateController(val);
-        }
-        else if (val == 2)
-        {
-            UpdateController(val);
-        }
-    }
-
-    public void UpdateController(int valor) 
-    {
-        if (valor == 0)
-        {
-            Debug.Log("TouchScreen control enabled");
-            _inputController.ChangedModeController(0);
-        }
-        else if (valor == 1)
-        {
-            Debug.Log("Wireless control enabled");
-            _inputController.ChangedModeController(1);
-        }
-        else if (valor == 2)
-        {
-            Debug.Log("Hybrid control enabled");
-            _inputController.ChangedModeController(2);
-        }
-    }
+    }   
 }
 
 

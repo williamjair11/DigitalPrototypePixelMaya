@@ -10,10 +10,7 @@ public class InputController : MonoBehaviour
 
     [SerializeField] InputAction _moveInput = null;
     [SerializeField] InputAction _cameraInput = null;
-    private void Update()
-    {
-        
-    }
+ 
     void OnEnable()
     {
         _moveInput.Enable();
@@ -68,6 +65,7 @@ public class InputController : MonoBehaviour
             _inputHybridIsActived = true;
             _inputGamepadIsActived = false;
             Debug.Log("Entrando a modo hibryd");
+
         }
     }
 }
