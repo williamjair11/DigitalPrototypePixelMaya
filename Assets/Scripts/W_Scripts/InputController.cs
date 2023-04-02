@@ -3,9 +3,9 @@ using UnityEngine.InputSystem;
 
 public class InputController : MonoBehaviour
 {
-    public bool _inputTouchscreenIsActived;
-    public bool _inputGamepadIsActived;
-    public bool _inputHybridIsActived;
+    public bool _inputTouchscreenIsActived = false;
+    public bool _inputGamepadIsActived = false;
+    public bool _inputHybridIsActived = false;
     public GameObject _joysStickPad;
 
     [SerializeField] InputAction _moveInput = null;
