@@ -9,18 +9,14 @@ public class PauseController : MonoBehaviour
 {
     public GameObject _pause;
     InputController _inputController;
-    void Start()
+    public void Start()
     {
         _pause.SetActive(false);
         _inputController = GetComponent<InputController>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Update()
     {
-        Debug.Log("Keyboard.current");
-        Debug.Log(Keyboard.current);
-        if(Keyboard.current != null)
         if (Keyboard.current[Key.Space].wasPressedThisFrame) 
         {
             _pause.SetActive(true);
@@ -32,9 +28,28 @@ public class PauseController : MonoBehaviour
         _pause.SetActive(false);
     }
 
-    public void GetIndex(int value) 
+    public void ShowPause() 
     {
-        if(value == 0) { _inputController.ChangedModeController(0); }
+        _pause.SetActive(true);
+    }
+
+    public void HandleInputData(int val)
+    {
+        if (val == 0)
+        {
+            _inputController.ChangedModeController(0);
+            Debug.Log("TouchScreen control enabled");
+        }
+        else if (val == 1)
+        {
+            _inputController.ChangedModeController(1);
+            Debug.Log("Wireless control enabled");
+        }
+        else if (val == 2)
+        {
+            _inputController.ChangedModeController(2);
+            Debug.Log("Hybrid control enabled");
+        }
     }
 
 }
