@@ -34,6 +34,10 @@ public class VrModeController : MonoBehaviour
 
     // Main camera from the scene.
     private Camera _mainCamera;
+    public CameraController _cameraController;
+    public InputController _inputController;
+    public PauseController _pauseController;
+    public HudController _hudController;
 
     /// <summary>
     /// Gets a value indicating whether the screen has been touched this frame.
@@ -63,7 +67,12 @@ public class VrModeController : MonoBehaviour
     public void Start()
     {
         // Saves the main camera from the scene.
+        
         _mainCamera = Camera.main;
+        _inputController = new InputController();
+        _pauseController = new PauseController();
+        _hudController = new HudController();
+        
 
         // Configures the app to not shut down the screen and sets the brightness to maximum.
         // Brightness control is expected to work only in iOS, see:
@@ -89,8 +98,8 @@ public class VrModeController : MonoBehaviour
         if (_isVrModeEnabled)
         {
             if (Api.IsCloseButtonPressed)
-            {
-                ExitVR();
+            {               
+                ExitVR();               
             }
 
             if (Api.IsGearButtonPressed)
@@ -103,29 +112,34 @@ public class VrModeController : MonoBehaviour
         else
         {
             // TODO(b/171727815): Add a button to switch to VR mode.
-            if (_isScreenTouched)
-            {
-                EnterVR();
-            }
+            //if (_isScreenTouched)
+            //{
+            //    EnterVR();
+            //}
         }
     }
 
     /// <summary>
     /// Enters VR mode.
     /// </summary>
-    private void EnterVR()
+    public void EnterVR(int val)
     {
-        StartCoroutine(StartXR());
-        if (Api.HasNewDeviceParams())
+        if(val == 2) 
         {
-            Api.ReloadDeviceParams();
-        }
+            Debug.Log("entrando a modo VR");           
+            StartCoroutine(StartXR());           
+            if (Api.HasNewDeviceParams())
+            {
+                Api.ReloadDeviceParams();
+            }
+            
+        }      
     }
 
     /// <summary>
     /// Exits VR mode.
     /// </summary>
-    private void ExitVR()
+    public void ExitVR()
     {
         StopXR();
     }
@@ -149,11 +163,13 @@ public class VrModeController : MonoBehaviour
         }
         else
         {
+            
             Debug.Log("XR initialized.");
 
             Debug.Log("Starting XR...");
             XRGeneralSettings.Instance.Manager.StartSubsystems();
             Debug.Log("XR started.");
+            //desactivedElement();
         }
     }
 
@@ -171,7 +187,18 @@ public class VrModeController : MonoBehaviour
         XRGeneralSettings.Instance.Manager.DeinitializeLoader();
         Debug.Log("XR deinitialized.");
 
-        _mainCamera.ResetAspect();
-        _mainCamera.fieldOfView = _defaultFieldOfView;
+        _cameraController.DefaultCameraState();
+        //_inputController.ShowJoystick();
+        //_hudController.showHud();
+        //_mainCamera.ResetAspect();
+        //_mainCamera.fieldOfView = _defaultFieldOfView;       
     }
+
+    public void desactivedElement() 
+    {
+        _pauseController.HidePause();
+        _hudController.HideHud();
+        _inputController.HideJoystick();
+    }
+
 }

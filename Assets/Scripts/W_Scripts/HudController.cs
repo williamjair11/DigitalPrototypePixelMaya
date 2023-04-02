@@ -5,16 +5,25 @@ using UnityEngine;
 public class HudController : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _pauseCanvas;
+    private GameObject _hudCanvas;
     PauseController _controller;
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void showHud() 
+    {
+        _hudCanvas.SetActive(true);
+    }
+
+    public void HideHud() 
+    {
+        _hudCanvas.SetActive(false);
     }
 }
