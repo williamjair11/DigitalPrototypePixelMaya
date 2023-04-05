@@ -6,7 +6,7 @@ public class R_ControlSelector : MonoBehaviour
 {
     public GameObject _PauseCanvas;
     bool _menuIsActivated = false;
-    InputController _controlSelector;
+    InputController _controlSelector = new InputController();
 
 
     private void Awake()
