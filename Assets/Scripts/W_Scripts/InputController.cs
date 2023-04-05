@@ -58,10 +58,10 @@ public class InputController : MonoBehaviour
         }
         
 
-        //if (value == 2)
-        //{
-            //VrIsActived();
-        //}
+        if (value == 2)
+        {
+            VrIsActived();
+        }
     }
 
     public void TouchScreenIsActived() 

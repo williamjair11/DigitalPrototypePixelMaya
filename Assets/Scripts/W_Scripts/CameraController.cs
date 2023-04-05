@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
     InputController _inputController= null;
     [SerializeField] Transform _player;
 
-    private quaternion DEFAULT_CAMERA;
+    public quaternion DEFAULT_CAMERA;
     
 
     private void Awake()

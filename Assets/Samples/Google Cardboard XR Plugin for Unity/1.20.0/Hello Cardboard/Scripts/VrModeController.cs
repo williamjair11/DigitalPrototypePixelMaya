@@ -18,6 +18,7 @@
 
 using System.Collections;
 using Google.XR.Cardboard;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Management;
@@ -34,10 +35,12 @@ public class VrModeController : MonoBehaviour
 
     // Main camera from the scene.
     private Camera _mainCamera;
+    public Transform _cameraTransform;
+    private quaternion DEFAULT_CAMERA;
     public CameraController _cameraController;
-    public InputController _inputController;
-    public PauseController _pauseController;
-    public HudController _hudController;
+    public GameObject _pauseCanvas;
+    public GameObject _hudCanvas;
+    public GameObject _joystickCanvas;
 
     /// <summary>
     /// Gets a value indicating whether the screen has been touched this frame.
@@ -69,10 +72,8 @@ public class VrModeController : MonoBehaviour
         // Saves the main camera from the scene.
         
         _mainCamera = Camera.main;
-        _inputController = new InputController();
-        _pauseController = new PauseController();
-        _hudController = new HudController();
-        
+        _cameraController = new CameraController();
+        DEFAULT_CAMERA = _cameraController.DEFAULT_CAMERA;
 
         // Configures the app to not shut down the screen and sets the brightness to maximum.
         // Brightness control is expected to work only in iOS, see:
@@ -126,13 +127,14 @@ public class VrModeController : MonoBehaviour
     {
         if(val == 2) 
         {
-            Debug.Log("entrando a modo VR");           
+            Debug.Log("entrando a modo VR");
+            
             StartCoroutine(StartXR());           
             if (Api.HasNewDeviceParams())
             {
                 Api.ReloadDeviceParams();
             }
-            
+            desactivedElement();
         }      
     }
 
@@ -169,7 +171,7 @@ public class VrModeController : MonoBehaviour
             Debug.Log("Starting XR...");
             XRGeneralSettings.Instance.Manager.StartSubsystems();
             Debug.Log("XR started.");
-            //desactivedElement();
+            
         }
     }
 
@@ -179,6 +181,7 @@ public class VrModeController : MonoBehaviour
     /// </summary>
     private void StopXR()
     {
+        
         Debug.Log("Stopping XR...");
         XRGeneralSettings.Instance.Manager.StopSubsystems();
         Debug.Log("XR stopped.");
@@ -187,18 +190,24 @@ public class VrModeController : MonoBehaviour
         XRGeneralSettings.Instance.Manager.DeinitializeLoader();
         Debug.Log("XR deinitialized.");
 
-        _cameraController.DefaultCameraState();
-        //_inputController.ShowJoystick();
-        //_hudController.showHud();
+        _cameraTransform.rotation = DEFAULT_CAMERA;
+        activatedElement();
         //_mainCamera.ResetAspect();
         //_mainCamera.fieldOfView = _defaultFieldOfView;       
     }
 
     public void desactivedElement() 
     {
-        _pauseController.HidePause();
-        _hudController.HideHud();
-        _inputController.HideJoystick();
+        _pauseCanvas.SetActive(false);
+        _hudCanvas.SetActive(false);
+        _joystickCanvas.SetActive(false);
+    }
+
+    public void activatedElement() 
+    {
+        _pauseCanvas.SetActive(true);
+        _hudCanvas.SetActive(true);
+        _joystickCanvas.SetActive(true);
     }
 
 }
