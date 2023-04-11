@@ -18,8 +18,10 @@
 
 using System.Collections;
 using Google.XR.Cardboard;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR;
 using UnityEngine.XR.Management;
 
@@ -41,11 +43,14 @@ public class VrModeController : MonoBehaviour
     public GameObject _pauseCanvas;
     public GameObject _hudCanvas;
     public GameObject _joystickCanvas;
+    private int _modeController=0;
+    [SerializeField]
+    private TMP_Dropdown _dropdown;
 
     /// <summary>
     /// Gets a value indicating whether the screen has been touched this frame.
     /// </summary>
-    private bool _isScreenTouched
+    public bool _isScreenTouched
     {
         get
         {
@@ -56,7 +61,7 @@ public class VrModeController : MonoBehaviour
     /// <summary>
     /// Gets a value indicating whether the VR mode is enabled.
     /// </summary>
-    private bool _isVrModeEnabled
+    public bool _isVrModeEnabled
     {
         get
         {
@@ -154,7 +159,7 @@ public class VrModeController : MonoBehaviour
     /// <returns>
     /// Returns result value of <c>InitializeLoader</c> method from the XR General Settings Manager.
     /// </returns>
-    private IEnumerator StartXR()
+    public IEnumerator StartXR()
     {
         Debug.Log("Initializing XR...");
         yield return XRGeneralSettings.Instance.Manager.InitializeLoader();
@@ -179,7 +184,7 @@ public class VrModeController : MonoBehaviour
     /// Stops and deinitializes the Cardboard XR plugin.
     /// See https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html.
     /// </summary>
-    private void StopXR()
+    public void StopXR()
     {
         
         Debug.Log("Stopping XR...");
@@ -192,6 +197,7 @@ public class VrModeController : MonoBehaviour
 
         _cameraTransform.rotation = DEFAULT_CAMERA;
         activatedElement();
+
         //_mainCamera.ResetAspect();
         //_mainCamera.fieldOfView = _defaultFieldOfView;       
     }
@@ -206,6 +212,7 @@ public class VrModeController : MonoBehaviour
     public void activatedElement() 
     {
         _pauseCanvas.SetActive(true);
+        _dropdown.value = 0;
         _hudCanvas.SetActive(true);
         _joystickCanvas.SetActive(true);
     }

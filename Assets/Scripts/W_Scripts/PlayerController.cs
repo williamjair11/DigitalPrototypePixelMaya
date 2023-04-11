@@ -6,10 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float _velocitySpeed = 5;
-    private float z;
-    private float x;
-    private float y;
-    public Vector3 _lastPlayerPosition;
+    private Vector3 _lastPlayerPosition;
     InputController _inputcontroller= null;
 
     private void Awake()
