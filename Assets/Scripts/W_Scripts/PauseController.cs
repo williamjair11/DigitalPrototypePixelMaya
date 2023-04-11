@@ -9,14 +9,13 @@ public class PauseController : MonoBehaviour
 {
     public GameObject _pause;
     InputController _inputController;
-    void Start()
+    public void Start()
     {
         _pause.SetActive(false);
         _inputController = GetComponent<InputController>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Update()
     {
         if (Keyboard.current[Key.Space].wasPressedThisFrame) 
         {
@@ -29,9 +28,10 @@ public class PauseController : MonoBehaviour
         _pause.SetActive(false);
     }
 
-    public void GetIndex(int value) 
+    public void ShowPause() 
     {
-        if(value == 0) { _inputController.ChangedModeController(0); }
-    }
-
+        _pause.SetActive(true);
+    }   
 }
+
+

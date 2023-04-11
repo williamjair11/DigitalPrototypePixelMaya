@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(InputController))]
 public class CameraController : MonoBehaviour
@@ -11,26 +13,29 @@ public class CameraController : MonoBehaviour
     InputController _inputController= null;
     [SerializeField] Transform _player;
 
+    public quaternion DEFAULT_CAMERA;
+    
+
     private void Awake()
     {
         _inputController = GetComponent<InputController>();
+        DEFAULT_CAMERA = transform.rotation;
     }
     void Update()
     {
         MoveCamera();
+        
     }
     void MoveCamera() 
     {
         Vector2 input = _inputController.CameraInput();
 
-        Vector2 angle = _cameraTransform.eulerAngles;
-        angle.x += -input.y * _cameraSensitivity * Time.deltaTime;
-        angle.y += input.x * _cameraSensitivity * Time.deltaTime;
-        
-        
+        transform.Rotate(Vector3.up * input.x * _cameraSensitivity * Time.deltaTime, Space.World);
+        _cameraTransform.Rotate(Vector3.right * -input.y * _cameraSensitivity * Time.deltaTime, Space.Self);      
+    }
 
-        _cameraTransform.eulerAngles = angle;
-        _player.Rotate(Vector3.up * input.x * _cameraSensitivity * Time.deltaTime);
-
+    public void DefaultCameraState() 
+    {
+        _cameraTransform.rotation = (DEFAULT_CAMERA);        
     }
 }
