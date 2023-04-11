@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,13 +10,15 @@ public class InputController : MonoBehaviour
 
     public GameObject _joysStickPad;
     VrModeController _vrModeController;
+   
 
     [SerializeField] InputAction _moveInput = null;
     [SerializeField] InputAction _cameraInput = null;
 
+
     private void Start()
     {
-        _vrModeController = new VrModeController();
+        _vrModeController = new VrModeController();     
     }
     void OnEnable()
     {
@@ -30,8 +33,7 @@ public class InputController : MonoBehaviour
     }
 
     public Vector2 CameraInput() 
-    {
-        
+    {     
         return _cameraInput.ReadValue<Vector2>();
     }
 
@@ -43,9 +45,8 @@ public class InputController : MonoBehaviour
     public void ChangedModeController(int value) 
     {
         //Value 0 = Touchscreen mode controller
-        //Value 1 = Gamepad mode controller
-        //Value 2 = Hibryd mode controller
-
+        //Value 1 = Gamepad mode controller      
+        
         if (value == 0) 
         {
             TouchScreenIsActived();
@@ -55,20 +56,12 @@ public class InputController : MonoBehaviour
         if(value == 1) 
         {
             GamepadIsActived();    
-        }
-        
-
-        if (value == 2)
-        {
-            VrIsActived();
-        }
+        }       
     }
 
     public void TouchScreenIsActived() 
     {
         _inputTouchscreenIsActived = true;
-        _inputHybridIsActived = false;
-        _inputGamepadIsActived = false;
       
         _joysStickPad.SetActive(true);
 
@@ -77,8 +70,6 @@ public class InputController : MonoBehaviour
 
     public void GamepadIsActived() 
     {
-        _inputTouchscreenIsActived = false;
-        _inputHybridIsActived = false;
         _inputGamepadIsActived = true;
 
         _joysStickPad.SetActive(false);
@@ -88,9 +79,7 @@ public class InputController : MonoBehaviour
 
     public void VrIsActived() 
     {
-        _inputTouchscreenIsActived = false;
         _inputHybridIsActived = true;
-        _inputGamepadIsActived = false;
      
         _joysStickPad.SetActive(false);
 

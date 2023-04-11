@@ -144,115 +144,143 @@ extern void VrModeController_get__isVrModeEnabled_m8D8D68536E09FF2DEAD3795AF30A5
 extern void VrModeController_Start_m10BF77FE8B825D9640800D5DF7EF791A391FA49B (void);
 // 0x00000042 System.Void VrModeController::Update()
 extern void VrModeController_Update_m43F984D5BF13F2C545B508D93645C1C3AC9262D5 (void);
-// 0x00000043 System.Void VrModeController::EnterVR()
-extern void VrModeController_EnterVR_m5FD79BF38C6AF621AF9992378BC5C3618FDE5EFB (void);
+// 0x00000043 System.Void VrModeController::EnterVR(System.Int32)
+extern void VrModeController_EnterVR_m4A9CC4EDC238A677CC471F971EC20E4464AB0C7A (void);
 // 0x00000044 System.Void VrModeController::ExitVR()
 extern void VrModeController_ExitVR_m1FF25DFE5B3BC15CEDE5C42F56CC399693867397 (void);
 // 0x00000045 System.Collections.IEnumerator VrModeController::StartXR()
 extern void VrModeController_StartXR_m57D80B4AD6B28A7C4E36052563B6227E824CDDB4 (void);
 // 0x00000046 System.Void VrModeController::StopXR()
 extern void VrModeController_StopXR_m0338E8D8035C06E1A46F17C16BBC7933EE9CAA3A (void);
-// 0x00000047 System.Void VrModeController::.ctor()
+// 0x00000047 System.Void VrModeController::desactivedElement()
+extern void VrModeController_desactivedElement_m8C511F9700467AE94393C7B79FB05D45BADB7989 (void);
+// 0x00000048 System.Void VrModeController::activatedElement()
+extern void VrModeController_activatedElement_mAFB8A0B0D9731E2D7E16CD98DD25A23EA7D02957 (void);
+// 0x00000049 System.Void VrModeController::.ctor()
 extern void VrModeController__ctor_m94505259847FB7C54346D7CF02AD85793393D141 (void);
-// 0x00000048 System.Void VrModeController/<StartXR>d__10::.ctor(System.Int32)
-extern void U3CStartXRU3Ed__10__ctor_mDA431E1365B30DA2F64F1E7875CD387F2231E138 (void);
-// 0x00000049 System.Void VrModeController/<StartXR>d__10::System.IDisposable.Dispose()
-extern void U3CStartXRU3Ed__10_System_IDisposable_Dispose_m3DC1735AA5EC0D61A72803BB3B33B9499A373336 (void);
-// 0x0000004A System.Boolean VrModeController/<StartXR>d__10::MoveNext()
-extern void U3CStartXRU3Ed__10_MoveNext_m9A6340456306ACFADD0D458946C82448A862E68B (void);
-// 0x0000004B System.Object VrModeController/<StartXR>d__10::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
-extern void U3CStartXRU3Ed__10_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_mD0B4CE8CBE980FD132B19F40FF2172502B1D0566 (void);
-// 0x0000004C System.Void VrModeController/<StartXR>d__10::System.Collections.IEnumerator.Reset()
-extern void U3CStartXRU3Ed__10_System_Collections_IEnumerator_Reset_mD99AEFDB38CFAC11731CDB371647891816288600 (void);
-// 0x0000004D System.Object VrModeController/<StartXR>d__10::System.Collections.IEnumerator.get_Current()
-extern void U3CStartXRU3Ed__10_System_Collections_IEnumerator_get_Current_mD84D9ACDB0A04C619509BA51590975DB84C30B0F (void);
-// 0x0000004E System.Void R_ControlSelector::Awake()
+// 0x0000004A System.Void VrModeController/<StartXR>d__16::.ctor(System.Int32)
+extern void U3CStartXRU3Ed__16__ctor_m8B313B094C173DB38E35448A53D83FAB32500F92 (void);
+// 0x0000004B System.Void VrModeController/<StartXR>d__16::System.IDisposable.Dispose()
+extern void U3CStartXRU3Ed__16_System_IDisposable_Dispose_m1098DA85462D3E22B5100B561215C913CDF461A5 (void);
+// 0x0000004C System.Boolean VrModeController/<StartXR>d__16::MoveNext()
+extern void U3CStartXRU3Ed__16_MoveNext_m49D3EF514061D94CB902832D4F2ADDE433BDFBF5 (void);
+// 0x0000004D System.Object VrModeController/<StartXR>d__16::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
+extern void U3CStartXRU3Ed__16_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_m02F166B8B66024EA33C8E1CE0C438C6D43533D8A (void);
+// 0x0000004E System.Void VrModeController/<StartXR>d__16::System.Collections.IEnumerator.Reset()
+extern void U3CStartXRU3Ed__16_System_Collections_IEnumerator_Reset_mBE60446A8118A0DA7F83BE872A0C53B03710AD2D (void);
+// 0x0000004F System.Object VrModeController/<StartXR>d__16::System.Collections.IEnumerator.get_Current()
+extern void U3CStartXRU3Ed__16_System_Collections_IEnumerator_get_Current_m8D670C9CDAFAA3299C81EA255E268CC8DF3FF711 (void);
+// 0x00000050 System.Void R_ControlSelector::Awake()
 extern void R_ControlSelector_Awake_m12F8BF50D0DB55E3B2B730ECF0EFF5BF71113B5E (void);
-// 0x0000004F System.Void R_ControlSelector::HandleInputData(System.Int32)
+// 0x00000051 System.Void R_ControlSelector::HandleInputData(System.Int32)
 extern void R_ControlSelector_HandleInputData_mC6FF93E848ACC8C3DA8E3E03F6D748583A64B161 (void);
-// 0x00000050 System.Void R_ControlSelector::Update()
+// 0x00000052 System.Void R_ControlSelector::Update()
 extern void R_ControlSelector_Update_m2782CC15CA3AAFF6BCEA95D559CEEAD9323EA4E8 (void);
-// 0x00000051 System.Void R_ControlSelector::ShowPause()
+// 0x00000053 System.Void R_ControlSelector::ShowPause()
 extern void R_ControlSelector_ShowPause_mACD19C8AFF05C53B28EDE79D9896BFD8103AD280 (void);
-// 0x00000052 System.Void R_ControlSelector::QuitPause()
+// 0x00000054 System.Void R_ControlSelector::QuitPause()
 extern void R_ControlSelector_QuitPause_mC38D041BABA4EB957A58E5824A75FC46DD307A24 (void);
-// 0x00000053 System.Void R_ControlSelector::.ctor()
+// 0x00000055 System.Void R_ControlSelector::.ctor()
 extern void R_ControlSelector__ctor_mEF124EB6F22F3A29482CF7E7E7595B34C38E69E3 (void);
-// 0x00000054 System.Void CameraController::Awake()
+// 0x00000056 System.Void CameraController::Awake()
 extern void CameraController_Awake_mA329C09A8A267A4FABDFE7E67EBA83B1706B04B7 (void);
-// 0x00000055 System.Void CameraController::Update()
+// 0x00000057 System.Void CameraController::Update()
 extern void CameraController_Update_mBCB871B23DBA60444D43AB56D780478BA3D355E6 (void);
-// 0x00000056 System.Void CameraController::MoveCamera()
+// 0x00000058 System.Void CameraController::MoveCamera()
 extern void CameraController_MoveCamera_mA2D1A592AABEDA675940110D79E2FD4A02E8083B (void);
-// 0x00000057 System.Void CameraController::.ctor()
+// 0x00000059 System.Void CameraController::DefaultCameraState()
+extern void CameraController_DefaultCameraState_m6C3A2C998F7104C3C5F5732DDAEC644099CC14D4 (void);
+// 0x0000005A System.Void CameraController::.ctor()
 extern void CameraController__ctor_mE196A6332BDDED632D6F9DB6260E424594598950 (void);
-// 0x00000058 System.Void InputController::Update()
-extern void InputController_Update_mE06250661752A777E36B045F124B6E47E9209BD2 (void);
-// 0x00000059 System.Void InputController::OnEnable()
+// 0x0000005B System.Void HudController::Start()
+extern void HudController_Start_m0B6980441633C36400BA0DD58A1052364A4757C7 (void);
+// 0x0000005C System.Void HudController::Update()
+extern void HudController_Update_m36C3FB0CBD302E7BD326F3150F2655454F6E1BBD (void);
+// 0x0000005D System.Void HudController::showHud()
+extern void HudController_showHud_m4909198AFDDF55EA67936FD0B76104CF3DB41B49 (void);
+// 0x0000005E System.Void HudController::HideHud()
+extern void HudController_HideHud_mCA5D20EA1FF01A794C17B98D12506CF4CA135B6C (void);
+// 0x0000005F System.Void HudController::.ctor()
+extern void HudController__ctor_m50C09E20B7B2A6231919E1070C6D7CB209D0DF66 (void);
+// 0x00000060 System.Void InputController::Start()
+extern void InputController_Start_mC887BF47D15F6F54A07FCE6717EBB85DFBDEE479 (void);
+// 0x00000061 System.Void InputController::OnEnable()
 extern void InputController_OnEnable_m39CAE7C09C4D1656794A555101F8B5B06FE6B559 (void);
-// 0x0000005A System.Void InputController::OnDisable()
+// 0x00000062 System.Void InputController::OnDisable()
 extern void InputController_OnDisable_m4EF72C4AFBA0426E2E9184DCDDB3D8E300660007 (void);
-// 0x0000005B UnityEngine.Vector2 InputController::CameraInput()
+// 0x00000063 UnityEngine.Vector2 InputController::CameraInput()
 extern void InputController_CameraInput_m36CBB0ED6C5E17748B59B7DD7730FB4402430165 (void);
-// 0x0000005C UnityEngine.Vector2 InputController::MoveInput()
+// 0x00000064 UnityEngine.Vector2 InputController::MoveInput()
 extern void InputController_MoveInput_mD29186E2550DDE82B82283B1677CE2D72E5CEEE9 (void);
-// 0x0000005D System.Void InputController::ChangedModeController(System.Int32)
+// 0x00000065 System.Void InputController::ChangedModeController(System.Int32)
 extern void InputController_ChangedModeController_m6FCDE94C2C0072B8D304D814BDCF7D6BD80C6F6A (void);
-// 0x0000005E System.Void InputController::.ctor()
+// 0x00000066 System.Void InputController::TouchScreenIsActived()
+extern void InputController_TouchScreenIsActived_m72A28803ED7EDAF2FEBFDB6320A144DDD2D7902A (void);
+// 0x00000067 System.Void InputController::GamepadIsActived()
+extern void InputController_GamepadIsActived_m182E92A311B9E445464694D62188740BA8818506 (void);
+// 0x00000068 System.Void InputController::VrIsActived()
+extern void InputController_VrIsActived_mD1B63519D3D9D2359852C93BC6C55BB0EFB9153F (void);
+// 0x00000069 System.Void InputController::ShowJoystick()
+extern void InputController_ShowJoystick_mC5B8E05C195A24C835A14EF0474A20D1A3A1A07C (void);
+// 0x0000006A System.Void InputController::HideJoystick()
+extern void InputController_HideJoystick_m9C4DC335A87350ABD6F34AC7A4BE43BB2A04076E (void);
+// 0x0000006B System.Void InputController::.ctor()
 extern void InputController__ctor_m0EDBE66635C62BD8D770DC8E9C8D90BECD52A00D (void);
-// 0x0000005F System.Void PauseController::Start()
+// 0x0000006C System.Void PauseController::Start()
 extern void PauseController_Start_m3D3B4E1280B1678333974DB866CF0454B3CF12E8 (void);
-// 0x00000060 System.Void PauseController::Update()
+// 0x0000006D System.Void PauseController::Update()
 extern void PauseController_Update_mC48C8E00C7C145F44D1198E8E3DF664473379B5B (void);
-// 0x00000061 System.Void PauseController::HidePause()
+// 0x0000006E System.Void PauseController::HidePause()
 extern void PauseController_HidePause_m7C0CDC9D095015EDDEFF80CBBD9E8CDE8BB17B10 (void);
-// 0x00000062 System.Void PauseController::GetIndex(System.Int32)
-extern void PauseController_GetIndex_m0A37120E187F97227F6709F593741FBA154267B4 (void);
-// 0x00000063 System.Void PauseController::.ctor()
+// 0x0000006F System.Void PauseController::ShowPause()
+extern void PauseController_ShowPause_m716081F7EBA45EA698D2BF8A14ACDB5C84B9F275 (void);
+// 0x00000070 System.Void PauseController::.ctor()
 extern void PauseController__ctor_m4FEA9F3594D37A43C2CA53CB8D04D6309CE385C8 (void);
-// 0x00000064 System.Void PlayerController::Awake()
+// 0x00000071 System.Void PlayerController::Awake()
 extern void PlayerController_Awake_m82639826DE098DC447C79B43900C5F2A630B3DC3 (void);
-// 0x00000065 System.Void PlayerController::Update()
+// 0x00000072 System.Void PlayerController::Update()
 extern void PlayerController_Update_m1F4051EB5BCBCCE5EEE2E3E49B7E278C3B14EC33 (void);
-// 0x00000066 System.Void PlayerController::Move()
+// 0x00000073 System.Void PlayerController::Move()
 extern void PlayerController_Move_m68BFC8B882D42955A212B23E7D1DDD56CC87DB09 (void);
-// 0x00000067 System.Void PlayerController::.ctor()
+// 0x00000074 UnityEngine.Vector3 PlayerController::savePosition()
+extern void PlayerController_savePosition_m483BFB1B21C386F59D3B3FE41493BC8FAF541256 (void);
+// 0x00000075 System.Void PlayerController::.ctor()
 extern void PlayerController__ctor_mDDAB7C7D82E1A5B3E6C197B1AB9D653DFE554F33 (void);
-// 0x00000068 System.Void UnityTemplateProjects.SimpleCameraController::Start()
+// 0x00000076 System.Void UnityTemplateProjects.SimpleCameraController::Start()
 extern void SimpleCameraController_Start_mE7DF3450479ECFC2347EFBAA8392BCAB460A69F7 (void);
-// 0x00000069 System.Void UnityTemplateProjects.SimpleCameraController::OnEnable()
+// 0x00000077 System.Void UnityTemplateProjects.SimpleCameraController::OnEnable()
 extern void SimpleCameraController_OnEnable_mD5E060BED4E0C5C0D40AA39C0DA7AE44CAAB217D (void);
-// 0x0000006A UnityEngine.Vector3 UnityTemplateProjects.SimpleCameraController::GetInputTranslationDirection()
+// 0x00000078 UnityEngine.Vector3 UnityTemplateProjects.SimpleCameraController::GetInputTranslationDirection()
 extern void SimpleCameraController_GetInputTranslationDirection_m62C42A7966EF22CB95BB847225D2BE2441A3CE0C (void);
-// 0x0000006B System.Void UnityTemplateProjects.SimpleCameraController::Update()
+// 0x00000079 System.Void UnityTemplateProjects.SimpleCameraController::Update()
 extern void SimpleCameraController_Update_mDB9A4DA6CC1C82A704D3575DC196F44F17E5E0B5 (void);
-// 0x0000006C System.Single UnityTemplateProjects.SimpleCameraController::GetBoostFactor()
+// 0x0000007A System.Single UnityTemplateProjects.SimpleCameraController::GetBoostFactor()
 extern void SimpleCameraController_GetBoostFactor_m6828544561E83441B588B1355AE356F5B5395861 (void);
-// 0x0000006D UnityEngine.Vector2 UnityTemplateProjects.SimpleCameraController::GetInputLookRotation()
+// 0x0000007B UnityEngine.Vector2 UnityTemplateProjects.SimpleCameraController::GetInputLookRotation()
 extern void SimpleCameraController_GetInputLookRotation_m46DE00C71926EA4D1119C5782919A7F8776FE41A (void);
-// 0x0000006E System.Boolean UnityTemplateProjects.SimpleCameraController::IsBoostPressed()
+// 0x0000007C System.Boolean UnityTemplateProjects.SimpleCameraController::IsBoostPressed()
 extern void SimpleCameraController_IsBoostPressed_mE3A2FFC52232D7F5550225F264B4F4D96E367E05 (void);
-// 0x0000006F System.Boolean UnityTemplateProjects.SimpleCameraController::IsEscapePressed()
+// 0x0000007D System.Boolean UnityTemplateProjects.SimpleCameraController::IsEscapePressed()
 extern void SimpleCameraController_IsEscapePressed_m0DBC5636F93C47F42E2957E71065F0F65FF9684E (void);
-// 0x00000070 System.Boolean UnityTemplateProjects.SimpleCameraController::IsCameraRotationAllowed()
+// 0x0000007E System.Boolean UnityTemplateProjects.SimpleCameraController::IsCameraRotationAllowed()
 extern void SimpleCameraController_IsCameraRotationAllowed_m0FC40B7FCA40A587E155985A0C0F22B992635FA6 (void);
-// 0x00000071 System.Boolean UnityTemplateProjects.SimpleCameraController::IsRightMouseButtonDown()
+// 0x0000007F System.Boolean UnityTemplateProjects.SimpleCameraController::IsRightMouseButtonDown()
 extern void SimpleCameraController_IsRightMouseButtonDown_m452E5582AC0DF2967F4C2AF74DEDD51533BE9E0F (void);
-// 0x00000072 System.Boolean UnityTemplateProjects.SimpleCameraController::IsRightMouseButtonUp()
+// 0x00000080 System.Boolean UnityTemplateProjects.SimpleCameraController::IsRightMouseButtonUp()
 extern void SimpleCameraController_IsRightMouseButtonUp_m6B7098D227CF6C336694BAE3CD689A712DF1A9D9 (void);
-// 0x00000073 System.Void UnityTemplateProjects.SimpleCameraController::.ctor()
+// 0x00000081 System.Void UnityTemplateProjects.SimpleCameraController::.ctor()
 extern void SimpleCameraController__ctor_m224B705F449A3DA440346B08A6237479A91D7136 (void);
-// 0x00000074 System.Void UnityTemplateProjects.SimpleCameraController/CameraState::SetFromTransform(UnityEngine.Transform)
+// 0x00000082 System.Void UnityTemplateProjects.SimpleCameraController/CameraState::SetFromTransform(UnityEngine.Transform)
 extern void CameraState_SetFromTransform_m3A7302F4586F37F7C78EDA2F0C476BAA22672360 (void);
-// 0x00000075 System.Void UnityTemplateProjects.SimpleCameraController/CameraState::Translate(UnityEngine.Vector3)
+// 0x00000083 System.Void UnityTemplateProjects.SimpleCameraController/CameraState::Translate(UnityEngine.Vector3)
 extern void CameraState_Translate_m561F6D92E99F13444FBAC8D5B1A40762A26219F9 (void);
-// 0x00000076 System.Void UnityTemplateProjects.SimpleCameraController/CameraState::LerpTowards(UnityTemplateProjects.SimpleCameraController/CameraState,System.Single,System.Single)
+// 0x00000084 System.Void UnityTemplateProjects.SimpleCameraController/CameraState::LerpTowards(UnityTemplateProjects.SimpleCameraController/CameraState,System.Single,System.Single)
 extern void CameraState_LerpTowards_mFDC0E1CA19B6791CDB6EE8AC262944DC1143FCF9 (void);
-// 0x00000077 System.Void UnityTemplateProjects.SimpleCameraController/CameraState::UpdateTransform(UnityEngine.Transform)
+// 0x00000085 System.Void UnityTemplateProjects.SimpleCameraController/CameraState::UpdateTransform(UnityEngine.Transform)
 extern void CameraState_UpdateTransform_m03320D760E52E809272776B58C7E741B2EE1D73E (void);
-// 0x00000078 System.Void UnityTemplateProjects.SimpleCameraController/CameraState::.ctor()
+// 0x00000086 System.Void UnityTemplateProjects.SimpleCameraController/CameraState::.ctor()
 extern void CameraState__ctor_m33568E59E39C953BDE6CD28D35A34BE52AE25504 (void);
-static Il2CppMethodPointer s_methodPointers[120] = 
+static Il2CppMethodPointer s_methodPointers[134] = 
 {
 	JoystickPlayerExample_FixedUpdate_m9AEDBA111F95D67A006A5D3821956048224541B7,
 	JoystickPlayerExample__ctor_m702422E0AE29402330CF41FDDBEE76F0506342E2,
@@ -320,17 +348,19 @@ static Il2CppMethodPointer s_methodPointers[120] =
 	VrModeController_get__isVrModeEnabled_m8D8D68536E09FF2DEAD3795AF30A57BA6DF7C95F,
 	VrModeController_Start_m10BF77FE8B825D9640800D5DF7EF791A391FA49B,
 	VrModeController_Update_m43F984D5BF13F2C545B508D93645C1C3AC9262D5,
-	VrModeController_EnterVR_m5FD79BF38C6AF621AF9992378BC5C3618FDE5EFB,
+	VrModeController_EnterVR_m4A9CC4EDC238A677CC471F971EC20E4464AB0C7A,
 	VrModeController_ExitVR_m1FF25DFE5B3BC15CEDE5C42F56CC399693867397,
 	VrModeController_StartXR_m57D80B4AD6B28A7C4E36052563B6227E824CDDB4,
 	VrModeController_StopXR_m0338E8D8035C06E1A46F17C16BBC7933EE9CAA3A,
+	VrModeController_desactivedElement_m8C511F9700467AE94393C7B79FB05D45BADB7989,
+	VrModeController_activatedElement_mAFB8A0B0D9731E2D7E16CD98DD25A23EA7D02957,
 	VrModeController__ctor_m94505259847FB7C54346D7CF02AD85793393D141,
-	U3CStartXRU3Ed__10__ctor_mDA431E1365B30DA2F64F1E7875CD387F2231E138,
-	U3CStartXRU3Ed__10_System_IDisposable_Dispose_m3DC1735AA5EC0D61A72803BB3B33B9499A373336,
-	U3CStartXRU3Ed__10_MoveNext_m9A6340456306ACFADD0D458946C82448A862E68B,
-	U3CStartXRU3Ed__10_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_mD0B4CE8CBE980FD132B19F40FF2172502B1D0566,
-	U3CStartXRU3Ed__10_System_Collections_IEnumerator_Reset_mD99AEFDB38CFAC11731CDB371647891816288600,
-	U3CStartXRU3Ed__10_System_Collections_IEnumerator_get_Current_mD84D9ACDB0A04C619509BA51590975DB84C30B0F,
+	U3CStartXRU3Ed__16__ctor_m8B313B094C173DB38E35448A53D83FAB32500F92,
+	U3CStartXRU3Ed__16_System_IDisposable_Dispose_m1098DA85462D3E22B5100B561215C913CDF461A5,
+	U3CStartXRU3Ed__16_MoveNext_m49D3EF514061D94CB902832D4F2ADDE433BDFBF5,
+	U3CStartXRU3Ed__16_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_m02F166B8B66024EA33C8E1CE0C438C6D43533D8A,
+	U3CStartXRU3Ed__16_System_Collections_IEnumerator_Reset_mBE60446A8118A0DA7F83BE872A0C53B03710AD2D,
+	U3CStartXRU3Ed__16_System_Collections_IEnumerator_get_Current_m8D670C9CDAFAA3299C81EA255E268CC8DF3FF711,
 	R_ControlSelector_Awake_m12F8BF50D0DB55E3B2B730ECF0EFF5BF71113B5E,
 	R_ControlSelector_HandleInputData_mC6FF93E848ACC8C3DA8E3E03F6D748583A64B161,
 	R_ControlSelector_Update_m2782CC15CA3AAFF6BCEA95D559CEEAD9323EA4E8,
@@ -340,22 +370,34 @@ static Il2CppMethodPointer s_methodPointers[120] =
 	CameraController_Awake_mA329C09A8A267A4FABDFE7E67EBA83B1706B04B7,
 	CameraController_Update_mBCB871B23DBA60444D43AB56D780478BA3D355E6,
 	CameraController_MoveCamera_mA2D1A592AABEDA675940110D79E2FD4A02E8083B,
+	CameraController_DefaultCameraState_m6C3A2C998F7104C3C5F5732DDAEC644099CC14D4,
 	CameraController__ctor_mE196A6332BDDED632D6F9DB6260E424594598950,
-	InputController_Update_mE06250661752A777E36B045F124B6E47E9209BD2,
+	HudController_Start_m0B6980441633C36400BA0DD58A1052364A4757C7,
+	HudController_Update_m36C3FB0CBD302E7BD326F3150F2655454F6E1BBD,
+	HudController_showHud_m4909198AFDDF55EA67936FD0B76104CF3DB41B49,
+	HudController_HideHud_mCA5D20EA1FF01A794C17B98D12506CF4CA135B6C,
+	HudController__ctor_m50C09E20B7B2A6231919E1070C6D7CB209D0DF66,
+	InputController_Start_mC887BF47D15F6F54A07FCE6717EBB85DFBDEE479,
 	InputController_OnEnable_m39CAE7C09C4D1656794A555101F8B5B06FE6B559,
 	InputController_OnDisable_m4EF72C4AFBA0426E2E9184DCDDB3D8E300660007,
 	InputController_CameraInput_m36CBB0ED6C5E17748B59B7DD7730FB4402430165,
 	InputController_MoveInput_mD29186E2550DDE82B82283B1677CE2D72E5CEEE9,
 	InputController_ChangedModeController_m6FCDE94C2C0072B8D304D814BDCF7D6BD80C6F6A,
+	InputController_TouchScreenIsActived_m72A28803ED7EDAF2FEBFDB6320A144DDD2D7902A,
+	InputController_GamepadIsActived_m182E92A311B9E445464694D62188740BA8818506,
+	InputController_VrIsActived_mD1B63519D3D9D2359852C93BC6C55BB0EFB9153F,
+	InputController_ShowJoystick_mC5B8E05C195A24C835A14EF0474A20D1A3A1A07C,
+	InputController_HideJoystick_m9C4DC335A87350ABD6F34AC7A4BE43BB2A04076E,
 	InputController__ctor_m0EDBE66635C62BD8D770DC8E9C8D90BECD52A00D,
 	PauseController_Start_m3D3B4E1280B1678333974DB866CF0454B3CF12E8,
 	PauseController_Update_mC48C8E00C7C145F44D1198E8E3DF664473379B5B,
 	PauseController_HidePause_m7C0CDC9D095015EDDEFF80CBBD9E8CDE8BB17B10,
-	PauseController_GetIndex_m0A37120E187F97227F6709F593741FBA154267B4,
+	PauseController_ShowPause_m716081F7EBA45EA698D2BF8A14ACDB5C84B9F275,
 	PauseController__ctor_m4FEA9F3594D37A43C2CA53CB8D04D6309CE385C8,
 	PlayerController_Awake_m82639826DE098DC447C79B43900C5F2A630B3DC3,
 	PlayerController_Update_m1F4051EB5BCBCCE5EEE2E3E49B7E278C3B14EC33,
 	PlayerController_Move_m68BFC8B882D42955A212B23E7D1DDD56CC87DB09,
+	PlayerController_savePosition_m483BFB1B21C386F59D3B3FE41493BC8FAF541256,
 	PlayerController__ctor_mDDAB7C7D82E1A5B3E6C197B1AB9D653DFE554F33,
 	SimpleCameraController_Start_mE7DF3450479ECFC2347EFBAA8392BCAB460A69F7,
 	SimpleCameraController_OnEnable_mD5E060BED4E0C5C0D40AA39C0DA7AE44CAAB217D,
@@ -375,134 +417,148 @@ static Il2CppMethodPointer s_methodPointers[120] =
 	CameraState_UpdateTransform_m03320D760E52E809272776B58C7E741B2EE1D73E,
 	CameraState__ctor_m33568E59E39C953BDE6CD28D35A34BE52AE25504,
 };
-static const int32_t s_InvokerIndices[120] = 
+static const int32_t s_InvokerIndices[134] = 
 {
-	6602,
-	6602,
-	5153,
-	5153,
-	5079,
-	5079,
-	6602,
-	6602,
-	6532,
-	6532,
-	6590,
-	6532,
-	5239,
-	6532,
-	5239,
-	6444,
-	5153,
-	6374,
-	5079,
-	6374,
-	5079,
-	6602,
-	5182,
-	5182,
-	1039,
-	6602,
-	2222,
-	5182,
-	4776,
-	6602,
-	6532,
-	5239,
-	6602,
-	5182,
-	5182,
-	1039,
-	6602,
-	6602,
-	6602,
-	5182,
-	5182,
-	6602,
-	6532,
-	5239,
-	5153,
-	6602,
-	5182,
-	5182,
-	1039,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	5079,
-	6602,
-	6374,
-	6374,
-	6602,
-	6602,
-	6602,
-	6602,
-	6473,
-	6602,
-	6602,
-	5153,
-	6602,
-	6374,
-	6473,
-	6602,
-	6473,
-	6602,
-	5153,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6590,
-	6590,
-	5153,
-	6602,
-	6602,
-	6602,
-	6602,
-	5153,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6602,
-	6592,
-	6602,
-	6532,
-	6590,
-	6374,
-	6374,
-	6374,
-	6374,
-	6374,
-	6602,
-	5182,
-	5295,
-	1456,
-	5182,
-	6602,
+	6633,
+	6633,
+	5177,
+	5177,
+	5103,
+	5103,
+	6633,
+	6633,
+	6562,
+	6562,
+	6621,
+	6562,
+	5263,
+	6562,
+	5263,
+	6474,
+	5177,
+	6404,
+	5103,
+	6404,
+	5103,
+	6633,
+	5206,
+	5206,
+	1041,
+	6633,
+	2230,
+	5206,
+	4798,
+	6633,
+	6562,
+	5263,
+	6633,
+	5206,
+	5206,
+	1041,
+	6633,
+	6633,
+	6633,
+	5206,
+	5206,
+	6633,
+	6562,
+	5263,
+	5177,
+	6633,
+	5206,
+	5206,
+	1041,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	5103,
+	6633,
+	6404,
+	6404,
+	6633,
+	6633,
+	5177,
+	6633,
+	6503,
+	6633,
+	6633,
+	6633,
+	6633,
+	5177,
+	6633,
+	6404,
+	6503,
+	6633,
+	6503,
+	6633,
+	5177,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6621,
+	6621,
+	5177,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6633,
+	6623,
+	6633,
+	6633,
+	6633,
+	6623,
+	6633,
+	6562,
+	6621,
+	6404,
+	6404,
+	6404,
+	6404,
+	6404,
+	6633,
+	5206,
+	5320,
+	1461,
+	5206,
+	6633,
 };
 IL2CPP_EXTERN_C const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule;
 const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule = 
 {
 	"Assembly-CSharp.dll",
-	120,
+	134,
 	s_methodPointers,
 	0,
 	NULL,
