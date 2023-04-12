@@ -7,6 +7,7 @@ public class HudController : MonoBehaviour
     [SerializeField]
     private GameObject _hudCanvas;
     PauseController _controller;
+    public bool _hudIsActivated;
     void Start()
     {
         
@@ -20,10 +21,12 @@ public class HudController : MonoBehaviour
     public void showHud() 
     {
         _hudCanvas.SetActive(true);
+        _hudIsActivated = true;
     }
 
     public void HideHud() 
     {
         _hudCanvas.SetActive(false);
+        _hudIsActivated = false;
     }
 }

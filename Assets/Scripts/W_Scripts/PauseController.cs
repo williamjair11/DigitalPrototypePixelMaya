@@ -8,7 +8,11 @@ using UnityEngine.UI;
 public class PauseController : MonoBehaviour
 {
     public GameObject _pause;
+    public bool _pauseIsActivated;
     InputController _inputController;
+    public TMP_Dropdown _dropdown;
+    [SerializeField]
+    private GameObject _joystickCanvas;
     public void Start()
     {
         _pause.SetActive(false);
@@ -17,20 +21,24 @@ public class PauseController : MonoBehaviour
 
     public void Update()
     {
-        if (Keyboard.current[Key.Space].wasPressedThisFrame) 
-        {
-            _pause.SetActive(true);
-        }     
+           
     }
 
     public void HidePause() 
     {
         _pause.SetActive(false);
+        _pauseIsActivated = false;
+        if (_dropdown.value == 0) 
+        {
+            _joystickCanvas.SetActive(true);
+        }
     }
 
     public void ShowPause() 
     {
         _pause.SetActive(true);
+        _pauseIsActivated = true;
+        _joystickCanvas.SetActive(false);
     }   
 }
 

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - RightJoystick
   - LeftJoystick
+  - ground
   layers:
   - Default
   - TransparentFX
