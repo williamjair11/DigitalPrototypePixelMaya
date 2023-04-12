@@ -63,7 +63,7 @@ public class InputController : MonoBehaviour
     {
         _inputTouchscreenIsActived = true;
       
-        _joysStickPad.SetActive(true);
+        //_joysStickPad.SetActive(true);
 
         Debug.Log("Entrando a modo screen");
     }

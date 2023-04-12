@@ -214,7 +214,7 @@ public class VrModeController : MonoBehaviour
         _pauseCanvas.SetActive(true);
         _dropdown.value = 0;
         _hudCanvas.SetActive(true);
-        _joystickCanvas.SetActive(true);
+        //_joystickCanvas.SetActive(true);
     }
 
 }
