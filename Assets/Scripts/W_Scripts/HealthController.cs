@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class HealthController : MonoBehaviour
 {
@@ -14,8 +13,10 @@ public class HealthController : MonoBehaviour
     [SerializeField]
     private UnityEvent _OnRestoreHealt;
     [SerializeField]
-    private UnityEvent _OnRestoreMaximimHealt;
-
+    private UnityEvent _OnRestoreMaximumHealt;
+    [SerializeField]
+    private Slider _healtSlider;
+    [SerializeField]
     private float _currentHealt;
 
     private void Start()
@@ -24,35 +25,43 @@ public class HealthController : MonoBehaviour
     }
     private void Update()
     {
-        if (_currentHealt <= 0) 
-        {
-            OnDie(); 
-            _currentHealt=0;
-        }
+        
     }
     public void ReciveDamage(float damage) 
     {      
         _currentHealt -= damage;
-        Debug.Log("Make damage: " + damage + "Vida actual: " + _currentHealt);
-        _OnReciveDamage.Invoke(); //insert methods animations and sounds
+
+        if( _currentHealt < 0) 
+        {
+            _currentHealt = 0;
+            _OnDie.Invoke();
+            Debug.Log("Dead");
+        }
+        else 
+        {
+            Debug.Log("Recive Damage: "+ damage + " Current healt is; " + _currentHealt);
+            _OnReciveDamage.Invoke(); //insert methods animations and sounds
+        }
+        
+        _healtSlider.value = _currentHealt;
     }
 
     public void OnRestoreHealt(float healtRestore) 
     {
-        _currentHealt = healtRestore;
-        Debug.Log("Healt restore" + healtRestore + "Vida actual: " + _currentHealt);
-        _OnRestoreHealt.Invoke(); //insert methods animations and sounds
-    }
+        _currentHealt += healtRestore;
 
-    public void OnRestoreMaximumHealt() 
-    { 
-        _currentHealt = _initialHealt;
-        Debug.Log("Healt restore" + _initialHealt + "Vida actual: " + _currentHealt );
-        _OnRestoreMaximimHealt.Invoke(); //insert methods animations and sounds
+        if (_currentHealt >= _initialHealt) 
+        {
+            _currentHealt=_initialHealt;
+            _OnRestoreMaximumHealt.Invoke();
+            Debug.Log("Full healt");
+        }
+        else 
+        {
+            Debug.Log("Restore healt: " + healtRestore + " Current healt is; " + _currentHealt);
+            _OnRestoreHealt.Invoke(); //insert methods animations and sounds
+        }
+
+        _healtSlider.value = _currentHealt;
     }
-    public void OnDie() 
-    {
-        Debug.Log("Game over");
-        _OnDie.Invoke(); //insert methods animations and sounds
-    }  
 }
