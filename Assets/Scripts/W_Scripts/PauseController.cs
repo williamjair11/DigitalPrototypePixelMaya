@@ -19,11 +19,6 @@ public class PauseController : MonoBehaviour
         _inputController = GetComponent<InputController>();
     }
 
-    public void Update()
-    {
-           
-    }
-
     public void HidePause() 
     {
         _pause.SetActive(false);
