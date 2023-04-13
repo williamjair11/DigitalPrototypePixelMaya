@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(InputController))]
 public class PlayerController : MonoBehaviour
@@ -17,13 +18,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float _jumpForce = 10f;
 
+    [SerializeField]
+    private float _jumpEnergy;
+
     InputController _inputcontroller = null;
     IsGrounded _isGrounded;
+    EnergyController _energyController = null;
+
+    [SerializeField]
+    private UnityEvent<float> _jumpEvent;
 
     private void Awake()
     {
         _inputcontroller = GetComponent<InputController>();
         _isGrounded = GetComponent<IsGrounded>();
+        _energyController = GetComponent<EnergyController>();
     }
     void Update()
     {
@@ -53,12 +62,12 @@ public class PlayerController : MonoBehaviour
     public void Jump() 
     {
         isJump = Input.GetKeyDown(KeyCode.G);
-        bool isGamePadJump = _inputcontroller.Jump();
-        Debug.Log(isGamePadJump);
+        bool isGamePadJump = _inputcontroller.Jump();       
 
         if (_isGrounded._floorDetected && isJump)
         {
             _rb.AddForce(new Vector3(0, _jumpForce, 0), ForceMode.Impulse);
+            _jumpEvent.Invoke(_jumpEnergy);
         }
     }
 
@@ -67,6 +76,7 @@ public class PlayerController : MonoBehaviour
         if (_isGrounded._floorDetected)
         {
             _rb.AddForce(new Vector3(0, _jumpForce, 0), ForceMode.Impulse);
+            _jumpEvent.Invoke(_jumpEnergy);
         }
     }
 }

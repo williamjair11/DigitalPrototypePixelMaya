@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 
 public class DamageController : MonoBehaviour
 {
     [SerializeField]
     public float _damageAmount;
+    
     [SerializeField]
     private UnityEvent<float> OnMakeDamage;
 
     public bool _canMakeDamage;
-    
+       
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player" && _canMakeDamage) 
         {
             OnMakeDamage.Invoke(_damageAmount);
-            Destroy(gameObject);
         }
     }
     public void DesactivatedCanMakeDamage() 

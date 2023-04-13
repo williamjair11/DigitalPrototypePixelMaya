@@ -196,10 +196,7 @@ public class VrModeController : MonoBehaviour
         Debug.Log("XR deinitialized.");
 
         _cameraTransform.rotation = DEFAULT_CAMERA;
-        activatedElement();
-
-        //_mainCamera.ResetAspect();
-        //_mainCamera.fieldOfView = _defaultFieldOfView;       
+        activatedElement();     
     }
 
     public void desactivedElement() 
@@ -213,8 +210,6 @@ public class VrModeController : MonoBehaviour
     {
         _pauseCanvas.SetActive(true);
         _dropdown.value = 0;
-        //_hudCanvas.SetActive(true);
-        //_joystickCanvas.SetActive(true);
     }
 
 }
