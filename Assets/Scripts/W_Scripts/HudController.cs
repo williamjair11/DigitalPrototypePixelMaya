@@ -8,16 +8,7 @@ public class HudController : MonoBehaviour
     private GameObject _hudCanvas;
     PauseController _controller;
     public bool _hudIsActivated;
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
+ 
     public void showHud() 
     {
         _hudCanvas.SetActive(true);
