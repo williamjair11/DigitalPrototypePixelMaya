@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,27 +10,24 @@ public class InputController : MonoBehaviour
     public bool _inputHybridIsActived = false;
 
     public GameObject _joysStickPad;
-    VrModeController _vrModeController;
    
 
     [SerializeField] InputAction _moveInput = null;
     [SerializeField] InputAction _cameraInput = null;
+    [SerializeField] InputAction _jump = null;
 
-
-    private void Start()
-    {
-        _vrModeController = new VrModeController();     
-    }
     void OnEnable()
     {
         _moveInput.Enable();
         _cameraInput.Enable();
+        _jump.Enable();
     }
 
     private void OnDisable()
     {
         _moveInput.Disable();
         _cameraInput.Disable();
+        _jump.Disable();
     }
 
     public Vector2 CameraInput() 
@@ -40,6 +38,11 @@ public class InputController : MonoBehaviour
     public Vector2 MoveInput() 
     {
         return _moveInput.ReadValue<Vector2>();
+    }
+
+    public bool Jump() 
+    {
+        return true;
     }
 
     public void ChangedModeController(int value) 

@@ -53,6 +53,8 @@ public class PlayerController : MonoBehaviour
     public void Jump() 
     {
         isJump = Input.GetKeyDown(KeyCode.G);
+        bool isGamePadJump = _inputcontroller.Jump();
+        Debug.Log(isGamePadJump);
 
         if (_isGrounded._floorDetected && isJump)
         {

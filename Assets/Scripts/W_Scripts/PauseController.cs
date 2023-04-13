@@ -13,6 +13,8 @@ public class PauseController : MonoBehaviour
     public TMP_Dropdown _dropdown;
     [SerializeField]
     private GameObject _joystickCanvas;
+    [SerializeField]
+    private GameObject _hudCanvas;
     public void Start()
     {
         _pause.SetActive(false);
@@ -27,6 +29,7 @@ public class PauseController : MonoBehaviour
         {
             _joystickCanvas.SetActive(true);
         }
+        _hudCanvas.SetActive(true);
     }
 
     public void ShowPause() 
@@ -34,6 +37,7 @@ public class PauseController : MonoBehaviour
         _pause.SetActive(true);
         _pauseIsActivated = true;
         _joystickCanvas.SetActive(false);
+        _hudCanvas.SetActive(false);
     }   
 }
 

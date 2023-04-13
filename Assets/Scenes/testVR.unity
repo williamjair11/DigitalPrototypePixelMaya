@@ -2921,6 +2921,7 @@ MonoBehaviour:
   _pauseIsActivated: 0
   _dropdown: {fileID: 934039208}
   _joystickCanvas: {fileID: 526602696}
+  _hudCanvas: {fileID: 329261966}
 --- !u!4 &1101403240
 Transform:
   m_ObjectHideFlags: 0
@@ -3097,21 +3098,13 @@ MonoBehaviour:
   _moveInput:
     m_Name: Move Input
     m_Type: 0
-    m_ExpectedControlType: 
+    m_ExpectedControlType: Vector2
     m_Id: fa5abaec-fc35-430d-81f4-6ae73e097ff8
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: 61936169-f98e-48f8-9bd6-b01bb9709fe6
-      m_Path: <Gamepad>/leftStick
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move Input
-      m_Flags: 0
-    - m_Name: 
-      m_Id: 80bc4438-b62d-467d-8868-dbe88b8554fb
       m_Path: <DualShockGamepad>/leftStick
       m_Interactions: 
       m_Processors: 
@@ -3119,8 +3112,8 @@ MonoBehaviour:
       m_Action: Move Input
       m_Flags: 0
     - m_Name: 
-      m_Id: adcfe884-5fdd-49fc-a17b-cd369445a069
-      m_Path: <XInputController>/leftStick
+      m_Id: 9e7245b3-ab9d-4251-b1bc-0822fbaef489
+      m_Path: <Gamepad>/leftStick
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -3130,11 +3123,19 @@ MonoBehaviour:
   _cameraInput:
     m_Name: Camera Input
     m_Type: 0
-    m_ExpectedControlType: 
+    m_ExpectedControlType: Vector2
     m_Id: e2f360b4-f3bd-49fc-8138-92f2f8df6b11
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 70ab42b8-445b-41e4-9194-c42eadbf42a4
+      m_Path: <DualShockGamepad>/rightStick
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Camera Input
+      m_Flags: 0
     - m_Name: 
       m_Id: bf1e07bf-5825-4687-b1fd-b10b4c1f7a44
       m_Path: <Gamepad>/rightStick
@@ -3143,22 +3144,15 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Camera Input
       m_Flags: 0
-    - m_Name: 
-      m_Id: 2d8ba879-2eed-41e7-aba3-2406c2bd8758
-      m_Path: <DualShockGamepad>/rightStick
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Camera Input
-      m_Flags: 0
-    - m_Name: 
-      m_Id: f7d29ff0-3eb5-4977-8a37-8d7cafc606ee
-      m_Path: <XInputController>/rightStick
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Camera Input
-      m_Flags: 0
+    m_Flags: 0
+  _jump:
+    m_Name: Jump
+    m_Type: 0
+    m_ExpectedControlType: Axis
+    m_Id: c529c0fb-aace-4c10-ba10-e0ddde771e14
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
     m_Flags: 0
 --- !u!114 &1183416060
 MonoBehaviour:
@@ -3228,7 +3222,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _initialHealt: 100
-  _currentHealt: 0
   _OnReciveDamage:
     m_PersistentCalls:
       m_Calls: []
@@ -3236,6 +3229,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _OnRestoreHealt:
+    m_PersistentCalls:
+      m_Calls: []
+  _OnRestoreMaximimHealt:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &1206493405
