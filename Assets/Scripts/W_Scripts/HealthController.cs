@@ -27,11 +27,11 @@ public class HealthController : MonoBehaviour
     {
         
     }
-    public void ReciveDamage(float damage) 
+    public void ReciveDamage(float damage, string target) 
     {      
         _currentHealt -= damage;
 
-        if( _currentHealt < 0) 
+        if( _currentHealt <= 0) 
         {
             _currentHealt = 0;
             _OnDie.Invoke();
@@ -39,14 +39,17 @@ public class HealthController : MonoBehaviour
         }
         else 
         {
-            Debug.Log("Recive Damage: "+ damage + " Current healt is; " + _currentHealt);
+            Debug.Log("Recive Damage: "+ damage + " Current healt is; " + _currentHealt + " Object:" + target);
             _OnReciveDamage.Invoke(); //insert methods animations and sounds
         }
         
-        _healtSlider.value = _currentHealt;
+        if(target == "Player") 
+        {
+            _healtSlider.value = _currentHealt;
+        }      
     }
 
-    public void OnRestoreHealt(float healtRestore) 
+    public void OnRestoreHealt(float healtRestore, string target) 
     {
         _currentHealt += healtRestore;
 
@@ -62,6 +65,9 @@ public class HealthController : MonoBehaviour
             _OnRestoreHealt.Invoke(); //insert methods animations and sounds
         }
 
-        _healtSlider.value = _currentHealt;
+        if (target == "Player")
+        {
+            _healtSlider.value = _currentHealt;
+        }    
     }
 }
