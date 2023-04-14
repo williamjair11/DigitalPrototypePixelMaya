@@ -9,7 +9,7 @@ public class RestoreHealtController : MonoBehaviour
     public float _healtAmount;
 
     [SerializeField]
-    private UnityEvent<float> OnRestoreHealt;
+    private UnityEvent<float, string> OnRestoreHealt;
 
     public bool _canRestoreHealt;
 
@@ -17,7 +17,7 @@ public class RestoreHealtController : MonoBehaviour
     {
         if (other.tag == "Player" && _canRestoreHealt)
         {
-            OnRestoreHealt.Invoke(_healtAmount);
+            OnRestoreHealt.Invoke(_healtAmount, "player");
         }
     }
     public void DesactivatedCanRestoreHealt()

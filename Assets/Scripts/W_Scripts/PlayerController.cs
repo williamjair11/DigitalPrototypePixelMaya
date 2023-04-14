@@ -2,22 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.EventSystems.EventTrigger;
 
 [RequireComponent(typeof(InputController))]
 public class PlayerController : MonoBehaviour
 {
     private Vector3 _lastPlayerPosition;
-    private bool isJump ;
-    private bool _holdingBall=true;
-    private Rigidbody _rbBall;
+    private bool isJump;
+    private bool _shotAvailable=true;
 
-    public Transform _camera;
+    public Transform _positionBall;
 
     [SerializeField]
     private GameObject _EnergyBall;
-
-    [SerializeField]
-    private Rigidbody _rb;
 
     [SerializeField]
     private float _velocitySpeed = 5f;
@@ -32,14 +29,13 @@ public class PlayerController : MonoBehaviour
     private float _ballEnergyCost;
 
     [SerializeField]
+    private float _timeNextShot;
+
+    [SerializeField]
     private float _ballForceForward;
 
     [SerializeField]
     private float _ballForceUp;
-
-
-    InputController _inputcontroller = null;
-    IsGrounded _isGrounded;
 
     [SerializeField]
     private UnityEvent<float> _jumpEvent;
@@ -47,28 +43,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private UnityEvent<float> _energyBallEvent;
 
+    [SerializeField]
+    private Rigidbody _rbPlayer;
+
+    InputController _inputcontroller = null;
+    IsGrounded _isGrounded;
+
     private void Awake()
     {
         _inputcontroller = GetComponent<InputController>();
-        _isGrounded = GetComponent<IsGrounded>();        
-        _rbBall = _EnergyBall.GetComponent<Rigidbody>();
-        //_rbBall.useGravity = false;       
+        _isGrounded = GetComponent<IsGrounded>();               
     }
     void Update()
     {
         Move();
-        savePosition();
-        Jump();
-        throwball();
-    }
-
-    private void LateUpdate()
-    {
-        if (_holdingBall)
-        {
-            _EnergyBall.transform.position = _camera.transform.position + _camera.forward * 2;
-        }
-        throwball();
+        savePosition();      
     }
 
     void Move() 
@@ -89,55 +78,33 @@ public class PlayerController : MonoBehaviour
         return _lastPlayerPosition;
     }
 
-    public void Jump() 
-    {
-        isJump = Input.GetKeyDown(KeyCode.G);
-        bool isGamePadJump = _inputcontroller.Jump();       
-
-        if (_isGrounded._floorDetected && isJump)
-        {
-            _rb.AddForce(new Vector3(0, _jumpForce, 0), ForceMode.Impulse);
-            _jumpEvent.Invoke(_jumpEnergyCost);
-        }
-    }
-
     public void JumpButton() 
     {
         if (_isGrounded._floorDetected)
         {
-            _rb.AddForce(new Vector3(0, _jumpForce, 0), ForceMode.Impulse);
+            _rbPlayer.AddForce(new Vector3(0, _jumpForce, 0), ForceMode.Impulse);
             _jumpEvent.Invoke(_jumpEnergyCost);
         }
     }
 
     public void throwButton() 
     {
-        if (_holdingBall)
+        if (_shotAvailable)
         {
-            if (Input.GetMouseButton(1))
-            {
-                _rbBall.AddForce(_camera.forward * _ballForceForward);
-                _rbBall.AddForce(_camera.up * _ballForceUp);
-                _rb.useGravity = true;
-                _holdingBall = false;
-                _energyBallEvent.Invoke(_ballEnergyCost);
-            }
+            GameObject _temporaryEnergyBall = Instantiate(_EnergyBall, _positionBall.transform.position, _positionBall.transform.rotation);
+            Rigidbody _rb = _temporaryEnergyBall.GetComponent<Rigidbody>();
+            _rb.AddForce(_temporaryEnergyBall.transform.forward * _ballForceForward, ForceMode.Impulse);
+            _rb.AddForce(_temporaryEnergyBall.transform.up * _ballForceUp, ForceMode.Impulse);
+            _energyBallEvent.Invoke(_ballEnergyCost); 
+            _shotAvailable = false;
+            StartCoroutine(waitForNextShot());
+            Destroy(_temporaryEnergyBall, 5f);
         }
     }
-    
-    public void throwball() 
-    {
-        
-        if (_holdingBall) 
-        {                   
-            if (Input.GetMouseButton(1))              
-            {                           
-                _rbBall.AddForce(_camera.forward * _ballForceForward);
-                _rbBall.AddForce(_camera.up * _ballForceUp);
-                _rb.useGravity = true;
-                _holdingBall = false;
-                _energyBallEvent.Invoke(_ballEnergyCost);
-            }
-        }
+
+    IEnumerator waitForNextShot() 
+    {    
+        yield return new WaitForSeconds(_timeNextShot);
+        _shotAvailable = true;       
     }
 }

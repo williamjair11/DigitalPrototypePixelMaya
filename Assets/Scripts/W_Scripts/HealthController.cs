@@ -61,11 +61,11 @@ public class HealthController : MonoBehaviour
         }
         else 
         {
-            Debug.Log("Restore healt: " + healtRestore + " Current healt is; " + _currentHealt);
+            Debug.Log("Restore healt: " + healtRestore + " Current healt is; " + _currentHealt + "for: " + target);
             _OnRestoreHealt.Invoke(); //insert methods animations and sounds
         }
 
-        if (target == "Player")
+        if (target == "player")
         {
             _healtSlider.value = _currentHealt;
         }    
