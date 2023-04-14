@@ -11,7 +11,10 @@ public class DamageController : MonoBehaviour
     public float _damageAmount;
     
     [SerializeField]
-    private UnityEvent<float> OnMakeDamage;
+    private UnityEvent<float, string> OnMakeDamagePlayer;
+
+    [SerializeField]
+    private UnityEvent<float , string> OnMakeDamageEnemy;
 
     public bool _canMakeDamage;
        
@@ -19,9 +22,15 @@ public class DamageController : MonoBehaviour
     {
         if (other.tag == "Player" && _canMakeDamage) 
         {
-            OnMakeDamage.Invoke(_damageAmount);
+            OnMakeDamagePlayer.Invoke(_damageAmount, "Player");
         }
+        else if(other.tag == "Enemy" && _canMakeDamage)
+        {
+            OnMakeDamageEnemy.Invoke(_damageAmount, "Enemy");
+        }               
     }
+
+    
     public void DesactivatedCanMakeDamage() 
     {
         _canMakeDamage = false;
