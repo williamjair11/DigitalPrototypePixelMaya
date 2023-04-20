@@ -112,7 +112,7 @@ public class VrModeController : MonoBehaviour
             {
                 Api.ScanDeviceParams();
             }
-
+            
             Api.UpdateScreenParams();
         }
         else
