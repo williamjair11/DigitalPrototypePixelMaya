@@ -11,7 +11,8 @@ public class PlayerDetection : MonoBehaviour
     [SerializeField] private float _originalSpeed;
     [SerializeField] private float _returnSpeed;
     [SerializeField] private NavMeshAgent _enemy;
-    [SerializeField] private PlayerController _playerController = new PlayerController();
+    [SerializeField] private PlayerController _playerController;
+    // [SerializeField] private PlayerController _playerController = new PlayerController();
     [SerializeField] private GameObject _originalEnemyPosition;
     private Vector3 _lastPlayerPosition;
     private float distance;
