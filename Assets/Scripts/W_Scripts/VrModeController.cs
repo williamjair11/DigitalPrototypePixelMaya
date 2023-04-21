@@ -101,6 +101,7 @@ public class VrModeController : MonoBehaviour
     /// </summary>
     public void Update()
     {
+        #if !UNITY_EDITOR
         if (_isVrModeEnabled)
         {
             if (Api.IsCloseButtonPressed)
@@ -112,8 +113,9 @@ public class VrModeController : MonoBehaviour
             {
                 Api.ScanDeviceParams();
             }
+             
+                Api.UpdateScreenParams();
             
-            Api.UpdateScreenParams();
         }
         else
         {
@@ -123,6 +125,7 @@ public class VrModeController : MonoBehaviour
             //    EnterVR();
             //}
         }
+        #endif
     }
 
     /// <summary>
