@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 {
-=======
-﻿{
->>>>>>> W_featureVrMode
     "files.exclude":
     {
         "**/.DS_Store":true,
@@ -55,10 +51,5 @@
         "ProjectSettings/":true,
         "temp/":true,
         "Temp/":true
-<<<<<<< HEAD
-    },
-    "FSharp.suggestGitignore": false
-=======
     }
->>>>>>> W_featureVrMode
 }
