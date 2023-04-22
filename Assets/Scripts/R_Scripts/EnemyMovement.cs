@@ -14,10 +14,6 @@ public class EnemyMovement : MonoBehaviour
     void Start() {
         _enemy = GetComponent<NavMeshAgent>();
         _lastPlayerPosition = _playerController.savePosition();
-        /*
-         GameObject[] destinationList = new GameObject[numberOfObjectives];
-         SetDestinations(destinationList);
-        */
     }
     void Update()
     {
@@ -52,12 +48,6 @@ public class EnemyMovement : MonoBehaviour
         Idle,
         Turning
     }
-
-    public Vector3 GetEnemyDirection() {
-        Vector3 direction = _enemy.velocity.normalized;
-        return direction;
-    }
-
     public EnemyState GetEnemyState() {
         if (_enemy.speed == walkingSpeed) {
             return EnemyState.Walking;
@@ -65,32 +55,20 @@ public class EnemyMovement : MonoBehaviour
         if (_enemy.speed == runningSpeed) {
             return EnemyState.Running;
         }
-        if (_enemy.speed == 0.1f){
+        if (_enemy.speed == 0f){
             return EnemyState.Idle;
         }
         else if (_enemy.velocity.magnitude > 0 && Vector3.Angle(_enemy.velocity, _enemy.transform.forward) > 10f)
         {
             return EnemyState.Turning;
         }
-        else
-        {
+        else {
             return EnemyState.Idle;
         }
     }
-
     public float GetEnemyAngle() {
         Vector3 direction = _enemy.velocity.normalized;
         float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         return angle;
     }
-    public bool IsEnemyStanding() {
-    Vector3 velocity = _enemy.velocity;
-    float magnitude = velocity.magnitude;
-    if (magnitude < 0.1f) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
 }
