@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Rendering;
 
 public class DamageController : MonoBehaviour
 {
@@ -11,26 +7,16 @@ public class DamageController : MonoBehaviour
     public float _damageAmount;
     
     [SerializeField]
-    private UnityEvent<float, string> OnMakeDamagePlayer;
+    private UnityEvent<float, string> OnMakeDamage;
 
-    [SerializeField]
-    private UnityEvent<float , string> OnMakeDamageEnemy;
 
-    public bool _canMakeDamage;
+    public bool _canMakeDamage=true;
        
     private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Player" && _canMakeDamage) 
-        {
-            OnMakeDamagePlayer.Invoke(_damageAmount, "Player");
-        }
-        else if(other.tag == "Enemy" && _canMakeDamage)
-        {
-            OnMakeDamageEnemy.Invoke(_damageAmount, "Enemy");
-        }               
+    {    
+        OnMakeDamage.Invoke(_damageAmount, other.tag);
     }
-
-    
+  
     public void DesactivatedCanMakeDamage() 
     {
         _canMakeDamage = false;

@@ -15,7 +15,8 @@ public class IsGrounded : MonoBehaviour
     private RaycastHit _raycastHit;
     void Update()
     {
-        ObjectIsGrounded();      
+        ObjectIsGrounded();
+        DistanceFromGround();
     }
 
     public float DistanceFromGround() 
@@ -39,12 +40,12 @@ public class IsGrounded : MonoBehaviour
         if (Physics.Raycast(_rayGround, 1f))
         {
             _floorDetected = true;
-            Debug.Log("Objeto en el suelo");
+            //Debug.Log("Objeto en el suelo");
         }
         else 
         {
             _floorDetected = false;
-            Debug.Log("Objeto en el aire");
+            //Debug.Log("Objeto en el aire");
         }
     }
 }

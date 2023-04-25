@@ -17,19 +17,21 @@ public class HealthController : MonoBehaviour
     [SerializeField]
     private Slider _healtSlider;
     [SerializeField]
+    private GameObject _gameObject;
+
     private float _currentHealt;
+    private GameController _gameController;
+
 
     private void Start()
     {
         _currentHealt = _initialHealt;
     }
-    private void Update()
-    {
-        
-    }
+
     public void ReciveDamage(float damage, string target) 
     {      
         _currentHealt -= damage;
+        
 
         if( _currentHealt <= 0) 
         {
@@ -39,7 +41,7 @@ public class HealthController : MonoBehaviour
         }
         else 
         {
-            Debug.Log("Recive Damage: "+ damage + " Current healt is; " + _currentHealt + " Object:" + target);
+            Debug.Log("Recive Damage: "+ damage + " Current healt is: " + _currentHealt + " Object: " + target);
             _OnReciveDamage.Invoke(); //insert methods animations and sounds
         }
         
