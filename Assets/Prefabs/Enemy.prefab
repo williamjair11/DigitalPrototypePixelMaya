@@ -112,11 +112,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fa2bb2749c2cbb41af9f393dd473e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damageAmount: 10
-  OnMakeDamagePlayer:
+  _damageAmount: 40
+  OnMakeDamage:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3987780804513703804, guid: ef3bb142d26c68649ba08bb262a95367, type: 3}
         m_TargetAssemblyTypeName: HealthController, Assembly-CSharp
         m_MethodName: ReciveDamage
         m_Mode: 0
@@ -128,10 +128,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  OnMakeDamageEnemy:
-    m_PersistentCalls:
-      m_Calls: []
-  _canMakeDamage: 0
+  _canMakeDamage: 1
 --- !u!54 &4046403006764697764
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -174,4 +171,4 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _healtSlider: {fileID: 0}
-  _currentHealt: 0
+  _gameObject: {fileID: 4046403006764697762}

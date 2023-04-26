@@ -1,21 +1,3 @@
-//-----------------------------------------------------------------------
-// <copyright file="VrModeController.cs" company="Google LLC">
-// Copyright 2020 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-// </copyright>
-//-----------------------------------------------------------------------
-
 using System.Collections;
 using Google.XR.Cardboard;
 using TMPro;
@@ -25,94 +7,63 @@ using UnityEngine.UI;
 using UnityEngine.XR;
 using UnityEngine.XR.Management;
 
-/// <summary>
-/// Turns VR mode on and off.
-/// </summary>
 public class VrModeController : MonoBehaviour
 {
-    // Field of view value to be used when the scene is not in VR mode. In case
-    // XR isn't initialized on startup, this value could be taken from the main
-    // camera and stored.
-    private const float _defaultFieldOfView = 60.0f;
 
-    // Main camera from the scene.
+    private const float _defaultFieldOfView = 90f;
+
     private Camera _mainCamera;
-    public Transform _cameraTransform;
+    [SerializeField] private InputController _inputController;
+
+    [SerializeField] private CameraController _cameraController;
+
     private quaternion DEFAULT_CAMERA;
-    public CameraController _cameraController;
-    public GameObject _pauseCanvas;
-    public GameObject _hudCanvas;
-    public GameObject _joystickCanvas;
-    private int _modeController=0;
-    [SerializeField]
-    private TMP_Dropdown _dropdown;
 
-    /// <summary>
-    /// Gets a value indicating whether the screen has been touched this frame.
-    /// </summary>
-    public bool _isScreenTouched
-    {
-        get
-        {
-            return Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
-        }
-    }
 
-    /// <summary>
-    /// Gets a value indicating whether the VR mode is enabled.
-    /// </summary>
-    public bool _isVrModeEnabled
-    {
-        get
-        {
-            return XRGeneralSettings.Instance.Manager.isInitializationComplete;
-        }
-    }
-
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
     public void Start()
     {
-        // Saves the main camera from the scene.
-        
+        _inputController.GetComponent<InputController>();
+
         _mainCamera = Camera.main;
+
         _cameraController = new CameraController();
         DEFAULT_CAMERA = _cameraController.DEFAULT_CAMERA;
 
-        // Configures the app to not shut down the screen and sets the brightness to maximum.
-        // Brightness control is expected to work only in iOS, see:
-        // https://docs.unity3d.com/ScriptReference/Screen-brightness.html.
+
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Screen.brightness = 1.0f;
 
-        // Checks if the device parameters are stored and scans them if not.
-        // This is only required if the XR plugin is initialized on startup,
-        // otherwise these API calls can be removed and just be used when the XR
-        // plugin is started.
         if (!Api.HasDeviceParams())
         {
             Api.ScanDeviceParams();
         }
     }
-
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
     public void Update()
     {
+<<<<<<< HEAD
         #if !UNITY_EDITOR
         if (_isVrModeEnabled)
         {
             if (Api.IsCloseButtonPressed)
             {               
                 ExitVR();               
+=======
+        bool VrIsActivated = _inputController._inputHybridIsActived;
+        bool state = true;
+
+        if (Api.IsCloseButtonPressed)
+            {
+                _inputController.ChangedModeController(0);
+                ExitVR();
+                state = true;
+>>>>>>> W_featureCastEnergy
             }
 
             if (Api.IsGearButtonPressed)
             {
                 Api.ScanDeviceParams();
             }
+<<<<<<< HEAD
              
                 Api.UpdateScreenParams();
             
@@ -127,42 +78,36 @@ public class VrModeController : MonoBehaviour
         }
         #endif
     }
+=======
 
-    /// <summary>
-    /// Enters VR mode.
-    /// </summary>
-    public void EnterVR(int val)
-    {
-        if(val == 2) 
-        {
-            Debug.Log("entrando a modo VR");
-            
-            StartCoroutine(StartXR());           
-            if (Api.HasNewDeviceParams())
+            Api.UpdateScreenParams();
+>>>>>>> W_featureCastEnergy
+
+            if (VrIsActivated) 
             {
-                Api.ReloadDeviceParams();
+                if (state) 
+                {
+                    EnterVR();
+                    state = false;
+                }              
             }
-            desactivedElement();
-        }      
     }
 
-    /// <summary>
-    /// Exits VR mode.
-    /// </summary>
+    private void EnterVR()
+    {
+        StartCoroutine(StartXR());
+        if (Api.HasNewDeviceParams())
+        {
+            Api.ReloadDeviceParams();
+        }
+    }
+
     public void ExitVR()
     {
         StopXR();
     }
 
-    /// <summary>
-    /// Initializes and starts the Cardboard XR plugin.
-    /// See https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html.
-    /// </summary>
-    ///
-    /// <returns>
-    /// Returns result value of <c>InitializeLoader</c> method from the XR General Settings Manager.
-    /// </returns>
-    public IEnumerator StartXR()
+    private IEnumerator StartXR()
     {
         Debug.Log("Initializing XR...");
         yield return XRGeneralSettings.Instance.Manager.InitializeLoader();
@@ -173,23 +118,16 @@ public class VrModeController : MonoBehaviour
         }
         else
         {
-            
             Debug.Log("XR initialized.");
 
             Debug.Log("Starting XR...");
             XRGeneralSettings.Instance.Manager.StartSubsystems();
             Debug.Log("XR started.");
-            
         }
     }
 
-    /// <summary>
-    /// Stops and deinitializes the Cardboard XR plugin.
-    /// See https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html.
-    /// </summary>
-    public void StopXR()
+    private void StopXR()
     {
-        
         Debug.Log("Stopping XR...");
         XRGeneralSettings.Instance.Manager.StopSubsystems();
         Debug.Log("XR stopped.");
@@ -198,21 +136,9 @@ public class VrModeController : MonoBehaviour
         XRGeneralSettings.Instance.Manager.DeinitializeLoader();
         Debug.Log("XR deinitialized.");
 
-        _cameraTransform.rotation = DEFAULT_CAMERA;
-        activatedElement();     
-    }
+        _mainCamera.ResetAspect();
+        _mainCamera.fieldOfView = _defaultFieldOfView;
+        _mainCamera.transform.rotation = DEFAULT_CAMERA;
 
-    public void desactivedElement() 
-    {
-        _pauseCanvas.SetActive(false);
-        _hudCanvas.SetActive(false);
-        _joystickCanvas.SetActive(false);
     }
-
-    public void activatedElement() 
-    {
-        _pauseCanvas.SetActive(true);
-        _dropdown.value = 0;
-    }
-
 }

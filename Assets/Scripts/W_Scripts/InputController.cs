@@ -1,20 +1,25 @@
 using JetBrains.Annotations;
+using System;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputController : MonoBehaviour
 {
-    public bool _inputTouchscreenIsActived = true;
+    [NonSerialized]
+    public bool _inputTouchscreenIsActived = false;
+    [NonSerialized]
     public bool _inputGamepadIsActived = false;
-    public bool _inputHybridIsActived = false;
+    [NonSerialized]
+    public bool _inputHybridIsActived = true;
 
     public GameObject _joysStickPad;
-   
 
     [SerializeField] InputAction _moveInput = null;
     [SerializeField] InputAction _cameraInput = null;
     [SerializeField] InputAction _jump = null;
+    [SerializeField] private TMP_Dropdown _controlSlider;
 
     void OnEnable()
     {
@@ -46,27 +51,31 @@ public class InputController : MonoBehaviour
     }
 
     public void ChangedModeController(int value) 
-    {
-        //Value 0 = Touchscreen mode controller
-        //Value 1 = Gamepad mode controller      
-        
+    {       
         if (value == 0) 
         {
+            _controlSlider.value = 0;
             TouchScreenIsActived();
         }
         else
 
         if(value == 1) 
         {
+            _controlSlider.value = 1;
             GamepadIsActived();    
-        }       
+        }
+        if (value == 2) 
+        {
+            _controlSlider.value = 2;
+            VrIsActived();
+        }
     }
 
     public void TouchScreenIsActived() 
     {
         _inputTouchscreenIsActived = true;
-      
-        //_joysStickPad.SetActive(true);
+        _inputHybridIsActived = false;
+        _inputGamepadIsActived = false;
 
         Debug.Log("Entrando a modo screen");
     }
@@ -74,7 +83,9 @@ public class InputController : MonoBehaviour
     public void GamepadIsActived() 
     {
         _inputGamepadIsActived = true;
-
+        _inputTouchscreenIsActived = false;
+        _inputHybridIsActived=false;
+        
         _joysStickPad.SetActive(false);
 
         Debug.Log("Entrando a modo gamepad");
@@ -83,9 +94,9 @@ public class InputController : MonoBehaviour
     public void VrIsActived() 
     {
         _inputHybridIsActived = true;
-     
-        _joysStickPad.SetActive(false);
-
+        _inputTouchscreenIsActived=false;
+        _inputGamepadIsActived=false;
+        
         Debug.Log("Entrando a modo hibryd");
     }
 
