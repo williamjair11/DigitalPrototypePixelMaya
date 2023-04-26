@@ -39,14 +39,6 @@ public class CardboardStartup : MonoBehaviour
         {
             Api.ReloadDeviceParams();
         }
-<<<<<<< HEAD
-        #if !UNITY_EDITOR
-        Api.UpdateScreenParams();
-        #endif
-=======
-
         Api.UpdateScreenParams(); 
-       
->>>>>>> W_featureCastEnergy
     }
 }

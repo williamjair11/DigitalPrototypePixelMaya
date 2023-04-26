@@ -40,57 +40,31 @@ public class VrModeController : MonoBehaviour
     }
     public void Update()
     {
-<<<<<<< HEAD
-        #if !UNITY_EDITOR
-        if (_isVrModeEnabled)
-        {
-            if (Api.IsCloseButtonPressed)
-            {               
-                ExitVR();               
-=======
         bool VrIsActivated = _inputController._inputHybridIsActived;
         bool state = true;
 
         if (Api.IsCloseButtonPressed)
-            {
-                _inputController.ChangedModeController(0);
-                ExitVR();
-                state = true;
->>>>>>> W_featureCastEnergy
-            }
-
-            if (Api.IsGearButtonPressed)
-            {
-                Api.ScanDeviceParams();
-            }
-<<<<<<< HEAD
-             
-                Api.UpdateScreenParams();
-            
-        }
-        else
         {
-            // TODO(b/171727815): Add a button to switch to VR mode.
-            //if (_isScreenTouched)
-            //{
-            //    EnterVR();
-            //}
+            _inputController.ChangedModeController(0);
+            ExitVR();
+            state = true;
         }
-        #endif
-    }
-=======
 
-            Api.UpdateScreenParams();
->>>>>>> W_featureCastEnergy
+        if (Api.IsGearButtonPressed)
+        {
+            Api.ScanDeviceParams();
+        }
 
-            if (VrIsActivated) 
+        Api.UpdateScreenParams();
+
+        if (VrIsActivated)
+        {
+            if (state)
             {
-                if (state) 
-                {
-                    EnterVR();
-                    state = false;
-                }              
+                EnterVR();
+                state = false;
             }
+        }
     }
 
     private void EnterVR()
