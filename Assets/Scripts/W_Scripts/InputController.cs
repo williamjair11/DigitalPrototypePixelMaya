@@ -5,17 +5,24 @@ using UnityEngine.InputSystem;
 
 public class InputController : MonoBehaviour
 {
-    public bool _inputTouchscreenIsActived = true;
-    public bool _inputGamepadIsActived = false;
-    public bool _inputHybridIsActived = false;
+    [Header("Status controllers")]
+    private bool _inputTouchscreenIsActived = true;
+    private bool _inputGamepadIsActived = false;
+    private bool _inputHybridIsActived = false;
 
+    [Header("References Objects")]
     public GameObject _joysStickPad;
-   
+    private HudController _hudController;
 
+    [Header("InputAction")]
     [SerializeField] InputAction _moveInput = null;
     [SerializeField] InputAction _cameraInput = null;
     [SerializeField] InputAction _jump = null;
 
+    private void Start()
+    {
+        _hudController = FindObjectOfType<HudController>();
+    }
     void OnEnable()
     {
         _moveInput.Enable();
@@ -59,13 +66,18 @@ public class InputController : MonoBehaviour
         if(value == 1) 
         {
             GamepadIsActived();    
-        }       
+        }
+        if(value == 2) 
+        {
+            VrIsActived();
+        }
     }
 
     public void TouchScreenIsActived() 
     {
         _inputTouchscreenIsActived = true;
-      
+        _inputHybridIsActived = false;
+        _inputGamepadIsActived = false;
         //_joysStickPad.SetActive(true);
 
         Debug.Log("Entrando a modo screen");
@@ -74,8 +86,11 @@ public class InputController : MonoBehaviour
     public void GamepadIsActived() 
     {
         _inputGamepadIsActived = true;
+        _inputHybridIsActived = false;
+        _inputTouchscreenIsActived = false;
 
         _joysStickPad.SetActive(false);
+        _hudController.HideHud();
 
         Debug.Log("Entrando a modo gamepad");
     }

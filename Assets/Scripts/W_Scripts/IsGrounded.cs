@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -5,17 +6,16 @@ using UnityEngine;
 
 public class IsGrounded : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _objectTransform;
-    [SerializeField]
-    private float heigth = 100f;
+    [SerializeField] private GameObject _objectTransform;
+    [SerializeField] private float heigth = 100f;
     
-    public bool _floorDetected;
-    public float _distanceFromGround;
+    [NonSerialized]public bool _floorDetected;
+    private float _distanceFromGround;
     private RaycastHit _raycastHit;
     void Update()
     {
-        ObjectIsGrounded();      
+        ObjectIsGrounded();
+        DistanceFromGround();
     }
 
     public float DistanceFromGround() 

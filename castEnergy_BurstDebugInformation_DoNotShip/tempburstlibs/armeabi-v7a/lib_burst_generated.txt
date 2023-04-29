@@ -145,6 +145,14 @@ Library: lib_burst_generated
 --compilation-defines=MODULE_PARTICLE_SYSTEM_EXISTS
 --compilation-defines=TIMELINE_FRAMEACCURATE
 --compilation-defines=UNITY_ANALYTICS
+--compilation-defines=CINEMACHINE_TIMELINE
+--compilation-defines=CINEMACHINE_PHYSICS_2D
+--compilation-defines=CINEMACHINE_PHYSICS
+--compilation-defines=CINEMACHINE_UGUI
+--compilation-defines=CINEMACHINE_LWRP_7_3_1
+--compilation-defines=CINEMACHINE_UNITY_INPUTSYSTEM
+--compilation-defines=CINEMACHINE_UNITY_ANIMATION
+--compilation-defines=CINEMACHINE_UNITY_IMGUI
 --generate-link-xml=Temp\burst.link.xml
 --debug=Full
 --output=C:\Users\WillIam Delgado\Desktop\Pixel Maya\Prototipo 1\DigitalPrototype\Temp\StagingArea\tempburstlibs\armeabi-v7a\lib_burst_generated
@@ -181,6 +189,7 @@ Library: lib_burst_generated
 --root-assembly=C:\Users\WillIam Delgado\Desktop\Pixel Maya\Prototipo 1\DigitalPrototype\Temp\StagingArea\Data\Managed\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll
 --root-assembly=C:\Users\WillIam Delgado\Desktop\Pixel Maya\Prototipo 1\DigitalPrototype\Temp\StagingArea\Data\Managed\Unity.RenderPipelines.Core.ShaderLibrary.dll
 --root-assembly=C:\Users\WillIam Delgado\Desktop\Pixel Maya\Prototipo 1\DigitalPrototype\Temp\StagingArea\Data\Managed\Unity.RenderPipelines.Universal.Shaders.dll
+--root-assembly=C:\Users\WillIam Delgado\Desktop\Pixel Maya\Prototipo 1\DigitalPrototype\Temp\StagingArea\Data\Managed\Cinemachine.dll
 --assembly-folder=C:\Users\WillIam Delgado\Desktop\Pixel Maya\Prototipo 1\DigitalPrototype\Temp\StagingArea\Data\Managed\
 --pdb-search-paths=Temp/ManagedSymbols/
 --method=Unity.Jobs.IJobForExtensions+ForJobStruct`1[[UnityEngine.Rendering.Universal.ReorderJob`1[[UnityEngine.Rendering.Universal.LightMinMaxZ, Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Execute(UnityEngine.Rendering.Universal.ReorderJob`1[[UnityEngine.Rendering.Universal.LightMinMaxZ, Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]&, Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|Unity.Jobs.LowLevel.Unsafe.JobRanges&, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)--e943843acfb78f5f2f3716a6553740d9

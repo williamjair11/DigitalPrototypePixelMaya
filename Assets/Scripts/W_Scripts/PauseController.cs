@@ -7,16 +7,16 @@ using UnityEngine.UI;
 
 public class PauseController : MonoBehaviour
 {
-    public GameObject _pause;
-    public bool _pauseIsActivated;
+    [SerializeField] private GameObject _pause;
+    private bool _pauseIsActivated;
     InputController _inputController;
-    public TMP_Dropdown _dropdown;
-    [SerializeField]
-    private GameObject _joystickCanvas;
-    [SerializeField]
-    private GameObject _hudCanvas;
+    [SerializeField] private TMP_Dropdown _dropdown;
+    [SerializeField] private GameObject _joystickCanvas;
+    [SerializeField] private GameObject _hudCanvas;
+    private HudController _hudController;
     public void Start()
     {
+        _hudController = FindObjectOfType<HudController>();
         _pause.SetActive(false);
         _inputController = GetComponent<InputController>();
     }
@@ -29,7 +29,8 @@ public class PauseController : MonoBehaviour
         {
             _joystickCanvas.SetActive(true);
         }
-        _hudCanvas.SetActive(true);
+        //_hudCanvas.SetActive(true);
+        _hudController.showHud();
     }
 
     public void ShowPause() 
@@ -37,7 +38,8 @@ public class PauseController : MonoBehaviour
         _pause.SetActive(true);
         _pauseIsActivated = true;
         _joystickCanvas.SetActive(false);
-        _hudCanvas.SetActive(false);
+        //_hudCanvas.SetActive(false);
+        _hudController.HideHud();
     }   
 }
 

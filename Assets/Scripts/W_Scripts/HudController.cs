@@ -6,7 +6,6 @@ public class HudController : MonoBehaviour
 {
     [SerializeField]
     private GameObject _hudCanvas;
-    PauseController _controller;
     public bool _hudIsActivated;
  
     public void showHud() 

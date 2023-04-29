@@ -7,14 +7,11 @@ using static UnityEngine.EventSystems.EventTrigger;
 [RequireComponent(typeof(InputController))]
 public class PlayerController : MonoBehaviour
 {
-    private Vector3 _lastPlayerPosition;
-    private bool isJump;
-    private bool _shotAvailable=true;
-
-    public Transform _positionBall;
+    
+    [Header("Player states")]
 
     [SerializeField]
-    private GameObject _EnergyBall;
+    private Rigidbody _rbPlayer;
 
     [SerializeField]
     private float _velocitySpeed = 5f;
@@ -24,6 +21,16 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private float _jumpEnergyCost;
+
+    private Vector3 _lastPlayerPosition;
+
+
+    [Header("Ball Energy")]
+
+    public Transform _positionBall;
+
+    [SerializeField]
+    private GameObject _EnergyBall;
 
     [SerializeField]
     private float _ballEnergyCost;
@@ -37,15 +44,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float _ballForceUp;
 
+    private bool _shotAvailable = true;
+
+
+    [Header("Events")]
+
     [SerializeField]
     private UnityEvent<float> _jumpEvent;
 
     [SerializeField]
     private UnityEvent<float> _energyBallEvent;
 
-    [SerializeField]
-    private Rigidbody _rbPlayer;
 
+    [Header("Inicialition objects")]
     InputController _inputcontroller = null;
     IsGrounded _isGrounded;
 
@@ -72,7 +83,6 @@ public class PlayerController : MonoBehaviour
         if(_lastPlayerPosition != null && _lastPlayerPosition != transform.position) 
         {
             _lastPlayerPosition = transform.position;
-            //Debug.Log(_lastPlayerPosition);
         }
 
         return _lastPlayerPosition;
@@ -100,10 +110,14 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(waitForNextShot());
             Destroy(_temporaryEnergyBall, 5f);
         }
+        else 
+        {
+            //Play sound ball in cooldown
+        }
     }
 
     IEnumerator waitForNextShot() 
-    {    
+    {   
         yield return new WaitForSeconds(_timeNextShot);
         _shotAvailable = true;       
     }

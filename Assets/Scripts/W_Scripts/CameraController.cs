@@ -8,17 +8,18 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(InputController))]
 public class CameraController : MonoBehaviour
 {
+    [Header("Camera states")]
     [SerializeField] private float _cameraSensitivity= 30f;
-    [SerializeField] Transform _cameraTransform= null;
-    InputController _inputController= null;
-    [SerializeField] Transform _player;
-    [SerializeField] private  float _positiveAngleLimit = 90f;
+    [SerializeField] private float _positiveAngleLimit = 90f;
     [SerializeField] private float _negativeAngleLimit = -90f;
+    [SerializeField] Transform _cameraTransform= null;
+    public quaternion DEFAULT_CAMERA;
     private float rotationX;
 
-    public quaternion DEFAULT_CAMERA;
+    [Header("References")]
+    InputController _inputController= null;
+    [SerializeField] Transform _player;
     
-
     private void Awake()
     {
         _inputController = GetComponent<InputController>();
