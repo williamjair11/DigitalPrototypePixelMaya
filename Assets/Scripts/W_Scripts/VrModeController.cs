@@ -3,28 +3,21 @@ using Google.XR.Cardboard;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.XR;
 using UnityEngine.XR.Management;
+using UnityEngine.Events;
 
 public class VrModeController : MonoBehaviour
 {
-    [Header("References scripts objects")]
-    private HudController _hudController;
-    private PauseController _pauseController;
-
-
     [Header("Camera")]
     public Transform _cameraTransform;
     private quaternion DEFAULT_CAMERA;
     public CameraController _cameraController;
 
-    public GameObject _joystickCanvas;
-
     [Header("Selection controls Canvas")]
-    [SerializeField]
-    private TMP_Dropdown _dropdown;
+    [SerializeField] private TMP_Dropdown _dropdown;
 
+    [Header("Events")]
+    [SerializeField] private UnityEvent showPauseCanvas;
 
     public bool _isScreenTouched
     {
@@ -43,10 +36,6 @@ public class VrModeController : MonoBehaviour
     }
     public void Start()
     {
-        //References scripts
-        _hudController = FindObjectOfType<HudController>();
-        _pauseController = FindObjectOfType<PauseController>();
-
         //Save states camera
         _cameraController = new CameraController();
         DEFAULT_CAMERA = _cameraController.DEFAULT_CAMERA;
@@ -55,10 +44,10 @@ public class VrModeController : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Screen.brightness = 1.0f;
 
-        if (!Api.HasDeviceParams())
-        {
-            Api.ScanDeviceParams();
-        }
+        //if (!Api.HasDeviceParams())
+        //{
+        //    Api.ScanDeviceParams();
+        //}
     }
     public void Update()
     {
@@ -89,20 +78,15 @@ public class VrModeController : MonoBehaviour
         #endif
     }
 
-    public void EnterVR(int val)
-    {
-        _hudController.HideHud();
-        _pauseController.HidePause();
-        if (val == 2) 
-        {
+    public void EnterVR()
+    {       
             Debug.Log("entrando a modo VR");
             
             StartCoroutine(StartXR());           
             if (Api.HasNewDeviceParams())
             {
                 Api.ReloadDeviceParams();
-            }
-        }      
+            }          
     }
 
     public void ExitVR()
@@ -139,8 +123,7 @@ public class VrModeController : MonoBehaviour
         Debug.Log("XR deinitialized.");
 
         _cameraTransform.rotation = DEFAULT_CAMERA;
+        showPauseCanvas.Invoke();
         _dropdown.value = 0;
-        _joystickCanvas.SetActive(true);
-        _hudController.showHud();
     }
 }

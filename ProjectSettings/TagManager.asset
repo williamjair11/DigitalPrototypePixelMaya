@@ -15,8 +15,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - TouchControlsLayer
+  - PauseLayer
   - 
   - 
   - 
@@ -44,4 +44,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: background
+    uniqueID: 677919747
+    locked: 0
+  - name: controls
+    uniqueID: 2712358851
+    locked: 0
+  - name: Pause
+    uniqueID: 1247871663
+    locked: 0
+  - name: Hud
+    uniqueID: 2455858553
     locked: 0

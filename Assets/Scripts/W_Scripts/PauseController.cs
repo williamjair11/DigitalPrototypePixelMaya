@@ -2,44 +2,59 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class PauseController : MonoBehaviour
 {
-    [SerializeField] private GameObject _pause;
     private bool _pauseIsActivated;
-    InputController _inputController;
-    [SerializeField] private TMP_Dropdown _dropdown;
-    [SerializeField] private GameObject _joystickCanvas;
-    [SerializeField] private GameObject _hudCanvas;
-    private HudController _hudController;
-    public void Start()
-    {
-        _hudController = FindObjectOfType<HudController>();
-        _pause.SetActive(false);
-        _inputController = GetComponent<InputController>();
-    }
 
-    public void HidePause() 
+    [SerializeField] private GameObject _pause;
+    
+    [SerializeField] private TMP_Dropdown _dropdown;
+
+    [SerializeField] private UnityEvent showHudCanvas;
+    [SerializeField] private UnityEvent hideHudCanvas;
+
+    [SerializeField] private UnityEvent showTouchControlsCanvas;
+    [SerializeField] private UnityEvent hideTouchControlsCanvas;
+
+    [SerializeField] private InputController _touchControlsIsActivated;
+
+    private bool activatedControls;
+
+    void Update()
     {
-        _pause.SetActive(false);
-        _pauseIsActivated = false;
-        if (_dropdown.value == 0) 
+
+    }
+    public void HidePause()
+    {
+        if (_pauseIsActivated)
         {
-            _joystickCanvas.SetActive(true);
-        }
-        //_hudCanvas.SetActive(true);
-        _hudController.showHud();
+            _pause.SetActive(false);
+            _pauseIsActivated = false;
+            if (_dropdown.value == 0)
+            {
+                showTouchControlsCanvas.Invoke();
+                showHudCanvas.Invoke();
+            }
+            if (_dropdown.value == 1) 
+            {
+                showHudCanvas.Invoke();
+            }
+        }            
     }
 
     public void ShowPause() 
     {
-        _pause.SetActive(true);
-        _pauseIsActivated = true;
-        _joystickCanvas.SetActive(false);
-        //_hudCanvas.SetActive(false);
-        _hudController.HideHud();
+        if (_pauseIsActivated == false) 
+        {
+            _pause.SetActive(true);
+            hideTouchControlsCanvas.Invoke();
+            hideHudCanvas.Invoke();
+            _pauseIsActivated = true;
+        }   
     }   
 }
 

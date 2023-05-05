@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
         if (_isGrounded._floorDetected)
         {
             _rbPlayer.AddForce(new Vector3(0, _jumpForce, 0), ForceMode.Impulse);
-            _jumpEvent.Invoke(_jumpEnergyCost);
+            //_jumpEvent.Invoke(_jumpEnergyCost);
         }
     }
 
@@ -120,5 +120,10 @@ public class PlayerController : MonoBehaviour
     {   
         yield return new WaitForSeconds(_timeNextShot);
         _shotAvailable = true;       
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        
     }
 }

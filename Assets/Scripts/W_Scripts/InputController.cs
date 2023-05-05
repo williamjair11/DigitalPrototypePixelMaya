@@ -1,28 +1,33 @@
 using JetBrains.Annotations;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class InputController : MonoBehaviour
 {
     [Header("Status controllers")]
-    private bool _inputTouchscreenIsActived = true;
-    private bool _inputGamepadIsActived = false;
-    private bool _inputHybridIsActived = false;
-
-    [Header("References Objects")]
-    public GameObject _joysStickPad;
-    private HudController _hudController;
+    public bool _inputTouchscreenIsActived = false;
+    public bool _inputGamepadIsActived = false;
+    public bool _inputHybridIsActived = true;
 
     [Header("InputAction")]
     [SerializeField] InputAction _moveInput = null;
     [SerializeField] InputAction _cameraInput = null;
     [SerializeField] InputAction _jump = null;
 
-    private void Start()
-    {
-        _hudController = FindObjectOfType<HudController>();
-    }
+    [Header("Events")]
+    [SerializeField] private UnityEvent showPauseCanvas;
+    [SerializeField] private UnityEvent hidePauseCanvas;
+
+    [SerializeField] private UnityEvent showHudCanvas;
+    [SerializeField] private UnityEvent hideHudCanvas;
+
+    [SerializeField] private UnityEvent showTouchControlsCanvas;
+    [SerializeField] private UnityEvent hideTouchControlsCanvas;
+
+    [SerializeField] private UnityEvent activatedApiVR;
+
     void OnEnable()
     {
         _moveInput.Enable();
@@ -78,8 +83,8 @@ public class InputController : MonoBehaviour
         _inputTouchscreenIsActived = true;
         _inputHybridIsActived = false;
         _inputGamepadIsActived = false;
-        //_joysStickPad.SetActive(true);
 
+        showHudCanvas.Invoke();
         Debug.Log("Entrando a modo screen");
     }
 
@@ -89,28 +94,21 @@ public class InputController : MonoBehaviour
         _inputHybridIsActived = false;
         _inputTouchscreenIsActived = false;
 
-        _joysStickPad.SetActive(false);
-        _hudController.HideHud();
-
+        hideTouchControlsCanvas.Invoke();
+        showHudCanvas.Invoke();
         Debug.Log("Entrando a modo gamepad");
     }
 
     public void VrIsActived() 
     {
         _inputHybridIsActived = true;
-     
-        _joysStickPad.SetActive(false);
+        _inputTouchscreenIsActived = false;
+        _inputGamepadIsActived = false;
 
+        hideHudCanvas.Invoke();
+        hidePauseCanvas.Invoke();
+        hideTouchControlsCanvas.Invoke();
+        activatedApiVR.Invoke();
         Debug.Log("Entrando a modo hibryd");
-    }
-
-    public void ShowJoystick() 
-    {
-        _joysStickPad.SetActive(true);
-    }
-
-    public void HideJoystick()
-    {
-        _joysStickPad.SetActive(false);
     }
 }
