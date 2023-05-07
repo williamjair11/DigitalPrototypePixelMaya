@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-/// <summary>
-/// This class controls the enemy's movement towards the player and return to the original position.
-/// </summary>
+
 public class PlayerDetection : MonoBehaviour
 {
     [SerializeField] private float _originalSpeed;
@@ -34,8 +32,7 @@ public class PlayerDetection : MonoBehaviour
         }
         }
         Debug.Log(distance);
-        _lastPlayerPosition = _playerController.savePosition();
-        
+        _lastPlayerPosition = _playerController.savePosition();      
     }
     /// <summary>
     /// Returns the distance between two objects as a float.
