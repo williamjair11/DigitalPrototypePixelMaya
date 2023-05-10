@@ -24,6 +24,10 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 _lastPlayerPosition;
 
+    [SerializeField] private bool _canMove = true;
+
+   
+
 
     [Header("Ball Energy")]
 
@@ -46,6 +50,17 @@ public class PlayerController : MonoBehaviour
 
     private bool _shotAvailable = true;
 
+    [Header("Flash")]
+
+    [SerializeField] private float _timeNextFlash;
+
+    [SerializeField] private float _costFlashEnergy;
+
+    private bool _flashIsAvaible = true;
+
+    [SerializeField] private float _timeStunFlash;
+
+    private bool _flashButtonActivated = false;
 
     [Header("Events")]
 
@@ -55,20 +70,31 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private UnityEvent<float> _energyBallEvent;
 
+    [SerializeField]
+    private UnityEvent<float> _enemyStunEvent;
+
+    [SerializeField]
+    private UnityEvent<float> _decrementEnergyFlashEvent;
+
 
     [Header("Inicialition objects")]
     InputController _inputcontroller = null;
     IsGrounded _isGrounded;
+    public Light playerGameObject;
 
     private void Awake()
     {
         _inputcontroller = GetComponent<InputController>();
-        _isGrounded = GetComponent<IsGrounded>();               
+        _isGrounded = GetComponent<IsGrounded>();
+        playerGameObject = GetComponent<Light>();
     }
     void Update()
     {
-        Move();
-        savePosition();      
+        if (_canMove) 
+        {
+            Move();
+            savePosition();
+        }            
     }
 
     void Move() 
@@ -116,14 +142,46 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator waitForNextShot() 
-    {   
-        yield return new WaitForSeconds(_timeNextShot);
-        _shotAvailable = true;       
+    public void flashButton() 
+    {
+            _flashButtonActivated = true;
     }
 
-    private void OnTriggerEnter(Collider other)
+    IEnumerator waitForNextShot()
     {
-        
+        yield return new WaitForSeconds(_timeNextShot);
+        _shotAvailable = true;
+    }
+
+    IEnumerator waitForNextFlash()
+    {
+        yield return new WaitForSeconds(_timeNextFlash);
+        _flashIsAvaible = true;
+        playerGameObject.intensity = 0;
+        playerGameObject.range = 0;
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (_flashButtonActivated && _flashIsAvaible) 
+        {
+            if(other.tag == "Enemy") 
+            {
+                _decrementEnergyFlashEvent.Invoke(_costFlashEnergy);
+                _enemyStunEvent.Invoke(_timeStunFlash);
+                _flashIsAvaible = false;
+                _flashButtonActivated = false;
+                playerGameObject.intensity = 100;
+                playerGameObject.range = 30;
+                StartCoroutine(waitForNextFlash());
+            }
+        }
+    }
+
+    public IEnumerator StunTime(float value) 
+    {
+        _canMove = false;
+        yield return new WaitForSeconds(value);
+        _canMove = true;
     }
 }

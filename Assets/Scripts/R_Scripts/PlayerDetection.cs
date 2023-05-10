@@ -13,6 +13,7 @@ public class PlayerDetection : MonoBehaviour
     [SerializeField] private GameObject _originalEnemyPosition;
     private Vector3 _lastPlayerPosition;
     private float distance;
+    private bool _canMove= true;
     private void Start() {
         _lastPlayerPosition = _playerController.savePosition();
     }
@@ -20,18 +21,23 @@ public class PlayerDetection : MonoBehaviour
     
     void Update()
     {
-        if (DistanceBetween(_enemy, _lastPlayerPosition) > 20f){
-            _enemy.destination = _originalEnemyPosition.transform.position;
-            _enemy.speed = _returnSpeed;
-        }
-        else{
-            if (_lastPlayerPosition != _playerController.savePosition())
+        if(_canMove) 
         {
-            _enemy.destination = _lastPlayerPosition;
-            _enemy.speed = _originalSpeed;
+            if (DistanceBetween(_enemy, _lastPlayerPosition) > 20f)
+            {
+                _enemy.destination = _originalEnemyPosition.transform.position;
+                _enemy.speed = _returnSpeed;
+            }
+            else
+            {
+                if (_lastPlayerPosition != _playerController.savePosition())
+                {
+                    _enemy.destination = _lastPlayerPosition;
+                    _enemy.speed = _originalSpeed;
+                }
+            }
         }
-        }
-        Debug.Log(distance);
+        
         _lastPlayerPosition = _playerController.savePosition();      
     }
     /// <summary>
@@ -43,5 +49,17 @@ public class PlayerDetection : MonoBehaviour
     {
         distance = Vector3.Distance(_navMeshAgent.transform.position, _vector3);
         return distance;
+    }
+
+    public void StunEnemy(float timeStun) 
+    {
+        _canMove = false;
+        StartCoroutine(stun(timeStun));
+    }
+
+    public IEnumerator stun (float time) 
+    {
+        yield return new WaitForSeconds(time);
+        _canMove = true;
     }
 }
