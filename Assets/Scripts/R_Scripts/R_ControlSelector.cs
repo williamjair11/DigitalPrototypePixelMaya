@@ -4,18 +4,18 @@ using TMPro;
 using UnityEngine;
 public class R_ControlSelector : MonoBehaviour
 {
-    public GameObject _PauseCanvas;
-    public GameObject _PauseButtonForTouchControls;
+    [SerializeField] private GameObject _PauseCanvas;
+    [SerializeField] private GameObject _PauseButtonForTouchControls;
     bool _menuIsActivated = false;
     bool _touchControlsAreActived = true;
-    InputController _controlSelector = new InputController();
+    // InputController _controlSelector = new InputController();
 
 
     private void Awake()
     {
 
     }
-
+    /*
     public void HandleInputData(int val)
     {
         if (val == 0)
@@ -36,7 +36,8 @@ public class R_ControlSelector : MonoBehaviour
             _touchControlsAreActived = false;
         }
     }
-    void Update()
+    */
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape) && _menuIsActivated == false)
         {

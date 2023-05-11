@@ -9,7 +9,7 @@ public class PlayerDetection : MonoBehaviour
     [SerializeField] private float _originalSpeed;
     [SerializeField] private float _returnSpeed;
     [SerializeField] private NavMeshAgent _enemy;
-    [SerializeField] private PlayerController _playerController = new PlayerController();
+    [SerializeField] private PlayerController _playerController;
     [SerializeField] private GameObject _originalEnemyPosition;
     private Vector3 _lastPlayerPosition;
     private float distance;
@@ -46,6 +46,7 @@ public class PlayerDetection : MonoBehaviour
         distance = Vector3.Distance(_navMeshAgent.transform.position, _vector3);
         return distance;
     }
+<<<<<<< HEAD
 
     public void StunEnemy(float timeStun) 
     {
@@ -59,3 +60,6 @@ public class PlayerDetection : MonoBehaviour
         _canMove = true;
     }
 }
+=======
+}
+>>>>>>> df11c1115fe645394f91c43d3454c172a1e2a260
