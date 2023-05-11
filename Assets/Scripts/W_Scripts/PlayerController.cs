@@ -8,7 +8,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 public class PlayerController : MonoBehaviour
 {
     
-    [Header("Player states")]
+    [Header("Player")]
 
     [SerializeField]
     private Rigidbody _rbPlayer;
@@ -25,6 +25,10 @@ public class PlayerController : MonoBehaviour
     private Vector3 _lastPlayerPosition;
 
     [SerializeField] private bool _canMove = true;
+
+    private float _currentEnergy;
+
+    private bool _reloadEnergy=false;
 
    
 
@@ -62,6 +66,8 @@ public class PlayerController : MonoBehaviour
 
     private bool _flashButtonActivated = false;
 
+    private bool _rangeToFlash = false;
+
     [Header("Events")]
 
     [SerializeField]
@@ -76,10 +82,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private UnityEvent<float> _decrementEnergyFlashEvent;
 
+    [SerializeField]
+    private UnityEvent _regenerateAllEnergy;
+
 
     [Header("Inicialition objects")]
     InputController _inputcontroller = null;
     IsGrounded _isGrounded;
+    EnergyController _energyController;
     public Light playerGameObject;
 
     private void Awake()
@@ -87,14 +97,30 @@ public class PlayerController : MonoBehaviour
         _inputcontroller = GetComponent<InputController>();
         _isGrounded = GetComponent<IsGrounded>();
         playerGameObject = GetComponent<Light>();
+        _energyController = GetComponent<EnergyController>();
     }
     void Update()
     {
+        _currentEnergy = _energyController._currentEnergy;
+
         if (_canMove) 
         {
             Move();
             savePosition();
-        }            
+        }
+
+        if (_currentEnergy <= 0 && _reloadEnergy == false) 
+        {
+            _velocitySpeed = 1f;
+            _regenerateAllEnergy.Invoke();
+            _reloadEnergy = true;
+        }
+
+        if(_currentEnergy == 100) 
+        { 
+            _reloadEnergy = false;
+            _velocitySpeed = 5f;
+        }
     }
 
     void Move() 
@@ -144,7 +170,10 @@ public class PlayerController : MonoBehaviour
 
     public void flashButton() 
     {
+        if (_rangeToFlash) 
+        {
             _flashButtonActivated = true;
+        }            
     }
 
     IEnumerator waitForNextShot()
@@ -162,10 +191,11 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnTriggerStay(Collider other)
-    {
-        if (_flashButtonActivated && _flashIsAvaible) 
+    {           
+        if(other.tag == "Enemy") 
         {
-            if(other.tag == "Enemy") 
+            _rangeToFlash = true;
+            if (_flashButtonActivated && _flashIsAvaible)
             {
                 _decrementEnergyFlashEvent.Invoke(_costFlashEnergy);
                 _enemyStunEvent.Invoke(_timeStunFlash);
@@ -176,6 +206,11 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(waitForNextFlash());
             }
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.tag == "Enemy") { _rangeToFlash = false; }
     }
 
     public IEnumerator StunTime(float value) 

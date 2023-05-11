@@ -36,6 +36,7 @@ public class IsGrounded : MonoBehaviour
     void ObjectIsGrounded() 
     {
         Ray _rayGround = new Ray(_objectTransform.transform.position, Vector3.down);
+        Debug.DrawRay(transform.position, Vector3.down , Color.red);
         if (Physics.Raycast(_rayGround, 2f))
         {
             _floorDetected = true;

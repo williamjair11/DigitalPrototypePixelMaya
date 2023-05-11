@@ -14,8 +14,10 @@ public class PlayerDetection : MonoBehaviour
     private Vector3 _lastPlayerPosition;
     private float distance;
     private bool _canMove= true;
-    private void Start() {
+    private void Start()
+    {
         _lastPlayerPosition = _playerController.savePosition();
+        transform.position = _originalEnemyPosition.transform.position;
     }
    
     
@@ -23,7 +25,7 @@ public class PlayerDetection : MonoBehaviour
     {
         if(_canMove) 
         {
-            if (DistanceBetween(_enemy, _lastPlayerPosition) > 20f)
+            if (DistanceBetween(_enemy, _lastPlayerPosition) > 10f)
             {
                 _enemy.destination = _originalEnemyPosition.transform.position;
                 _enemy.speed = _returnSpeed;
@@ -36,15 +38,9 @@ public class PlayerDetection : MonoBehaviour
                     _enemy.speed = _originalSpeed;
                 }
             }
-        }
-        
-        _lastPlayerPosition = _playerController.savePosition();      
+            _lastPlayerPosition = _playerController.savePosition();
+        }            
     }
-    /// <summary>
-    /// Returns the distance between two objects as a float.
-    /// </summary>
-    /// <param name="_navMeshAgent">The first object to compare.</param>
-    /// <param name="_vector3">The second object to compare.</param>
     public float DistanceBetween(NavMeshAgent _navMeshAgent, Vector3 _vector3)
     {
         distance = Vector3.Distance(_navMeshAgent.transform.position, _vector3);

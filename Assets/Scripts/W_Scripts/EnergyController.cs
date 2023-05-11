@@ -121,4 +121,9 @@ public class EnergyController : MonoBehaviour
     {
         _regenerateAllEnergy = true;
     }
+
+    public float ConsultCurrentEnergy() 
+    {
+        return _currentEnergy;
+    }
 }
