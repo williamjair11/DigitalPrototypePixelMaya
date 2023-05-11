@@ -11,25 +11,33 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float walkingSpeed;
     [SerializeField] private PlayerController _playerController;
     [SerializeField] private GameObject _originalEnemyPosition;
+    private bool _canMove = true;
     void Start() {
         _enemy = GetComponent<NavMeshAgent>();
         _lastPlayerPosition = _playerController.savePosition();
+        transform.position = _originalEnemyPosition.transform.position;
     }
     void Update()
     {
-        if (DistanceBetween(_enemy, _lastPlayerPosition) > 20f){
-            _enemy.destination = _originalEnemyPosition.transform.position;
-            _enemy.speed = walkingSpeed;
-        }
-        else{
-            if (_lastPlayerPosition != _playerController.savePosition())
+        if (_canMove)
+        {
+            if (DistanceBetween(_enemy, _lastPlayerPosition) > 20f)
             {
-                _enemy.destination = _lastPlayerPosition;
-                _enemy.speed = runningSpeed;
+                _enemy.destination = _originalEnemyPosition.transform.position;
+                _enemy.speed = walkingSpeed;
             }
+            else
+            {
+                if (_lastPlayerPosition != _playerController.savePosition())
+                {
+                    _enemy.destination = _lastPlayerPosition;
+                    _enemy.speed = runningSpeed;
+                }
+            }
+            _lastPlayerPosition = _playerController.savePosition();
+            GetEnemyState();
         }
-        _lastPlayerPosition = _playerController.savePosition();
-        GetEnemyState();
+            
     }
     /// <summary>
     /// Returns the distance between two objects as a float.
@@ -42,13 +50,15 @@ public class EnemyMovement : MonoBehaviour
         Debug.Log(distance);
         return distance;
     }
-    public enum EnemyState {
+    public enum EnemyState 
+    {
         Walking,
         Running,
         Idle,
         Turning
     }
-    public EnemyState GetEnemyState() {
+    public EnemyState GetEnemyState() 
+    {
         if (_enemy.speed == walkingSpeed) {
             return EnemyState.Walking;
         }
@@ -66,9 +76,22 @@ public class EnemyMovement : MonoBehaviour
             return EnemyState.Idle;
         }
     }
-    public float GetEnemyAngle() {
+    public float GetEnemyAngle() 
+    {
         Vector3 direction = _enemy.velocity.normalized;
         float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         return angle;
+    }
+
+    public void StunEnemy(float timeStun)
+    {
+        _canMove = false;
+        StartCoroutine(stun(timeStun));
+    }
+
+    public IEnumerator stun(float time)
+    {
+        yield return new WaitForSeconds(time);
+        _canMove = true;
     }
 }
