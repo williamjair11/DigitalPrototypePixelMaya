@@ -28,24 +28,6 @@ public class EnemyAnimationController : MonoBehaviour
         bool isRunning = enemyaAnimator.GetBool(isWalkingHash);
         bool isTurning = enemyaAnimator.GetBool(isTurningHash);
         bool isIdle = enemyaAnimator.GetBool(isIdleHash);
-        /*
-        if(!isWalking && forwardPressed)
-        {
-            enemyaAnimator.SetBool(isWalkingHash, true);
-        }
-        if (isWalking && !forwardPressed)
-        {
-            enemyaAnimator.SetBool(isWalkingHash, false);
-        }
-        if (isWalking && runPressed)
-        {
-            enemyaAnimator.SetBool(isRunningHash, true);
-        }
-        if (!isWalking || !runPressed)
-        {
-            enemyaAnimator.SetBool(isRunningHash, false);
-        }
-        */
         if (_enemyMovement.GetEnemyState() == EnemyMovement.EnemyState.Walking)
         {
             enemyaAnimator.SetBool(isWalkingHash, true);
