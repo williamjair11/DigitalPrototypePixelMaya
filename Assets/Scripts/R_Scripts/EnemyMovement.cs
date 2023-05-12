@@ -37,6 +37,10 @@ public class EnemyMovement : MonoBehaviour
             _lastPlayerPosition = _playerController.savePosition();
             GetEnemyState();
         }
+        else 
+        {
+            _enemy.destination = transform.position;
+        }
             
     }
     /// <summary>
