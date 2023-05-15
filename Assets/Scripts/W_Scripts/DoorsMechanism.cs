@@ -4,40 +4,55 @@ using UnityEngine;
 
 public class DoorsMechanism : MonoBehaviour
 {
-    [SerializeField] private Transform doorLeft;
-    [SerializeField] private Transform doorRight;
     private bool _doorIsActivated = false;
-    private bool _buttonIsActivated = false;
-    public ButtonActivated _estateButton;
+    [SerializeField] private ButtonActivated _estateButton1;
+    [SerializeField] private ButtonActivated _estateButton2;
+    [SerializeField] public bool _button_1_IsActivated = false;
+    [SerializeField] public bool _button_2_IsActivated = false;
+
+
+    private Animator _animatorDoor;
+
     void Start()
     {
-        _estateButton = GetComponent<ButtonActivated>();
+        
+        _animatorDoor = GetComponent<Animator>();
+        _animatorDoor.SetBool("DoorActivated", false);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        _buttonIsActivated = _estateButton.consultButton();
+        _button_1_IsActivated = _estateButton1.buttonIsActivated;
+        _button_2_IsActivated = _estateButton2.buttonIsActivated; 
 
-        if (_buttonIsActivated) 
-        {
-            _doorIsActivated = true;
-        }
+        Debug.Log(_button_1_IsActivated);
+        Debug.Log(_button_2_IsActivated);
 
-        if (_doorIsActivated) 
+        if (_button_1_IsActivated && _button_2_IsActivated) 
         {
-            if(doorRight.transform.localPosition.x < 6.5) 
+            if(_doorIsActivated == false) 
             {
-                doorRight.Translate(Vector3.right * Time.deltaTime);
-            }
-            if (doorLeft.transform.localPosition.x < -12.5)
-            {
-                doorLeft.Translate(Vector3.left * Time.deltaTime);
+                openDoors();
             }
         }
-        else if (_doorIsActivated == false) 
+        else 
         {
-
+            if (_doorIsActivated) 
+            {
+                closedDoors();
+            }
         }
+    }
+
+    void openDoors() 
+    {
+        _doorIsActivated = true;
+        _animatorDoor.SetBool("DoorActivated",  _doorIsActivated);
+    }
+
+    void closedDoors() 
+    {
+        _doorIsActivated = false;
+        _animatorDoor.SetBool("DoorActivated", _doorIsActivated);
     }
 }

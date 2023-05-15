@@ -66,11 +66,14 @@ public class PlayerHability : MonoBehaviour
     [SerializeField] private Light playerlight;
 
     [SerializeField] private PlayerController _playerGameObject;
+
+    private float initialSpeed;
     private void Awake()
     {
         playerlight = GetComponent<Light>();
         _energyController = GetComponent<EnergyController>();
         _playerGameObject = GetComponent<PlayerController>();
+        initialSpeed = _playerGameObject._velocitySpeed;
     }
 
     private void Start()
@@ -83,7 +86,7 @@ public class PlayerHability : MonoBehaviour
 
         if (_currentEnergy <= 0 && _reloadEnergy == false)
         {
-            _playerGameObject._velocitySpeed = 3f;
+            _playerGameObject._velocitySpeed = initialSpeed/2;
             _regenerateAllEnergy.Invoke();
             _reloadEnergy = true;
         }
@@ -91,7 +94,7 @@ public class PlayerHability : MonoBehaviour
         if (_currentEnergy == 100)
         {
             _reloadEnergy = false;
-            _playerGameObject._velocitySpeed = 5f;
+            _playerGameObject._velocitySpeed = initialSpeed;
         }
     }
 

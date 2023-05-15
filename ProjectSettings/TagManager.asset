@@ -8,6 +8,7 @@ TagManager:
   - LeftJoystick
   - ground
   - Enemy
+  - Interactable
   layers:
   - Default
   - TransparentFX

@@ -51,7 +51,6 @@ public class EnemyMovement : MonoBehaviour
     public float DistanceBetween(NavMeshAgent _navMeshAgent, Vector3 _vector3)
     {
         distance = Vector3.Distance(_navMeshAgent.transform.position, _vector3);
-        Debug.Log(distance);
         return distance;
     }
     public enum EnemyState 

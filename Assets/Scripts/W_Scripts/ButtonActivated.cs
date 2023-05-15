@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ButtonActivated : MonoBehaviour
 {
-    private bool buttonIsActivated = false;
+    public bool buttonIsActivated = false;
 
     [SerializeField] private Light buttonLight;
     void Start()
@@ -15,26 +15,29 @@ public class ButtonActivated : MonoBehaviour
         buttonLight.range = 0;
     }
 
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        buttonIsActivated = true;
-        buttonLight.intensity = 150f;
-        buttonLight.range = 3.15f;
+        if (other.tag == "Interactable")
+        {
+            buttonIsActivated = true;
+            buttonLight.intensity = 150f;
+            buttonLight.range = 3.15f;
+        }
+        
     }
 
     private void OnTriggerExit(Collider other)
     {
-        buttonIsActivated = false;
-        buttonLight.intensity = 0;
-        buttonLight.range = 0;
+        if (other.tag == "Interactable")
+        {
+            buttonIsActivated = false;
+            buttonLight.intensity = 0;
+            buttonLight.range = 0;
+        }
+        
     }
 
-    public bool consultButton() 
+    public bool estateButton() 
     {
         return buttonIsActivated;
     }
