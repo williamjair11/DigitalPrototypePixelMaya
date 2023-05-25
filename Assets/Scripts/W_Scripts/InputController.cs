@@ -15,6 +15,8 @@ public class InputController : MonoBehaviour
     [SerializeField] InputAction _moveInput = null;
     [SerializeField] InputAction _cameraInput = null;
     [SerializeField] InputAction _jump = null;
+    [SerializeField] InputAction _throwBallEnergy = null;
+    [SerializeField] InputAction _flashHability = null;
 
     [Header("Events")]
     [SerializeField] private UnityEvent showPauseCanvas;
@@ -33,6 +35,8 @@ public class InputController : MonoBehaviour
         _moveInput.Enable();
         _cameraInput.Enable();
         _jump.Enable();
+        _flashHability.Enable();
+        _throwBallEnergy.Enable();
     }
 
     private void OnDisable()
@@ -40,6 +44,14 @@ public class InputController : MonoBehaviour
         _moveInput.Disable();
         _cameraInput.Disable();
         _jump.Disable();
+        _flashHability.Disable();
+        _throwBallEnergy.Disable();
+    }
+
+    private void Update()
+    {
+        ThrowBallEnergy();
+        FlashHability();
     }
 
     public Vector2 CameraInput() 
@@ -54,7 +66,33 @@ public class InputController : MonoBehaviour
 
     public bool Jump() 
     {
-        return true;
+        bool state = false;
+        if (_jump.WasPressedThisFrame()) 
+        {
+            state = true;
+        }
+        return state;
+    }
+
+    public bool FlashHability() 
+    {
+
+        bool state = false;
+        if (_flashHability.WasPressedThisFrame())
+        {
+            state = true;
+        }
+        return state;
+    }
+
+    public bool ThrowBallEnergy()
+    {
+        bool state = false;
+        if (_throwBallEnergy.WasPressedThisFrame()) 
+        {
+            state = true;
+        }
+        return state;
     }
 
     public void ChangedModeController(int value) 

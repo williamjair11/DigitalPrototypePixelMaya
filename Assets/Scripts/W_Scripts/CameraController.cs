@@ -39,7 +39,7 @@ public class CameraController : MonoBehaviour
     {
         Vector2 input = _inputController.CameraInput();
 
-        rotationX -= input.y;
+        rotationX -= input.y * 0.5f;
         rotationY -= input.x;
         rotationX = Mathf.Clamp(rotationX, _negativeAngleLimit, _positiveAngleLimit);
         

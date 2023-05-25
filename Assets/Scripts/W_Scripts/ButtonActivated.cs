@@ -8,6 +8,8 @@ public class ButtonActivated : MonoBehaviour
     public bool buttonIsActivated = false;
 
     [SerializeField] private Light buttonLight;
+
+    
     void Start()
     {
         buttonLight = GetComponent<Light>();

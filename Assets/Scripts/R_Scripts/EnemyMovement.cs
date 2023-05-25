@@ -11,6 +11,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float walkingSpeed;
     [SerializeField] private PlayerController _playerController;
     [SerializeField] private GameObject _originalEnemyPosition;
+    [SerializeField] private int _rangeEnemyDetection;
     private bool _canMove = true;
     void Start() {
         _enemy = GetComponent<NavMeshAgent>();
@@ -21,7 +22,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (_canMove)
         {
-            if (DistanceBetween(_enemy, _lastPlayerPosition) > 20f)
+            if (DistanceBetween(_enemy, _lastPlayerPosition) > _rangeEnemyDetection)
             {
                 _enemy.destination = _originalEnemyPosition.transform.position;
                 _enemy.speed = walkingSpeed;

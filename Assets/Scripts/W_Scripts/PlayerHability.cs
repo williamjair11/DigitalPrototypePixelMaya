@@ -66,6 +66,7 @@ public class PlayerHability : MonoBehaviour
     [SerializeField] private Light playerlight;
 
     [SerializeField] private PlayerController _playerGameObject;
+    private InputController _inputController;
 
     private float initialSpeed;
     private void Awake()
@@ -74,6 +75,7 @@ public class PlayerHability : MonoBehaviour
         _energyController = GetComponent<EnergyController>();
         _playerGameObject = GetComponent<PlayerController>();
         initialSpeed = _playerGameObject._velocitySpeed;
+        _inputController = GetComponent<InputController>();
     }
 
     private void Start()
@@ -82,6 +84,10 @@ public class PlayerHability : MonoBehaviour
     }
     private void Update()
     {
+        if (_inputController.ThrowBallEnergy()) { throwButton(); }
+
+        if(_inputController.FlashHability()) { flashButton(); }
+
         _currentEnergy = _energyController._currentEnergy;
 
         if (_currentEnergy <= 0 && _reloadEnergy == false)
@@ -91,7 +97,7 @@ public class PlayerHability : MonoBehaviour
             _reloadEnergy = true;
         }
 
-        if (_currentEnergy == 100)
+        if (_currentEnergy == _energyController._initialEnergy)
         {
             _reloadEnergy = false;
             _playerGameObject._velocitySpeed = initialSpeed;
@@ -100,7 +106,7 @@ public class PlayerHability : MonoBehaviour
 
     public void throwButton()
     {
-        if (_shotAvailable)
+        if (_shotAvailable && _reloadEnergy == false)
         {
             GameObject _temporaryEnergyBall = Instantiate(_EnergyBall, _positionBall.transform.position, _positionBall.transform.rotation);
             Rigidbody _rb = _temporaryEnergyBall.GetComponent<Rigidbody>();
@@ -138,7 +144,7 @@ public class PlayerHability : MonoBehaviour
                 _flashButtonActivated = false;
                 playerlight.intensity = 100;
                 playerlight.range = 30;
-                StartCoroutine(waitForNextFlash());
+                StartCoroutine(waitLight());
             }
         }
     }
@@ -156,10 +162,20 @@ public class PlayerHability : MonoBehaviour
 
     IEnumerator waitForNextFlash()
     {
+
         yield return new WaitForSeconds(_timeNextFlash);
         _flashIsAvaible = true;
+    }
+
+    IEnumerator waitLight() 
+    {
+        playerlight.intensity = 100;
+        playerlight.range = 10;
+        yield return new WaitForSeconds(1);
         playerlight.intensity = 0;
         playerlight.range = 0;
+
+        StartCoroutine(waitForNextFlash());
     }
 
 }

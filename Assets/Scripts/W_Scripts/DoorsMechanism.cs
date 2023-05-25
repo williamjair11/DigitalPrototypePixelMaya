@@ -5,11 +5,10 @@ using UnityEngine;
 public class DoorsMechanism : MonoBehaviour
 {
     private bool _doorIsActivated = false;
-    [SerializeField] private ButtonActivated _estateButton1;
-    [SerializeField] private ButtonActivated _estateButton2;
-    [SerializeField] public bool _button_1_IsActivated = false;
-    [SerializeField] public bool _button_2_IsActivated = false;
-
+    [SerializeField] private List<ButtonActivated> _buttons;
+    private int numButtons;
+    private int currentButtons=0;
+    private bool buttonsIsActivated;
 
     private Animator _animatorDoor;
 
@@ -18,26 +17,23 @@ public class DoorsMechanism : MonoBehaviour
         
         _animatorDoor = GetComponent<Animator>();
         _animatorDoor.SetBool("DoorActivated", false);
+        numButtons = _buttons.Count;
     }
 
     void Update()
     {
-        _button_1_IsActivated = _estateButton1.buttonIsActivated;
-        _button_2_IsActivated = _estateButton2.buttonIsActivated; 
+        scanButtons();
 
-        Debug.Log(_button_1_IsActivated);
-        Debug.Log(_button_2_IsActivated);
-
-        if (_button_1_IsActivated && _button_2_IsActivated) 
+        if (buttonsIsActivated)
         {
-            if(_doorIsActivated == false) 
+            if (_doorIsActivated == false)
             {
                 openDoors();
             }
         }
-        else 
+        else
         {
-            if (_doorIsActivated) 
+            if (_doorIsActivated)
             {
                 closedDoors();
             }
@@ -54,5 +50,27 @@ public class DoorsMechanism : MonoBehaviour
     {
         _doorIsActivated = false;
         _animatorDoor.SetBool("DoorActivated", _doorIsActivated);
+    }
+
+    void scanButtons() 
+    {
+        for(int i = 0; i < numButtons; i++) 
+        {
+            if (_buttons[i].buttonIsActivated) 
+            {
+                currentButtons++;
+            }
+        }
+
+        if(currentButtons == numButtons) 
+        {
+            buttonsIsActivated = true;
+        }
+        else 
+        {
+            buttonsIsActivated = false;
+        }
+
+        currentButtons = 0;
     }
 }

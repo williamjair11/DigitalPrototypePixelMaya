@@ -26,6 +26,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private bool _canMove = true;
 
+    [SerializeField] private float _timeToRecoveryCurrentSpeed;
+
     [Header("Events")]
 
     [SerializeField]
@@ -46,7 +48,17 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
             Move();
-            savePosition();              
+            savePosition();         
+        
+        if(_energyController._currentEnergy <= 0) 
+        {
+            StartCoroutine(SlowMove());
+        }
+
+        if (_inputcontroller.Jump()) 
+        {
+            JumpButton();
+        }
     }
 
     void Move() 
@@ -73,4 +85,11 @@ public class PlayerController : MonoBehaviour
             _rbPlayer.AddForce(new Vector3(0, _jumpForce, 0), ForceMode.Impulse);
         }
     } 
+
+    IEnumerator SlowMove() 
+    {
+        _velocitySpeed = _velocitySpeed / 2;
+        yield return new WaitForSeconds(_timeToRecoveryCurrentSpeed);
+        _velocitySpeed = _velocitySpeed * 2;
+    }
 }

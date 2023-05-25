@@ -37,15 +37,16 @@ public class IsGrounded : MonoBehaviour
     {
         Ray _rayGround = new Ray(_objectTransform.transform.position, Vector3.down);
         Debug.DrawRay(transform.position, Vector3.down , Color.red);
-        if (Physics.Raycast(_rayGround, 2f))
+        if (Physics.Raycast(_rayGround, 0.5f))
         {
+
             _floorDetected = true;
-            Debug.Log("Objeto en el suelo");
+            //Debug.Log("Objeto en el suelo");
         }
         else 
         {
             _floorDetected = false;
-            Debug.Log("Objeto en el aire");
+            //Debug.Log("Objeto en el aire");
         }
     }
 

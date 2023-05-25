@@ -14,7 +14,7 @@ public class EnergyController : MonoBehaviour
     [SerializeField] private float _rateIncreaseSpeedEnergy;
 
     [Header("statistics player")]
-    [SerializeField] private float _initialEnergy;
+    [SerializeField] public float _initialEnergy;
     [SerializeField] public float _currentEnergy;
 
     [Header("Events")]
@@ -44,8 +44,8 @@ public class EnergyController : MonoBehaviour
             {
                 _regenerateAllEnergy = false;
                 _currentEnergy = _initialEnergy;
+                _onEnergyFull.Invoke();
             }
-            //_energySlider.value = _initialEnergy;
         }
 
         if (_regenerateEnergy) 
@@ -58,7 +58,6 @@ public class EnergyController : MonoBehaviour
                 _regenerateEnergy = false;
                 _currentEnergy = _valueIncreaseEnergy;
             }
-            //_energySlider.value = _initialEnergy;
         }
 
         if (_decreaseEnergy)
@@ -71,7 +70,6 @@ public class EnergyController : MonoBehaviour
                 _decreaseEnergy = false;
                 _currentEnergy = _valueLossEnergy;
             }
-            //_energySlider.value = _valueLossEnergy;
         }
     }
 
