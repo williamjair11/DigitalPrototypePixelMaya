@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class EnemyAnimationController : MonoBehaviour
 {
-    Animator enemyaAnimator;
-    int isWalkingHash;
-    int isRunningHash;
-    int isTurningHash;
-    int isIdleHash;
+    [HideInInspector] public Animator enemyaAnimator;
+    [HideInInspector] public int isWalkingHash;
+    [HideInInspector] public int isRunningHash;
+    [HideInInspector] public int isTurningHash;
+    [HideInInspector] public int isIdleHash;
     private EnemyMovement _enemyMovement;
     void Start()
     {
@@ -37,24 +37,24 @@ public class EnemyAnimationController : MonoBehaviour
         }
         else if ((_enemyMovement.GetEnemyState() == EnemyMovement.EnemyState.Running))
         {
-            enemyaAnimator.SetBool(isRunningHash, true);
             enemyaAnimator.SetBool(isWalkingHash, false);
+            enemyaAnimator.SetBool(isRunningHash, true);
             enemyaAnimator.SetBool(isTurningHash, false);
             enemyaAnimator.SetBool(isIdleHash, false);
         }
         else if ((_enemyMovement.GetEnemyState() == EnemyMovement.EnemyState.Turning))
         {
-            enemyaAnimator.SetBool(isTurningHash, true);
             enemyaAnimator.SetBool(isWalkingHash, false);
             enemyaAnimator.SetBool(isRunningHash, false);
+            enemyaAnimator.SetBool(isTurningHash, true);
             enemyaAnimator.SetBool(isIdleHash, false);
         }
         else if ((_enemyMovement.GetEnemyState() == EnemyMovement.EnemyState.Idle))
         {
-            enemyaAnimator.SetBool(isIdleHash, true);
             enemyaAnimator.SetBool(isWalkingHash, false);
             enemyaAnimator.SetBool(isRunningHash, false);
             enemyaAnimator.SetBool(isTurningHash, false);
+            enemyaAnimator.SetBool(isIdleHash, true);
         }
     }
 }
