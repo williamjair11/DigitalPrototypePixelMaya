@@ -783,7 +783,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.47933933, g: 0.8113208, b: 0.25640798, a: 1}
-  m_Intensity: 94.05
+  m_Intensity: 100
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -3160,7 +3160,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1938927673}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 6.66, y: 6.521383, z: 13.70766}
+  m_LocalPosition: {x: 6.45, y: 6.521383, z: 13.70766}
   m_LocalScale: {x: 602.6036, y: 30.585468, z: 659.4204}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3989,6 +3989,7 @@ GameObject:
   - component: {fileID: 1407713043527106947}
   - component: {fileID: 1784238140172426042}
   - component: {fileID: 1784238140172426043}
+  - component: {fileID: 1784238140172426044}
   m_Layer: 0
   m_Name: MapaPrototipo
   m_TagString: Untagged
@@ -4106,6 +4107,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1784238140172426044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1784238140172426041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd68f027e715c44aa8d097000d4cccfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!33 &1913567347101661028
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -5847,7 +5860,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rateIncreaseSpeedEnergy: 20
-  _initialEnergy: 150
+  _initialEnergy: 100
   _currentEnergy: 0
   _onEnergyFull:
     m_PersistentCalls:

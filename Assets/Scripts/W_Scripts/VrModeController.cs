@@ -44,16 +44,14 @@ public class VrModeController : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Screen.brightness = 1.0f;
 
-        //if (!Api.HasDeviceParams())
-        //{
-        //    Api.ScanDeviceParams();
-        //}
+        if (!Api.HasDeviceParams())
+        {
+            Api.ScanDeviceParams();
+        }
     }
     public void Update()
     {
-        #if !UNITY_EDITOR
-        if (_isVrModeEnabled)
-        {
+
             if (Api.IsCloseButtonPressed)
             {               
                 ExitVR();               
@@ -64,18 +62,8 @@ public class VrModeController : MonoBehaviour
                 Api.ScanDeviceParams();
             }
              
-                Api.UpdateScreenParams();
-            
-        }
-        else
-        {
-            // TODO(b/171727815): Add a button to switch to VR mode.
-            //if (_isScreenTouched)
-            //{
-            //    EnterVR();
-            //}
-        }
-        #endif
+            Api.UpdateScreenParams();         
+
     }
 
     public void EnterVR()
