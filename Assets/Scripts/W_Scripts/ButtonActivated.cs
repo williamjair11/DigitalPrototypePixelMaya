@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
@@ -5,11 +6,8 @@ using UnityEngine;
 
 public class ButtonActivated : MonoBehaviour
 {
-    public bool buttonIsActivated = false;
-
     [SerializeField] private Light buttonLight;
-
-    
+    [NonSerialized]public bool buttonIsActivated = false;
     void Start()
     {
         buttonLight = GetComponent<Light>();

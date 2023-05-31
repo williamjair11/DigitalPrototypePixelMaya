@@ -7,30 +7,24 @@ using UnityEngine.Rendering;
 
 public class DamageController : MonoBehaviour
 {
-    [SerializeField]
-    public float _damageAmount;
-    
+    [SerializeField] public float _damageAmount;
+
+    [SerializeField] public bool _canMakeDamage;
+
     [SerializeField]
     private UnityEvent<float, string> OnMakeDamagePlayer;
 
     [SerializeField]
     private UnityEvent<float , string> OnMakeDamageEnemy;
-
-    public bool _canMakeDamage;
-       
+    
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && _canMakeDamage) 
+        if (_canMakeDamage) 
         {
-            OnMakeDamagePlayer.Invoke(_damageAmount, "Player");
-        }
-        else if(other.tag == "Enemy" && _canMakeDamage)
-        {
-            OnMakeDamageEnemy.Invoke(_damageAmount, "Enemy");
-        }               
+            OnMakeDamagePlayer.Invoke(_damageAmount, other.tag);
+        }           
     }
-
-    
+  
     public void DesactivatedCanMakeDamage() 
     {
         _canMakeDamage = false;

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using static UnityEngine.EventSystems.EventTrigger;
@@ -10,17 +9,13 @@ public class PlayerController : MonoBehaviour
     
     [Header("Player")]
 
-    [SerializeField]
-    private Rigidbody _rbPlayer;
+    [SerializeField] private Rigidbody _rbPlayer;
 
-    [SerializeField]
-    public float _velocitySpeed = 5f;
+    [SerializeField] public float _velocitySpeed = 5f;
 
-    [SerializeField]
-    private float _jumpForce = 10f;
+    [SerializeField] private float _slowSpeed;
 
-    [SerializeField]
-    private float _jumpEnergyCost;
+    [SerializeField] private float _jumpForce = 10f;
 
     private Vector3 _lastPlayerPosition;
 
@@ -30,13 +25,15 @@ public class PlayerController : MonoBehaviour
 
     [Header("Events")]
 
-    [SerializeField]
-    private UnityEvent<float> _jumpEvent;
+    [SerializeField] private UnityEvent<float> _jumpEvent;
 
 
     [Header("Inicialition objects")]
+
     InputController _inputcontroller = null;
+
     IsGrounded _isGrounded;
+
     EnergyController _energyController;
 
     private void Awake()
@@ -48,16 +45,16 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
             Move();
-            savePosition();         
-        
-        if(_energyController._currentEnergy <= 0) 
+            savePosition();
+
+        if (_energyController.ConsultCurrentEnergy() <=0) 
         {
             StartCoroutine(SlowMove());
         }
 
         if (_inputcontroller.Jump()) 
         {
-            JumpButton();
+            Jump();
         }
     }
 
@@ -78,7 +75,7 @@ public class PlayerController : MonoBehaviour
         return _lastPlayerPosition;
     }
 
-    public void JumpButton() 
+    public void Jump() 
     {
         if (_isGrounded._floorDetected)
         {
@@ -88,8 +85,9 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator SlowMove() 
     {
-        _velocitySpeed = _velocitySpeed / 2;
+        float _currentSpeed = _velocitySpeed;
+        _velocitySpeed = _slowSpeed;
         yield return new WaitForSeconds(_timeToRecoveryCurrentSpeed);
-        _velocitySpeed = _velocitySpeed * 2;
+        _velocitySpeed = _currentSpeed;
     }
 }

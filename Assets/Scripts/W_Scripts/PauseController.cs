@@ -22,8 +22,6 @@ public class PauseController : MonoBehaviour
 
     [SerializeField] private InputController _touchControlsIsActivated;
 
-    private bool activatedControls;
-
     void Update()
     {
 

@@ -9,6 +9,8 @@ TagManager:
   - ground
   - Enemy
   - Interactable
+  - playerLightOrb
+  - greenTorch
   layers:
   - Default
   - TransparentFX

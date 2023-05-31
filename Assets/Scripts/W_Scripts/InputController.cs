@@ -96,10 +96,7 @@ public class InputController : MonoBehaviour
     }
 
     public void ChangedModeController(int value) 
-    {
-        //Value 0 = Touchscreen mode controller
-        //Value 1 = Gamepad mode controller      
-        
+    {       
         if (value == 0) 
         {
             TouchScreenIsActived();

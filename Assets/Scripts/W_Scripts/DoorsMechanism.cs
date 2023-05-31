@@ -13,8 +13,7 @@ public class DoorsMechanism : MonoBehaviour
     private Animator _animatorDoor;
 
     void Start()
-    {
-        
+    {        
         _animatorDoor = GetComponent<Animator>();
         _animatorDoor.SetBool("DoorActivated", false);
         numButtons = _buttons.Count;

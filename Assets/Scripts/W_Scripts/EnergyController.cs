@@ -5,22 +5,18 @@ using UnityEngine.UI;
 public class EnergyController : MonoBehaviour
 {
     [Header("General variables")]
-    private bool _regenerateEnergy=false;
-    private bool _decreaseEnergy = false;
-    private bool _regenerateAllEnergy = false;
-    private float _valueLossEnergy=0;
-    private float _valueIncreaseEnergy=0;
-    
     [SerializeField] private float _rateIncreaseSpeedEnergy;
+    private bool _regeneratingEnergy = false;
 
     [Header("statistics player")]
     [SerializeField] public float _initialEnergy;
     [SerializeField] public float _currentEnergy;
 
     [Header("Events")]
-    [SerializeField] private UnityEvent _onEnergyFull;
-    [SerializeField] private UnityEvent _onEnergyChanged;
-    [SerializeField] private UnityEvent _onEnergyEnds;
+    [SerializeField] private UnityEvent _onEnergyFullEvent;
+    [SerializeField] private UnityEvent _onEnergyChangedEvent;
+    [SerializeField] private UnityEvent _onEnergyEndsEvent;
+    [SerializeField] private UnityEvent _regeneratingEnergyEvent;
 
     [Header("Energy Bar references")]
     [SerializeField] private Slider _energySlider;
@@ -29,98 +25,53 @@ public class EnergyController : MonoBehaviour
         _currentEnergy = _initialEnergy;
         _energySlider.maxValue = _initialEnergy;
     }
-
     
     void Update()
     {
-        if (_currentEnergy <= 0) { _regenerateAllEnergy=true; }
-
-        if (_regenerateAllEnergy)
+        if (_currentEnergy <= 0) 
         {
-            _currentEnergy += _rateIncreaseSpeedEnergy * Time.deltaTime;
-            _energySlider.value = _currentEnergy;
-
-            if (_currentEnergy >= _initialEnergy)
-            {
-                _regenerateAllEnergy = false;
-                _currentEnergy = _initialEnergy;
-                _onEnergyFull.Invoke();
-            }
+            _onEnergyEndsEvent.Invoke();
+            _regeneratingEnergy = true;
+            RegenerateEnergy(_initialEnergy);           
         }
 
-        if (_regenerateEnergy) 
-        {        
-                _currentEnergy += _rateIncreaseSpeedEnergy * Time.deltaTime;
-                _energySlider.value = _currentEnergy;
-            
-            if(_currentEnergy >= _valueIncreaseEnergy) 
-            {
-                _regenerateEnergy = false;
-                _currentEnergy = _valueIncreaseEnergy;
-            }
-        }
-
-        if (_decreaseEnergy)
-        {
-            _currentEnergy -= 23f * Time.deltaTime;
-            _energySlider.value = _currentEnergy;
-
-            if (_currentEnergy <= _valueLossEnergy)
-            {
-                _decreaseEnergy = false;
-                _currentEnergy = _valueLossEnergy;
-            }
-        }
+        if (_regeneratingEnergy) { _regeneratingEnergyEvent.Invoke(); }
     }
 
-    public void GetEnergy(float energyValue) 
+    public void RegenerateEnergy(float value) 
     {
-        _valueIncreaseEnergy = _currentEnergy + energyValue;
-
-        if (_currentEnergy >= _initialEnergy) 
+        float num = _currentEnergy + value;
+        if(num <= _initialEnergy) 
         {
-            _currentEnergy = _initialEnergy;
-            _onEnergyFull.Invoke();
+            _currentEnergy += value;
+            _energySlider.value = _currentEnergy;
+            _onEnergyChangedEvent.Invoke();
+            _regeneratingEnergy = false;
         }
         else 
-        {           
-            _onEnergyChanged.Invoke();
-            regenerateEnergy();
-        }     
-    }
-
-    public void SetEnergy(float energyValue)
-    {
-        _valueLossEnergy = _currentEnergy - energyValue;
-
-        if (_valueLossEnergy <= 0)
         {
-            _currentEnergy= 0;
-            _onEnergyEnds.Invoke();
+            num = 0;
+            Debug.Log("No se puede sobrepasar el nivel de energía");
         }
-        else
-        {      
-            _onEnergyChanged.Invoke();
-            decreaseEnergy();
-        }      
     }
 
-    public void regenerateEnergy() 
+    public void ReduceEnergy(float value)
     {
-        _regenerateEnergy = true;
-    }
-    
-    public void decreaseEnergy() 
-    {
-        _decreaseEnergy = true;
+        float num = _currentEnergy - value;
+        if(num >= 0) 
+        {
+            _currentEnergy -= value;
+            _energySlider.value = _currentEnergy;
+            _onEnergyChangedEvent.Invoke();
+        }
+        else 
+        {
+            num = 0;
+            Debug.Log("No se puede reducir más la energia");
+        }
     }
 
-    public void regenerateAllEnergy() 
-    {
-        _regenerateAllEnergy = true;
-    }
-
-    public float ConsultCurrentEnergy() 
+    public float ConsultCurrentEnergy()
     {
         return _currentEnergy;
     }

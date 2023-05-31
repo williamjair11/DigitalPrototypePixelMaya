@@ -38,7 +38,7 @@ public class VrModeController : MonoBehaviour
     {
         //Save states camera
         _cameraController = new CameraController();
-        DEFAULT_CAMERA = _cameraController.DEFAULT_CAMERA;
+        
 
         //Parameters 
         Screen.sleepTimeout = SleepTimeout.NeverSleep;

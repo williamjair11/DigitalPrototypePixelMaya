@@ -6,8 +6,6 @@ using UnityEngine.InputSystem.XInput;
 
 public class PlayerHability : MonoBehaviour
 {
-    private float _currentEnergy;
-
     private bool _reloadEnergy = false;
 
     [Header("Events")]
@@ -20,9 +18,6 @@ public class PlayerHability : MonoBehaviour
 
     [SerializeField]
     private UnityEvent<float> _decrementEnergyFlashEvent;
-
-    [SerializeField]
-    private UnityEvent _regenerateAllEnergy;
 
     [Header("Ball Energy")]
 
@@ -66,47 +61,27 @@ public class PlayerHability : MonoBehaviour
     [SerializeField] private Light playerlight;
 
     [SerializeField] private PlayerController _playerGameObject;
+
     private InputController _inputController;
 
-    private float initialSpeed;
+   
     private void Awake()
     {
         playerlight = GetComponent<Light>();
         _energyController = GetComponent<EnergyController>();
         _playerGameObject = GetComponent<PlayerController>();
-        initialSpeed = _playerGameObject._velocitySpeed;
         _inputController = GetComponent<InputController>();
-    }
-
-    private void Start()
-    {
-        
     }
     private void Update()
     {
-        if (_inputController.ThrowBallEnergy()) { throwButton(); }
+        if (_inputController.ThrowBallEnergy()) { throwBall(); }
 
-        if(_inputController.FlashHability()) { flashButton(); }
-
-        _currentEnergy = _energyController._currentEnergy;
-
-        if (_currentEnergy <= 0 && _reloadEnergy == false)
-        {
-            _playerGameObject._velocitySpeed = initialSpeed/2;
-            _regenerateAllEnergy.Invoke();
-            _reloadEnergy = true;
-        }
-
-        if (_currentEnergy == _energyController._initialEnergy)
-        {
-            _reloadEnergy = false;
-            _playerGameObject._velocitySpeed = initialSpeed;
-        }
+        if(_inputController.FlashHability()) { flash(); }
     }
 
-    public void throwButton()
+    public void throwBall()
     {
-        if (_shotAvailable && _reloadEnergy == false)
+        if (_shotAvailable && _reloadEnergy == false && _energyController.ConsultCurrentEnergy() >= _ballEnergyCost)
         {
             GameObject _temporaryEnergyBall = Instantiate(_EnergyBall, _positionBall.transform.position, _positionBall.transform.rotation);
             Rigidbody _rb = _temporaryEnergyBall.GetComponent<Rigidbody>();
@@ -123,7 +98,7 @@ public class PlayerHability : MonoBehaviour
         }
     }
 
-    public void flashButton()
+    public void flash()
     {
         if (_rangeToFlash)
         {
@@ -136,7 +111,7 @@ public class PlayerHability : MonoBehaviour
         if (other.tag == "Enemy")
         {
             _rangeToFlash = true;
-            if (_flashButtonActivated && _flashIsAvaible)
+            if (_flashButtonActivated && _flashIsAvaible && _rangeToFlash && _energyController.ConsultCurrentEnergy() >= _costFlashEnergy)
             {
                 _decrementEnergyFlashEvent.Invoke(_costFlashEnergy);
                 _enemyStunEvent.Invoke(_timeStunFlash);
@@ -145,7 +120,7 @@ public class PlayerHability : MonoBehaviour
                 playerlight.intensity = 100;
                 playerlight.range = 30;
                 StartCoroutine(waitLight());
-            }
+            }           
         }
     }
 

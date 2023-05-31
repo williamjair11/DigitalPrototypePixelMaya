@@ -23,51 +23,42 @@ public class HealthController : MonoBehaviour
     {
         _currentHealt = _initialHealt;
     }
-    private void Update()
-    {
-        
-    }
     public void ReciveDamage(float damage, string target) 
     {      
-        _currentHealt -= damage;
-
-        if( _currentHealt <= 0) 
+        float num = _currentHealt - damage;
+        
+        if( num >= 0) 
         {
-            _currentHealt = 0;
-            _OnDie.Invoke();
-            Debug.Log("Dead");
+            _currentHealt -= damage;
+            Debug.Log("Recive Damage: " + damage + " Current healt is; " + _currentHealt + " Object:" + target);
+            _healtSlider.value = _currentHealt;
+            _OnReciveDamage.Invoke(); //insert methods animations and sounds      
         }
         else 
         {
-            Debug.Log("Recive Damage: "+ damage + " Current healt is; " + _currentHealt + " Object:" + target);
-            _OnReciveDamage.Invoke(); //insert methods animations and sounds
-        }
-        
-        if(target == "Player") 
-        {
+            _OnDie.Invoke();
             _healtSlider.value = _currentHealt;
-        }      
+            Debug.Log("Dead");
+        }           
     }
 
-    public void OnRestoreHealt(float healtRestore, string target) 
+    public void RestoreHealt(float healtRestore, string target) 
     {
-        _currentHealt += healtRestore;
-
-        if (_currentHealt >= _initialHealt) 
+        float num = _currentHealt + healtRestore;
+       
+        if (num <= _initialHealt) 
         {
-            _currentHealt=_initialHealt;
-            _OnRestoreMaximumHealt.Invoke();
-            Debug.Log("Full healt");
+            _currentHealt += healtRestore;
+            Debug.Log("Restore healt: " + healtRestore + " Current healt is; " + _currentHealt + "for: " + target);
+            _OnRestoreHealt.Invoke(); //insert methods animations and sounds
+            _healtSlider.value = _currentHealt;
         }
         else 
         {
-            Debug.Log("Restore healt: " + healtRestore + " Current healt is; " + _currentHealt + "for: " + target);
-            _OnRestoreHealt.Invoke(); //insert methods animations and sounds
-        }
-
-        if (target == "player")
-        {
+            _currentHealt = _initialHealt;
+            _OnRestoreMaximumHealt.Invoke();
             _healtSlider.value = _currentHealt;
-        }    
+            Debug.Log("Full healt");
+        }
     }
 }
