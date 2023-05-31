@@ -10,7 +10,8 @@ using UnityEngine.UIElements;
 public class CameraController : MonoBehaviour
 {
     [Header("Camera states")]
-    [SerializeField] private float _cameraSensitivity= 30f;
+    [SerializeField] private float _cameraSensitivityX= 30f;
+    [SerializeField] private float _cameraSensitivityY = 30f;
     [SerializeField] private float _positiveAngleLimit = 90f;
     [SerializeField] private float _negativeAngleLimit = -90f;
     [SerializeField] Transform _cameraTransform= null;
@@ -35,10 +36,10 @@ public class CameraController : MonoBehaviour
     {
         Vector2 input = _inputController.CameraInput();
 
-        rotationX -= input.y * 0.5f;
+        rotationX -= input.y * _cameraSensitivityY;
         rotationX = Mathf.Clamp(rotationX, _negativeAngleLimit, _positiveAngleLimit);
        
-        transform.Rotate(Vector3.up * input.x * _cameraSensitivity * Time.deltaTime, Space.World);       
+        transform.Rotate(Vector3.up * input.x * _cameraSensitivityX * Time.deltaTime, Space.World);       
         _cameraTransform.localRotation = Quaternion.Euler(rotationX, 0, 0);
     }
 

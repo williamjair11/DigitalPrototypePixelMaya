@@ -15,14 +15,19 @@ public class DamageController : MonoBehaviour
     private UnityEvent<float, string> OnMakeDamagePlayer;
 
     [SerializeField]
-    private UnityEvent<float , string> OnMakeDamageEnemy;
-    
+    private UnityEvent<float, string> OnMakeDamageEnemy;
+
+
     private void OnTriggerEnter(Collider other)
     {
-        if (_canMakeDamage) 
+        if (_canMakeDamage && other.tag == "Player")
         {
             OnMakeDamagePlayer.Invoke(_damageAmount, other.tag);
-        }           
+        }
+        else if(_canMakeDamage && other.tag == "Enemy") 
+        {
+            OnMakeDamageEnemy.Invoke(_damageAmount, other.tag);
+        }
     }
   
     public void DesactivatedCanMakeDamage() 

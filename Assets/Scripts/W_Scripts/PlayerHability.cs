@@ -19,6 +19,7 @@ public class PlayerHability : MonoBehaviour
     [SerializeField]
     private UnityEvent<float> _decrementEnergyFlashEvent;
 
+
     [Header("Ball Energy")]
 
     public Transform _positionBall;
@@ -77,6 +78,17 @@ public class PlayerHability : MonoBehaviour
         if (_inputController.ThrowBallEnergy()) { throwBall(); }
 
         if(_inputController.FlashHability()) { flash(); }
+
+        if (_flashButtonActivated && _flashIsAvaible && _energyController.ConsultCurrentEnergy() >= _costFlashEnergy)
+        {
+            _decrementEnergyFlashEvent.Invoke(_costFlashEnergy);
+            _enemyStunEvent.Invoke(_timeStunFlash);
+            _flashIsAvaible = false;
+            _flashButtonActivated = false;
+            playerlight.intensity = 100;
+            playerlight.range = 30;
+            StartCoroutine(waitLight());
+        }
     }
 
     public void throwBall()
@@ -110,17 +122,7 @@ public class PlayerHability : MonoBehaviour
     {
         if (other.tag == "Enemy")
         {
-            _rangeToFlash = true;
-            if (_flashButtonActivated && _flashIsAvaible && _rangeToFlash && _energyController.ConsultCurrentEnergy() >= _costFlashEnergy)
-            {
-                _decrementEnergyFlashEvent.Invoke(_costFlashEnergy);
-                _enemyStunEvent.Invoke(_timeStunFlash);
-                _flashIsAvaible = false;
-                _flashButtonActivated = false;
-                playerlight.intensity = 100;
-                playerlight.range = 30;
-                StartCoroutine(waitLight());
-            }           
+            _rangeToFlash = true;                 
         }
     }
 
