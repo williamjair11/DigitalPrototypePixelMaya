@@ -4,70 +4,68 @@ using UnityEngine.UI;
 
 public class HealthController : MonoBehaviour
 {
-    [SerializeField]
-    private float _initialHealt;    
-    [SerializeField]
-    private UnityEvent _OnReciveDamage;
-    [SerializeField]
-    private UnityEvent _OnDie;
-    [SerializeField]
-    private UnityEvent _OnRestoreHealt;
-    [SerializeField]
-    private UnityEvent _OnRestoreMaximumHealt;
-    [SerializeField]
-    private Slider _healtSlider;
-    [SerializeField]
-    private float _currentHealt;
+    enum objectType { Player, Enemy }
+    [SerializeField] objectType _objectType;
+
+    [SerializeField] private float _initialHealt;    
+
+    [SerializeField] private UnityEvent _OnReciveDamage;
+
+    [SerializeField] private UnityEvent _OnDie;
+
+    [SerializeField] private UnityEvent _OnRestoreHealt;
+
+    [SerializeField] private UnityEvent _OnRestoreMaximumHealt;
+
+    [SerializeField] private Slider _healtSlider;
+
+    [SerializeField] private float _currentHealt;
+
+    
 
     private void Start()
     {
         _currentHealt = _initialHealt;
     }
-    private void Update()
-    {
-        
-    }
     public void ReciveDamage(float damage, string target) 
     {      
-        _currentHealt -= damage;
-
-        if( _currentHealt <= 0) 
+        float num = _currentHealt - damage;
+        
+        if( num >= 0) 
         {
-            _currentHealt = 0;
-            _OnDie.Invoke();
-            Debug.Log("Dead");
+            _currentHealt -= damage;
+            Debug.Log("Recive Damage: " + damage + " Current healt is; " + _currentHealt + " Object:" + target);
+            if(_objectType == objectType.Player) { _healtSlider.value = _currentHealt; }
+            
+            _OnReciveDamage.Invoke(); //insert methods animations and sounds      
         }
         else 
         {
-            Debug.Log("Recive Damage: "+ damage + " Current healt is; " + _currentHealt + " Object:" + target);
-            _OnReciveDamage.Invoke(); //insert methods animations and sounds
-        }
-        
-        if(target == "Player") 
-        {
-            _healtSlider.value = _currentHealt;
-        }      
+            _OnDie.Invoke();
+            if (_objectType == objectType.Player) { _healtSlider.value = _currentHealt; }
+            Debug.Log("Dead");
+            if (_objectType == objectType.Enemy) { Destroy(this.gameObject); }
+            
+        }           
     }
 
-    public void OnRestoreHealt(float healtRestore, string target) 
+    public void RestoreHealt(float healtRestore, string target) 
     {
-        _currentHealt += healtRestore;
-
-        if (_currentHealt >= _initialHealt) 
+        float num = _currentHealt + healtRestore;
+       
+        if (num <= _initialHealt) 
         {
-            _currentHealt=_initialHealt;
-            _OnRestoreMaximumHealt.Invoke();
-            Debug.Log("Full healt");
+            _currentHealt += healtRestore;
+            Debug.Log("Restore healt: " + healtRestore + " Current healt is; " + _currentHealt + "for: " + target);
+            _OnRestoreHealt.Invoke(); //insert methods animations and sounds
+            if (_objectType == objectType.Player) { _healtSlider.value = _currentHealt; }
         }
         else 
         {
-            Debug.Log("Restore healt: " + healtRestore + " Current healt is; " + _currentHealt + "for: " + target);
-            _OnRestoreHealt.Invoke(); //insert methods animations and sounds
+            _currentHealt = _initialHealt;
+            _OnRestoreMaximumHealt.Invoke();
+            if (_objectType == objectType.Player) { _healtSlider.value = _currentHealt; }
+            Debug.Log("Full healt");
         }
-
-        if (target == "player")
-        {
-            _healtSlider.value = _currentHealt;
-        }    
     }
 }
