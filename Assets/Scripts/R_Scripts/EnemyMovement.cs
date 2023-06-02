@@ -4,71 +4,97 @@ using UnityEngine;
 using UnityEngine.AI;
 public class EnemyMovement : MonoBehaviour
 {
-    public NavMeshAgent _enemy;
+    EnemyAnimationController _enemyAnimatorController;
+    //LightDetection _lightDetection;
+    [HideInInspector] public Transform _currentWaypoint;
+    [HideInInspector] public NavMeshAgent _enemy;
+    [SerializeField] private PlayerController _playerController;
+    [SerializeField] private Waypoints _waypoint;
+    [SerializeField] private float _trackingDistance = 10f; //The distance at which the enemy will search for the player 
+    [SerializeField] private float runningSpeed = 6f;
+    [SerializeField] private float walkingSpeed = 3f;
+    [HideInInspector] private float distanceThreshold = 0.1f; //distance threshold for the the waypoints
     private Vector3 _lastPlayerPosition;
     private float distance;
-    private bool _playerMoved;
-    [SerializeField] private float tracksPlayerWhitinRangeOf;
-    [SerializeField] private float runningSpeed;
-    [SerializeField] private float walkingSpeed;
-    [SerializeField] private PlayerController _playerController;
-    public GameObject _enemyCheckPoint1;
-    public GameObject _enemyCheckPoint2;
-    LightDetection _lightDetection;
+    private bool _playerMoved;    
     private bool _canMove = true;
-    [SerializeField] private List<GameObject> checkPointList = new List<GameObject>();
-    [SerializeField] private GameObject checkPointSpawnPosition;
+    private bool _enemyDetectsLight = false;
+    private Vector3 _lightTarget;
+    private bool _playerIsInsideGreenLight = false;
+    private bool _onLightOrbDetection = false;
+    private GameObject _energyBallClone;
+    private bool _onWhiteTorchDetection = false;
 
-    void Start() {
-        _lightDetection = GetComponent<LightDetection>();
+    void Start() 
+    {
+        _enemyAnimatorController = GetComponent<EnemyAnimationController>();
+        //_lightDetection = GetComponent<LightDetection>();
         _enemy = GetComponent<NavMeshAgent>();
         _lastPlayerPosition = _playerController.savePosition();
-        // transform.position = _enemyCheckPoint1.transform.position;
+
+        //Set initial position to the first waypoint
+        _currentWaypoint = _waypoint.GetNextWaypoint(_currentWaypoint);
+        transform.position = _currentWaypoint.position;
+        
+        //Set the next waypoint target
+        _currentWaypoint = _waypoint.GetNextWaypoint(_currentWaypoint);
+        _energyBallClone = _playerController._temporaryEnergyBall;
     }
     void Update()
     {
         if (_canMove)
         {
-            if (InitialPlayerPositionChange())
+            if (_onWhiteTorchDetection)
             {
-                if (DistanceBetween(_enemy, _lastPlayerPosition) > tracksPlayerWhitinRangeOf)
+                _enemy.destination = GameObject.Find("TorchLighting (1)").transform.position;
+                _enemy.speed = runningSpeed;
+            }
+            else if (_onLightOrbDetection)
+            {
+                _enemy.destination = GameObject.Find("EnergyBall(Clone)").transform.position;
+                _enemy.speed = runningSpeed;
+            }
+
+            else if (_playerIsInsideGreenLight)
+            {
+                _enemy.speed = walkingSpeed;
+                _enemy.destination = _currentWaypoint.position;
+            }
+
+            else if (DistanceBetween(_enemy, _lastPlayerPosition) > _trackingDistance) //Enemy follows waypoints
+            {
+                _enemy.speed = walkingSpeed;
+                _enemy.destination = _currentWaypoint.position;
+                if (!_enemy.isStopped)
                 {
-                    _enemy.destination = _enemyCheckPoint1.transform.position;
-                    _enemy.speed = walkingSpeed;
-                    if (_enemy.transform.position == _enemyCheckPoint1.transform.position)
+                    if (Vector3.Distance(transform.position, _currentWaypoint.position) < distanceThreshold)
                     {
-                        _enemy.destination = _enemyCheckPoint2.transform.position;
+                        _currentWaypoint = _waypoint.GetNextWaypoint(_currentWaypoint);
+                        _enemy.destination = _currentWaypoint.position;
+                        _enemy.speed = 0f;
                     }
-                    else if (_enemy.destination == _enemyCheckPoint2.transform.position)
-                    {
-                        _enemy.destination = _enemyCheckPoint1.transform.position;
-                    }
+                }
+            }
+            else if (Vector3.Distance(_enemy.transform.position, _lastPlayerPosition) < _trackingDistance)
+            {
+                if (DistanceBetween(_enemy, _lastPlayerPosition) <= 2f)
+                {
+                    _enemy.speed = 0f;
+                    _enemyAnimatorController.enemyaAnimator.Play("Enemy_Atack");
                 }
                 else
                 {
-                    if (DistanceBetween(_enemy, _lastPlayerPosition) == 1f )
-                    {
-                        _enemy.speed = 0f;
-                    }
-                    else
-                    {
-                        _enemy.destination = _lastPlayerPosition;
-                        _enemy.speed = runningSpeed;
-                    }
-
+                    _enemy.speed = runningSpeed;
+                    _enemy.destination = _lastPlayerPosition;
+                    _enemy.speed = runningSpeed;
                 }
             }
-            _lastPlayerPosition = _playerController.savePosition();
-            GetEnemyState();
         }
-        CreateCheckpoints();
-            
+        _lastPlayerPosition = _playerController.savePosition();
+        GetEnemyState();
+        StopCoroutine(RandomDelay());
+        StartCoroutine(RandomDelay()); 
     }
-    /// <summary>
-    /// Returns the distance between two objects as a float.
-    /// </summary>
-    /// <param name="_navMeshAgent">The first object to compare.</param>
-    /// <param name="_vector3">The second object to compare.</param>
     public float DistanceBetween(NavMeshAgent _navMeshAgent, Vector3 _vector3)
     {
         distance = Vector3.Distance(_navMeshAgent.transform.position, _vector3);
@@ -80,8 +106,7 @@ public class EnemyMovement : MonoBehaviour
         Walking,
         Running,
         Idle,
-        Turning,
-        BesidePlayer
+        Turning
     }
     public EnemyState GetEnemyState() 
     {
@@ -91,16 +116,12 @@ public class EnemyMovement : MonoBehaviour
         else if (_enemy.speed == runningSpeed) {
             return EnemyState.Running;
         }
-        else if (_enemy.speed == 0f){
+        else if (_enemy.speed <= 0.1){
             return EnemyState.Idle;
         }
-        else if (_enemy.velocity.magnitude > 0 && Vector3.Angle(_enemy.velocity, _enemy.transform.forward) > 10f)
+        else if (_enemy.speed > 0 && Vector3.Angle(_enemy.velocity, _enemy.transform.forward) > 10f)
         {
             return EnemyState.Turning;
-        }
-        else if (DistanceBetween(_enemy, _lastPlayerPosition) == 2f)
-        {
-            return EnemyState.BesidePlayer;
         }
         else 
         {
@@ -118,24 +139,49 @@ public class EnemyMovement : MonoBehaviour
         yield return new WaitForSeconds(time);
         _canMove = true;
     }
-    private bool InitialPlayerPositionChange()
+    IEnumerator RandomDelay()
     {
-        if (_lastPlayerPosition != _playerController.savePosition())
+        float _randomDelay = Random.Range(3.0f, 5.0f);
+        if (Vector3.Distance(_enemy.transform.position, _currentWaypoint.position) < distanceThreshold + 0.1f)
         {
-            _playerMoved = true;
+            _enemy.speed = 0f;;
+        }
+        yield return new WaitForSeconds(_randomDelay);
+        _enemy.speed = walkingSpeed;
+    }
+        private void OnTriggerEnter(Collider other) 
+    {
+        if (other.CompareTag("greenTorch"))
+        {
+            _playerIsInsideGreenLight = true;
         }
         else
         {
-            _playerMoved = false;
+            _playerIsInsideGreenLight = false;
         }
-        return _playerMoved;
-    }
-    private void CreateCheckpoints()
-    {
-        foreach (GameObject obj in checkPointList)
+        if (other.CompareTag("playerLightOrb"))
         {
-            Instantiate(obj);
+            _onLightOrbDetection = true;
         }
+        else
+        {
+            _onLightOrbDetection = false;
+        }
+        if (other.CompareTag("whiteTorch"))
+        {
+            _onWhiteTorchDetection = true;
+        }
+        else
+        {
+            _onWhiteTorchDetection = false;
+        }
+        if (other.CompareTag("whiteTorchOff"))
+        {
+            Destroy(GameObject.Find("TorchLighting(1)"));
+        }
+        if (other.CompareTag("destroyOrb"))
+        {
+            Destroy(GameObject.Find("EnergyBall(Clone)"));
+        }    
     }
-
 }

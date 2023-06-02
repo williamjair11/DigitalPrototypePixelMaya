@@ -8,6 +8,9 @@ TagManager:
   - LeftJoystick
   - ground
   - Enemy
+  - playerLightOrb
+  - greenTorch
+  - whiteTorch
   layers:
   - Default
   - TransparentFX
