@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using DG.Tweening;
+
 
 public class EnergyController : MonoBehaviour
 {
@@ -19,11 +21,13 @@ public class EnergyController : MonoBehaviour
     [SerializeField] private UnityEvent _regeneratingEnergyEvent;
 
     [Header("Energy Bar references")]
-    [SerializeField] private Slider _energySlider;
+    [SerializeField] Slider _energySlider;
     void Start()
     {
         _currentEnergy = _initialEnergy;
         _energySlider.maxValue = _initialEnergy;
+        DOTween.Init();
+
     }
     
     void Update()
@@ -44,7 +48,7 @@ public class EnergyController : MonoBehaviour
         if(num <= _initialEnergy) 
         {
             _currentEnergy += value;
-            _energySlider.value = _currentEnergy;
+            _energySlider.DOValue(_currentEnergy, 1);
             _onEnergyChangedEvent.Invoke();
             _regeneratingEnergy = false;
         }
@@ -61,7 +65,7 @@ public class EnergyController : MonoBehaviour
         if(num >= 0) 
         {
             _currentEnergy -= value;
-            _energySlider.value = _currentEnergy;
+            _energySlider.DOValue(_currentEnergy, 1);
             _onEnergyChangedEvent.Invoke();
         }
         else 

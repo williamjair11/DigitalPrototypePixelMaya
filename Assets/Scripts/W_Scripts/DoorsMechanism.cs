@@ -9,14 +9,14 @@ public class DoorsMechanism : MonoBehaviour
     private int numButtons;
     private int currentButtons=0;
     private bool buttonsIsActivated;
+    private TweenManager _tweenManager;
 
-    private Animator _animatorDoor;
 
     void Start()
-    {        
-        _animatorDoor = GetComponent<Animator>();
-        _animatorDoor.SetBool("DoorActivated", false);
+    { 
         numButtons = _buttons.Count;
+        _tweenManager = FindObjectOfType<TweenManager>();
+        _tweenManager.CloseDoor();
     }
 
     void Update()
@@ -27,28 +27,18 @@ public class DoorsMechanism : MonoBehaviour
         {
             if (_doorIsActivated == false)
             {
-                openDoors();
+                _tweenManager.OpenDoor();
+                _doorIsActivated = true;
             }
         }
         else
         {
             if (_doorIsActivated)
             {
-                closedDoors();
+                _tweenManager.CloseDoor();
+                _doorIsActivated = false;
             }
         }
-    }
-
-    void openDoors() 
-    {
-        _doorIsActivated = true;
-        _animatorDoor.SetBool("DoorActivated",  _doorIsActivated);
-    }
-
-    void closedDoors() 
-    {
-        _doorIsActivated = false;
-        _animatorDoor.SetBool("DoorActivated", _doorIsActivated);
     }
 
     void scanButtons() 

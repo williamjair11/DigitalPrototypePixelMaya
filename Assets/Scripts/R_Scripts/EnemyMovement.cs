@@ -71,7 +71,7 @@ public class EnemyMovement : MonoBehaviour
         }
         else 
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            transform.position = transform.localPosition;
         }
 
     }
