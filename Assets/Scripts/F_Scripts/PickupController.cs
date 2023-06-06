@@ -9,8 +9,6 @@ public class PickupController : MonoBehaviour
     private GameObject heldObj;
     private Rigidbody heldObjRB;
     private Transform Obj;
-    [SerializeField] private UnityEvent swapShootToThrow;
-    [SerializeField] private UnityEvent swapThrowToShoot;
 
     [SerializeField] private float pickupRange = 5f;
     [SerializeField] private float pickupForce = 150f;
@@ -61,7 +59,6 @@ public class PickupController : MonoBehaviour
             Obj=pickObj.GetComponent<Transform>();
             heldObjRB.transform.parent = HoldArea;
             heldObj=pickObj;
-            swapShootToThrow.Invoke();
         }
     }
    public void DropObject()
@@ -72,7 +69,6 @@ public class PickupController : MonoBehaviour
 
         heldObjRB.transform.parent = null;
             heldObj = null;
-        swapThrowToShoot.Invoke();
         }
     public void ThrowObj()
     {

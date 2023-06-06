@@ -1,33 +1,44 @@
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
+
 public class TweenManager : MonoBehaviour
 {
-    #region Doors Variables
-    [Header("Doors Tween")]
-    [SerializeField] GameObject _doorLeft;
-    [SerializeField] GameObject _doorRight;
-    [SerializeField] private float _speedDoors;
-    [SerializeField] private float _openDoorLeftPosition;
-    [SerializeField] private float _openDoorRighPosition;
-    [SerializeField] private float _closeDoorsLeftPosition;
-    [SerializeField] private float _closeDoorsRightPosition;
-    #endregion
+    [SerializeField] private GameObject _sliderObject;
+    [SerializeField] private Image _sliderImage;
+
+    private EnergyController _energyController;
+
     void Start()
     {
         DOTween.Init();
+        _energyController = FindObjectOfType<EnergyController>();
     }
 
-    #region Doors Tween
-    public void OpenDoor() 
+    #region Slider energy Tween
+    public void TweenFlashHabilitySlider() 
     {
-        _doorLeft.transform.DOMoveX(_openDoorLeftPosition, _speedDoors);
-        _doorRight.transform.DOMoveX(_openDoorRighPosition, _speedDoors);
+        _sliderObject.transform.DOShakeScale(1f, 1f, 20, 90);
+        _sliderImage.color = Color.green;
+        _sliderImage.DOColor(Color.white, 5f);
     }
 
-    public void CloseDoor() 
+    public void TweenInsufficientEnergySlider() 
     {
-        _doorLeft.transform.DOMoveX(_closeDoorsLeftPosition, _speedDoors);
-        _doorRight.transform.DOMoveX(_closeDoorsRightPosition, _speedDoors);
+        Sequence _sequence = DOTween.Sequence();
+        _sequence.Insert(0, _sliderImage.DOColor(Color.red, 0.1f));
+        _sequence.Insert(1, _sliderImage.DOColor(Color.white, 0.1f));       
+    }
+
+    public void TweenRegenerateAllEnergy() 
+    {
+        float timeRecovery = _energyController._timeToRechargeAllEnergy;
+        Sequence _sequence = DOTween.Sequence();
+
+        _sequence.Insert(0, _sliderImage.DOColor(Color.blue, timeRecovery));
+        _sequence.Append(_sliderImage.DOColor(Color.white, 0.5f));
     }
     #endregion
+
+
 }

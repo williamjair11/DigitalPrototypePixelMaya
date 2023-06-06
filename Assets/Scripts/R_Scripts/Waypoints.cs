@@ -6,7 +6,6 @@ public class Waypoints : MonoBehaviour
     [SerializeField] private float _waypointSize = 1f;
     private void OnDrawGizmos()
     {
-        Debug.Log("Test");
         foreach (Transform t in transform)
         {
             Gizmos.color = Color.blue;
