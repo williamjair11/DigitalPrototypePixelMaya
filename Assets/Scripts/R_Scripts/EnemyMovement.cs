@@ -43,6 +43,7 @@ public class EnemyMovement : MonoBehaviour
         transform.position = _currentWaypoint.position;
         
         //Set the next waypoint target
+
         _currentWaypoint = _waypoint.GetNextWaypoint(_currentWaypoint);
     }
     void Update()
@@ -74,6 +75,8 @@ public class EnemyMovement : MonoBehaviour
                 _enemy.destination = _currentWaypoint.position;
                 if (!_enemy.isStopped)
                 {
+                    _enemy.speed = walkingSpeed;
+                    _enemy.destination = _currentWaypoint.position;
                     if (Vector3.Distance(transform.position, _currentWaypoint.position) < distanceThreshold)
                     {
                         _currentWaypoint = _waypoint.GetNextWaypoint(_currentWaypoint);
@@ -98,16 +101,17 @@ public class EnemyMovement : MonoBehaviour
             }
         } 
     }
-    public enum EnemyState 
+    public enum EnemyState
     {
         Walking,
         Runing,
         Rotating,
         Idle,
         Atacking,
+
         Turning
     }
-    public EnemyState GetEnemyState() 
+    public EnemyState GetEnemyState()
     {
         if (_enemy.speed == walkingSpeed) {
             _enemyAnimatorController.ChangeAnimationStateTo(ENEMY_IS_WALKING);
@@ -131,7 +135,7 @@ public class EnemyMovement : MonoBehaviour
             _enemyAnimatorController.ChangeAnimationStateTo(ENEMY_IS_ATACKING);
             return EnemyState.Atacking;
         }
-        else 
+        else
         {
             _enemyAnimatorController.ChangeAnimationStateTo(ENEMY_IS_IDLE);
             return EnemyState.Idle;

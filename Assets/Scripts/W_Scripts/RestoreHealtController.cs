@@ -5,19 +5,17 @@ using UnityEngine.Events;
 
 public class RestoreHealtController : MonoBehaviour
 {
-    [SerializeField]
-    public float _healtAmount;
+    [SerializeField] public float _healtAmount;
 
-    [SerializeField]
-    private UnityEvent<float, string> OnRestoreHealt;
+    [SerializeField] private UnityEvent<float, string> OnRestoreHealt;
 
-    public bool _canRestoreHealt;
+    private bool _canRestoreHealt;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player" && _canRestoreHealt)
         {
-            OnRestoreHealt.Invoke(_healtAmount, "player");
+            OnRestoreHealt.Invoke(_healtAmount, other.tag);
         }
     }
     public void DesactivatedCanRestoreHealt()
