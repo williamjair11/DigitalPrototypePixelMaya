@@ -44,15 +44,18 @@ public class VrModeController : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Screen.brightness = 1.0f;
 
-        if (!Api.HasDeviceParams())
+#if !UNITY_EDITOR
+if (!Api.HasDeviceParams())
         {
             Api.ScanDeviceParams();
         }
+#endif
+
     }
     public void Update()
     {
-
-            if (Api.IsCloseButtonPressed)
+#if !UNITY_EDITOR
+if (Api.IsCloseButtonPressed)
             {               
                 ExitVR();               
             }
@@ -62,8 +65,8 @@ public class VrModeController : MonoBehaviour
                 Api.ScanDeviceParams();
             }
              
-            Api.UpdateScreenParams();         
-
+            Api.UpdateScreenParams();  
+#endif
     }
 
     public void EnterVR()

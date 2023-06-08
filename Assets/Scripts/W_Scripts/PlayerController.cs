@@ -11,7 +11,13 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Rigidbody _rbPlayer;
 
-    [SerializeField] public float _velocitySpeed = 5f;
+    [SerializeField] public float _initialSpeedPlayer = 5f;
+
+    [SerializeField] private float _runSpeed;
+
+    private float _velocitySpeed;
+
+    private bool _movePlayer;
 
     [SerializeField] private float _slowSpeed;
 
@@ -20,8 +26,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 _lastPlayerPosition;
 
     [SerializeField] private bool _canMove = true;
-
-    [SerializeField] private float _timeToRecoveryCurrentSpeed;
 
     [Header("Events")]
 
@@ -41,29 +45,48 @@ public class PlayerController : MonoBehaviour
         _inputcontroller = GetComponent<InputController>();
         _isGrounded = GetComponent<IsGrounded>();
         _energyController = GetComponent<EnergyController>();
+        _velocitySpeed = _initialSpeedPlayer;
     }
     void Update()
     {
+
             Move();
             savePosition();
 
-        if (_energyController.ConsultCurrentEnergy() <=0) 
+        if (_energyController._regeneratingEnergy == true)
         {
-            StartCoroutine(SlowMove());
+            _velocitySpeed= _slowSpeed;
+        }
+        else 
+        {
+            _velocitySpeed = _initialSpeedPlayer;
         }
 
         if (_inputcontroller.Jump()) 
         {
             Jump();
         }
+
+        if (_inputcontroller.RunPlayer()) 
+        {
+            if(_energyController._regeneratingEnergy == false) { Run(); }           
+        }
+        else 
+        {
+            if(_energyController._regeneratingEnergy == true) { _velocitySpeed = _slowSpeed; }
+            else { _velocitySpeed = _initialSpeedPlayer;}
+        }
     }
 
     void Move() 
     {
         Vector2  Input = _inputcontroller.MoveInput();
-      
+        
         transform.position += transform.forward * Input.y  *_velocitySpeed  *Time.deltaTime;
         transform.position += transform.right * Input.x * _velocitySpeed * Time.deltaTime;
+
+        if(Input.x > 0 || Input.y > 0) { _movePlayer = true; }
+        else { _movePlayer = false; }
     }
     public Vector3 savePosition() 
     {
@@ -81,13 +104,14 @@ public class PlayerController : MonoBehaviour
         {
             _rbPlayer.AddForce(new Vector3(0, _jumpForce, 0), ForceMode.Impulse);
         }
-    } 
+    }
 
-    IEnumerator SlowMove() 
+    public void Run() 
     {
-        float _currentSpeed = _velocitySpeed;
-        _velocitySpeed = _slowSpeed;
-        yield return new WaitForSeconds(_timeToRecoveryCurrentSpeed);
-        _velocitySpeed = _currentSpeed;
+        if (_isGrounded._floorDetected && _movePlayer) 
+        {
+            _velocitySpeed = _runSpeed;
+            _energyController.ReduceRunEnergy();
+        }        
     }
 }

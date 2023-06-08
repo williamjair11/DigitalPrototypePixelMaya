@@ -1,28 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.EnhancedTouch;
+using DG.Tweening;
+using UnityEngine.Events;
 
 public class TurnOnOffLight : MonoBehaviour
 {
-    public GameObject txtToDisplay;            
+    [SerializeField] private UnityEvent<float> _energyTorchOnEvent;
 
-    private bool PlayerInZone;      
+    private bool PlayerInZone;
 
-    public GameObject lightobj;
+    private InputController _inputController;
 
+    private EnergyController _energyController;
+
+    public bool _torchTurnedOn = false;
+
+    [SerializeField] private GameObject txtToDisplay;
+
+    #region
+    [SerializeField] private Light _torch;
+    [SerializeField] private float _speedLight;
+    [SerializeField] private float _intensityLightOn;
+    [SerializeField] private float _intensityLightOff;
+    [SerializeField] private float _intensityLightMiddle;
+    [SerializeField] private float _costTurnOnTorch;
+    #endregion
     private void Start()
     {
-
-        PlayerInZone = false;                         
-        txtToDisplay.SetActive(false);
+        _inputController = FindObjectOfType<InputController>();
+        _energyController = FindObjectOfType<EnergyController>();
+        PlayerInZone = false;
+        //txtToDisplay.SetActive(false);
     }
 
     private void Update()
     {
-        if (PlayerInZone && Input.GetKeyDown(KeyCode.F)) //in zone and F key is pressed
+        bool stateButtonControl = _inputController.Interact();
+
+        if (PlayerInZone && _inputController.Interact() && _energyController.ConsultCurrentEnergy() >= _costTurnOnTorch)
         {
-            lightobj.SetActive(!lightobj.activeSelf);
-           
+            TorchOn();
+            _energyTorchOnEvent.Invoke(_costTurnOnTorch);
         }
     }
 
@@ -30,7 +50,7 @@ public class TurnOnOffLight : MonoBehaviour
     {
         if (other.gameObject.tag == "Player") //player in zone
         {
-            txtToDisplay.SetActive(true);
+            //txtToDisplay.SetActive(true);
             PlayerInZone = true;
         }
     }
@@ -41,7 +61,27 @@ public class TurnOnOffLight : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             PlayerInZone = false;
-            txtToDisplay.SetActive(false);
+            //txtToDisplay.SetActive(false);
         }
     }
+
+    #region Lights Tween
+    public void TorchOn()
+    {
+        _torch.DOIntensity(_intensityLightOn, _speedLight);
+        _torchTurnedOn = true;
+    }
+
+    public void TorchOff()
+    {
+        _torch.DOIntensity(_intensityLightOff, _speedLight);
+        _torchTurnedOn = false;
+    }
+
+    public void TorchMiddle()
+    {
+        _torch.DOIntensity(_intensityLightMiddle, _speedLight);
+        _torchTurnedOn = true;
+    }
+    #endregion
 }

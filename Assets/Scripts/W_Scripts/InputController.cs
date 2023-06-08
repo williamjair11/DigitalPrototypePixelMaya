@@ -19,6 +19,7 @@ public class InputController : MonoBehaviour
     [SerializeField] InputAction _flashHability = null;
     [SerializeField] InputAction _interact = null;
     [SerializeField] InputAction _twrowObject = null;
+    [SerializeField] InputAction _runPlayer = null;
 
     [Header("Events")]
     [SerializeField] private UnityEvent showPauseCanvas;
@@ -41,6 +42,7 @@ public class InputController : MonoBehaviour
         _throwBallEnergy.Enable();
         _interact.Enable();
         _twrowObject.Enable();
+        _runPlayer.Enable();
     }
 
     private void OnDisable()
@@ -52,6 +54,7 @@ public class InputController : MonoBehaviour
         _throwBallEnergy.Disable();
         _interact.Disable();
         _twrowObject.Disable();
+        _runPlayer.Disable();
     }
 
     private void Update()
@@ -60,6 +63,7 @@ public class InputController : MonoBehaviour
         FlashHability();
         Interact();
         ThrowObject();
+        
     }
 
     public Vector2 CameraInput() 
@@ -106,6 +110,16 @@ public class InputController : MonoBehaviour
 
         bool state = false;
         if (_flashHability.WasPressedThisFrame())
+        {
+            state = true;            
+        }
+        return state;
+    }
+
+    public bool RunPlayer()
+    {
+        bool state = false;
+        if (_runPlayer.IsPressed())
         {
             state = true;
         }

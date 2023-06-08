@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class ButtonActivated : MonoBehaviour
 {
@@ -9,9 +10,7 @@ public class ButtonActivated : MonoBehaviour
     [NonSerialized]public bool buttonIsActivated = false;
     void Start()
     {
-        buttonLight = GetComponent<Light>();
-        buttonLight.intensity = 0;
-        buttonLight.range = 0;
+        DOTween.Init();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -19,8 +18,7 @@ public class ButtonActivated : MonoBehaviour
         if (other.tag == "Interactable")
         {
             buttonIsActivated = true;
-            buttonLight.intensity = 150f;
-            buttonLight.range = 3.15f;
+            buttonLight.DOIntensity(50f, 2f);
         }
         
     }
@@ -30,10 +28,8 @@ public class ButtonActivated : MonoBehaviour
         if (other.tag == "Interactable")
         {
             buttonIsActivated = false;
-            buttonLight.intensity = 0;
-            buttonLight.range = 0;
-        }
-        
+            buttonLight.DOIntensity(0f, 1f);
+        }       
     }
 
     public bool estateButton() 
