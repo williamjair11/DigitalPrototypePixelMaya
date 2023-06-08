@@ -25,12 +25,9 @@ public class EnemyMovement : MonoBehaviour
     private float distance;
     private bool _playerMoved;    
     private bool _canMove = true;
-    private bool _enemyDetectsLight = false;
-    private Vector3 _lightTarget;
     private bool _playerIsInsideGreenLight = false;
-    private bool _onLightOrbDetection = false;
-    private GameObject _energyBallClone;
-    private bool _onWhiteTorchDetection = false;
+    private bool _onLightDetection = false;
+    private Vector3 _lightSourcePosition;
 
     void Start() 
     {
@@ -52,17 +49,11 @@ public class EnemyMovement : MonoBehaviour
         GetEnemyState();
         if (_canMove)
         {
-            if (_onWhiteTorchDetection)
+            if (_onLightDetection)
             {
                 _enemy.destination = GameObject.Find("TorchLighting (1)").transform.position;
                 _enemy.speed = runningSpeed;
             }
-            else if (_onLightOrbDetection)
-            {
-                _enemy.destination = GameObject.Find("EnergyBall(Clone)").transform.position;
-                _enemy.speed = runningSpeed;
-            }
-
             else if (_playerIsInsideGreenLight)
             {
                 _enemy.speed = walkingSpeed;
@@ -81,7 +72,6 @@ public class EnemyMovement : MonoBehaviour
                     {
                         _currentWaypoint = _waypoint.GetNextWaypoint(_currentWaypoint);
                         _enemy.destination = _currentWaypoint.position;
-                        _enemy.speed = 0f;
                     }
                 }
             }
@@ -100,6 +90,7 @@ public class EnemyMovement : MonoBehaviour
                 }
             }
         } 
+        Debug.Log(_enemy.speed);
     }
     public enum EnemyState
     {
@@ -108,7 +99,6 @@ public class EnemyMovement : MonoBehaviour
         Rotating,
         Idle,
         Atacking,
-
         Turning
     }
     public EnemyState GetEnemyState()
@@ -127,9 +117,9 @@ public class EnemyMovement : MonoBehaviour
         }
         else if (_enemy.speed > 0 && Vector3.Angle(_enemy.velocity, _enemy.transform.forward) > 10f){
             _enemyAnimatorController.ChangeAnimationStateTo(ENEMY_IS_ROTATING);
-            return EnemyState.Turning;
+            return EnemyState.Rotating;
         }
-        else if (Vector3.Distance(_enemy.transform.position, _playerLastPosition) < _atackingDistance)
+        else if (Vector3.Distance(transform.position, _playerLastPosition) < _atackingDistance)
         {
             _enemy.isStopped = true;
             _enemyAnimatorController.ChangeAnimationStateTo(ENEMY_IS_ATACKING);
@@ -172,25 +162,14 @@ public class EnemyMovement : MonoBehaviour
         {
             _playerIsInsideGreenLight = false;
         }
-        if (other.CompareTag("playerLightOrb"))
+        if (other.CompareTag("Light"))
         {
-            _onLightOrbDetection = true;
+            _lightSourcePosition = other.transform.position;
+            _onLightDetection = true;
         }
         else
         {
-            _onLightOrbDetection = false;
-        }
-        if (other.CompareTag("whiteTorch"))
-        {
-            _onWhiteTorchDetection = true;
-        }
-        else
-        {
-            _onWhiteTorchDetection = false;
-        }
-        if (other.CompareTag("whiteTorchOff"))
-        {
-            Destroy(GameObject.Find("TorchLighting(1)"));
+            _onLightDetection = false;
         }
         if (other.CompareTag("destroyOrb"))
         {

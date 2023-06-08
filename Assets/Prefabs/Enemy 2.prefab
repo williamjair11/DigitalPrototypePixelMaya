@@ -1117,12 +1117,11 @@ GameObject:
   - component: {fileID: 4630292067490905138}
   - component: {fileID: 4630292067490905139}
   - component: {fileID: 4630292067490905161}
-  - component: {fileID: 4630292067490905141}
-  - component: {fileID: 4630292067490905142}
   - component: {fileID: 4630292067490905143}
-  - component: {fileID: 4630292067490905162}
   - component: {fileID: 4630292067490905164}
   - component: {fileID: 4630292067490905165}
+  - component: {fileID: 4140756492607175564}
+  - component: {fileID: 4440943361819293710}
   m_Layer: 0
   m_Name: Enemy 2
   m_TagString: Enemy
@@ -1196,43 +1195,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4630292067490905141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5513377687985976690}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0beed56f02d647bd9fc8cb605592091, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _waypoint: {fileID: 0}
-  _currentWaypoint: {fileID: 0}
-  _enemy: {fileID: 4630292067490905143}
-  tracksPlayerWhitinRangeOf: 10
-  runningSpeed: 3
-  walkingSpeed: 1.5
-  _playerController: {fileID: 0}
-  distanceThreshold: 0.1
---- !u!114 &4630292067490905142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5513377687985976690}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad87ff2c74785449ca560b5c55eab70b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyaAnimator: {fileID: 0}
-  isWalkingHash: 0
-  isRunningHash: 0
-  isTurningHash: 0
-  isIdleHash: 0
 --- !u!195 &4630292067490905143
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1255,20 +1217,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &4630292067490905162
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5513377687985976690}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4870b0ea3ad6a4832b0311e03898848d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rangeOfLightDetection: 15
-  _enemyIsOnGreenLight: 0
 --- !u!114 &4630292067490905164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1326,6 +1274,42 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnMakeDamageEnemy:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &4140756492607175564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5513377687985976690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0beed56f02d647bd9fc8cb605592091, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentWaypoint: {fileID: 0}
+  _waypoint: {fileID: 0}
+  _enemy: {fileID: 0}
+  _playerController: {fileID: 0}
+  _atackingDistance: 1
+  _trackingDistance: 10
+  runningSpeed: 6
+  walkingSpeed: 3
+--- !u!114 &4440943361819293710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5513377687985976690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c37fc9bf2a6e24b48bb001a265976878, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
 --- !u!1 &5633005754429661526
 GameObject:
   m_ObjectHideFlags: 0

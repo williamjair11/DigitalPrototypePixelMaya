@@ -10,11 +10,6 @@ public class AnimationController : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
     }
-    void Update()
-    {
-
-    }
-    ///
     public void ChangeAnimationStateTo(string _newState)
     {
         if (_currentState == _newState) return;
