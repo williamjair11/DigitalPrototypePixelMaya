@@ -3,10 +3,11 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections;
+using System;
 
 public class EnergyController : MonoBehaviour
 {
-    [Header("General variables")]
+    [Header("General variables normal Energy")]
     [SerializeField] private float _rateIncreaseSpeedEnergy;
     [SerializeField] private float _timeAfkToRecoveryEnergy;
     private bool _counterActivate = false;  
@@ -25,6 +26,7 @@ public class EnergyController : MonoBehaviour
     [SerializeField] private UnityEvent _onEnergyEndsEvent;
     [SerializeField] private UnityEvent _regeneratingEnergyEvent;
 
+
     [Header("Energy Bar references")]
     [SerializeField] Slider _energySlider;
 
@@ -35,6 +37,7 @@ public class EnergyController : MonoBehaviour
         _currentEnergy = _initialEnergy;
         _energySlider.maxValue = _initialEnergy;
         _currentTime = _timeAfkToRecoveryEnergy;
+
         _tweenManager = FindObjectOfType<TweenManager>();
         DOTween.Init();
         
@@ -42,7 +45,11 @@ public class EnergyController : MonoBehaviour
     
     void Update()
     {
-        if (_regeneratingEnergy == false) { _currentTime -= Time.deltaTime; }
+        if (_regeneratingEnergy == false) 
+        { 
+            _currentTime -= Time.deltaTime;           
+        }
+
         
         if( _currentTime <= 0) 
         {
@@ -125,6 +132,13 @@ public class EnergyController : MonoBehaviour
             _energySlider.value = _currentEnergy;
             RestarCounterEnergy();
         }
+    }
+
+    public void IncrementEnergy() 
+    {
+            _currentEnergy += 10 * Time.deltaTime;
+            _energySlider.value = _currentEnergy;
+            RestarCounterEnergy();     
     }
 
     public void RegeneratingPasiveEnergy() 

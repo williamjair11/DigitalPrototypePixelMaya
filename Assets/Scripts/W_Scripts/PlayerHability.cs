@@ -13,6 +13,9 @@ public class PlayerHability : MonoBehaviour
     private UnityEvent<float> _energyBallEvent;
 
     [SerializeField]
+    private UnityEvent<float> _greenEnergyBallEvent;
+
+    [SerializeField]
     private UnityEvent<float> _enemyStunEvent;
 
     [SerializeField]
@@ -40,6 +43,10 @@ public class PlayerHability : MonoBehaviour
 
     private bool _shotAvailable = true;
 
+    [Header("Green Ball Energy")]
+
+    [SerializeField] private float _greenBallEnergyCost;
+
     [Header("Flash")]
 
     [SerializeField] private float _timeNextFlash;
@@ -58,6 +65,8 @@ public class PlayerHability : MonoBehaviour
 
     EnergyController _energyController;
 
+    GreenEnergy _greenEnergy;
+
     [SerializeField] private PlayerController _playerGameObject;
 
     private InputController _inputController;
@@ -71,13 +80,25 @@ public class PlayerHability : MonoBehaviour
         _playerGameObject = GetComponent<PlayerController>();
         _inputController = GetComponent<InputController>();
         _tweenManager= FindObjectOfType<TweenManager>();
+        _greenEnergy = FindObjectOfType<GreenEnergy>();
         DOTween.Init();
     }
     private void Update()
     {
-        if (_inputController.ThrowBallEnergy()) { throwBall(); }
+        bool stateEnergyGreen = _greenEnergy._greenEnergyIsActivated;
 
-        if(_inputController.FlashHability()) { CastFlashHability(); }
+        if (stateEnergyGreen) 
+        {
+            if (_inputController.ThrowBallEnergy()) { ThrowGreenBallEnergy(); }
+
+            if (_inputController.FlashHability()) { }
+        }
+        else 
+        {
+            if (_inputController.ThrowBallEnergy()) { throwBall(); }
+
+            if (_inputController.FlashHability()) { CastFlashHability(); }
+        }       
     }
 
     public void throwBall()
@@ -141,5 +162,11 @@ public class PlayerHability : MonoBehaviour
         _flashIsAvaible = false;
         yield return new WaitForSeconds(_timeNextFlash);
         _flashIsAvaible = true;
+    }
+
+    public void ThrowGreenBallEnergy() 
+    {
+        Debug.Log("Lanzando bola verde");
+        _greenEnergyBallEvent.Invoke(_greenBallEnergyCost);
     }
 }

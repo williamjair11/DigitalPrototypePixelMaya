@@ -17,7 +17,7 @@ public class InputController : MonoBehaviour
     [SerializeField] InputAction _jump = null;
     [SerializeField] InputAction _throwBallEnergy = null;
     [SerializeField] InputAction _flashHability = null;
-    [SerializeField] InputAction _interact = null;
+    [SerializeField] public InputAction _interact = null;
     [SerializeField] InputAction _twrowObject = null;
     [SerializeField] InputAction _runPlayer = null;
 
