@@ -6,8 +6,14 @@ public class TweenManager : MonoBehaviour
 {
     [SerializeField] private GameObject _sliderObject;
     [SerializeField] private Image _sliderImage;
+    [SerializeField] private Image _sliderNormalEnergy;
+
+    [SerializeField] private Light _lightPlayer;
 
     private EnergyController _energyController;
+
+
+    
 
     void Start()
     {
@@ -15,7 +21,9 @@ public class TweenManager : MonoBehaviour
         _energyController = FindObjectOfType<EnergyController>();
     }
 
-    #region Slider energy Tween
+    #region Slider normal energy Tween
+
+
     public void TweenFlashHabilitySlider() 
     {
         _sliderObject.transform.DOShakeScale(1f, 1f, 20, 90);
@@ -40,5 +48,18 @@ public class TweenManager : MonoBehaviour
     }
     #endregion
 
+    public void TweenPowerGreenEnergyOn() 
+    {
+        Sequence _sequence = DOTween.Sequence();
 
+        _sequence.Append(_lightPlayer.DOColor(Color.green, 0))
+            .Append(_lightPlayer.DOIntensity(20, 1));           
+    }
+    public void TweenPowerGreenEnergyOff()
+    {
+        Sequence _sequence = DOTween.Sequence();
+
+        _sequence.Append(_lightPlayer.DOColor(Color.green, 0))
+            .Append(_lightPlayer.DOIntensity(0, 1));
+    }
 }
