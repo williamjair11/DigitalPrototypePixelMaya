@@ -117,14 +117,10 @@ public class EnemyMovementRefactor : MonoBehaviour
         yield return new WaitForSeconds(time);
         _canMove = true;
     }
-    IEnumerator RandomDelay()
+    IEnumerator Delay()
     {
-        float _randomDelay = Random.Range(3.0f, 5.0f);
-        if (Vector3.Distance(_enemy.transform.position, _currentWaypoint.position) < distanceThreshold + 0.1f)
-        {
-            _enemy.speed = 0f;;
-        }
-        yield return new WaitForSeconds(_randomDelay);
+        StopEnemy();
+        yield return new WaitForSeconds(1f);
         _enemy.speed = walkingSpeed;
     }
         private void OnTriggerEnter(Collider other) 
@@ -134,11 +130,12 @@ public class EnemyMovementRefactor : MonoBehaviour
             _lightSourcePosition = other.gameObject.transform.position;
             _onLightDetection = true;
         }
-        else if (other.CompareTag("destroyOrb"))
+        if (other.CompareTag("destroyOrb"))
         {
-            Destroy(GameObject.Find("EnergyBall(Clone)"));
+            _onLightDetection = false;
+            Destroy(GameObject.Find("EnergyBall(Clone)"), 2f);
         }
-        else if (other.CompareTag("Player")){
+        if (other.CompareTag("Player")){
             _onPlayerDetection = true;
         }
     }
@@ -155,9 +152,10 @@ public class EnemyMovementRefactor : MonoBehaviour
     void FollowLight()
     {
             _enemy.isStopped = false;
-            _enemy.destination = _lightSourcePosition;
+            _enemy.destination = GameObject.Find("EnergyBall(Clone)").transform.position;
             _enemy.speed = runningSpeed;
             Debug.Log("Follow light");
+            if (GameObject.Find("EnergyBall(Clone)") == null)return;
     }
     void EnemyPatrols()
     {
@@ -193,6 +191,7 @@ public class EnemyMovementRefactor : MonoBehaviour
             if (_enemy.remainingDistance - _enemy.stoppingDistance <= 1)
             {
                 StopEnemy();
+                _enemyAnimatorController.ChangeAnimationStateTo(ENEMY_IS_ATACKING);
             }
             else
             {
