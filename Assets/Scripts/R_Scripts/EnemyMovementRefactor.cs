@@ -152,7 +152,7 @@ public class EnemyMovementRefactor : MonoBehaviour
     void FollowLight()
     {
             _enemy.isStopped = false;
-            _enemy.destination = GameObject.Find("EnergyBall(Clone)").transform.position;
+            _enemy.SetDestination(GameObject.Find("EnergyBall(Clone)").transform.position);
             _enemy.speed = runningSpeed;
             Debug.Log("Follow light");
             if (GameObject.Find("EnergyBall(Clone)") == null)return;
@@ -167,7 +167,7 @@ public class EnemyMovementRefactor : MonoBehaviour
         }
         else
         {
-            _enemy.destination = _currentWaypoint.position;
+            _enemy.SetDestination(_currentWaypoint.position);
             _enemy.speed = walkingSpeed;
             Debug.Log($"Distance between Enemy and waypoint{(Vector3.Distance(_enemy.transform.position, _currentWaypoint.position))}");
             if (Vector3.Distance(transform.position, _currentWaypoint.position) < distanceThreshold)
@@ -185,19 +185,18 @@ public class EnemyMovementRefactor : MonoBehaviour
     }
     void ChasePlayer()
     {
-        if (Vector3.Distance(transform.position, _playerLastPosition) < _trackingDistance && !_playerIsInsideGreenLight)
+        if (!_playerIsInsideGreenLight)
         {
             Debug.Log("Chase Player");
             if (_enemy.remainingDistance - _enemy.stoppingDistance <= 1)
             {
                 StopEnemy();
-                _enemyAnimatorController.ChangeAnimationStateTo(ENEMY_IS_ATACKING);
             }
             else
             {
                 _enemy.isStopped = false;
                 _enemy.speed = runningSpeed;
-                _enemy.destination = _playerLastPosition;
+                _enemy.SetDestination(_playerLastPosition);
             }
         }
     }
