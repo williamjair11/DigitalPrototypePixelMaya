@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem.XInput;
 using DG.Tweening;
 
 public class PlayerHability : MonoBehaviour
@@ -47,6 +45,10 @@ public class PlayerHability : MonoBehaviour
 
     [SerializeField] private float _greenBallEnergyCost;
 
+    private bool _shootGreenEnergyIsAvaible = true;
+
+    [SerializeField] private float _timeNextGreenEnergyBall;
+
     [Header("Flash")]
 
     [SerializeField] private float _timeNextFlash;
@@ -65,8 +67,6 @@ public class PlayerHability : MonoBehaviour
 
     EnergyController _energyController;
 
-    GreenEnergy _greenEnergy;
-
     [SerializeField] private PlayerController _playerGameObject;
 
     private InputController _inputController;
@@ -80,22 +80,22 @@ public class PlayerHability : MonoBehaviour
         _playerGameObject = GetComponent<PlayerController>();
         _inputController = GetComponent<InputController>();
         _tweenManager= FindObjectOfType<TweenManager>();
-        _greenEnergy = FindObjectOfType<GreenEnergy>();
         DOTween.Init();
     }
     private void Update()
     {
-        bool stateEnergyGreen = _greenEnergy._greenEnergyIsActivated;
+        EnergyController.EnergysTypes _currentTypeEnergy = _energyController._typeEnergy;
 
-        if (stateEnergyGreen) 
-        {
-            if (_inputController.ThrowBallEnergy()) { ThrowGreenBallEnergy(); }
-
-            if (_inputController.FlashHability()) { }
-        }
-        else 
+        if (_currentTypeEnergy == EnergyController.EnergysTypes.Normal) 
         {
             if (_inputController.ThrowBallEnergy()) { throwBall(); }
+
+            if (_inputController.FlashHability()) { CastFlashHability(); }          
+        }
+        
+        if( _currentTypeEnergy == EnergyController.EnergysTypes.Green)
+        {
+            if (_inputController.ThrowBallEnergy()) { ThrowGreenBallEnergy(); }
 
             if (_inputController.FlashHability()) { CastFlashHability(); }
         }       
@@ -157,6 +157,13 @@ public class PlayerHability : MonoBehaviour
         _shotAvailable = true;
     }
 
+    IEnumerator waitForNextGreenEnergyBall()
+    {
+        _shootGreenEnergyIsAvaible= false;
+        yield return new WaitForSeconds(_timeNextGreenEnergyBall);
+        _shootGreenEnergyIsAvaible = true;
+    }
+
     IEnumerator waitForNextFlash()
     {
         _flashIsAvaible = false;
@@ -166,7 +173,11 @@ public class PlayerHability : MonoBehaviour
 
     public void ThrowGreenBallEnergy() 
     {
-        Debug.Log("Lanzando bola verde");
-        _greenEnergyBallEvent.Invoke(_greenBallEnergyCost);
+        if(_shootGreenEnergyIsAvaible) 
+        {
+            Debug.Log("Lanzando bola verde");
+            StartCoroutine(waitForNextGreenEnergyBall());
+            _greenEnergyBallEvent.Invoke(_greenBallEnergyCost);
+        }       
     }
 }

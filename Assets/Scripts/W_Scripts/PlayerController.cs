@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private float _velocitySpeed;
 
     private bool _movePlayer;
+
+    private bool _isRunning;
 
     [SerializeField] private float _slowSpeed;
 
@@ -40,15 +43,30 @@ public class PlayerController : MonoBehaviour
 
     EnergyController _energyController;
 
+    TweenManager _tweenManager;
+
     private void Awake()
     {
         _inputcontroller = GetComponent<InputController>();
         _isGrounded = GetComponent<IsGrounded>();
         _energyController = GetComponent<EnergyController>();
+        _tweenManager = FindObjectOfType<TweenManager>();
         _velocitySpeed = _initialSpeedPlayer;
+        
     }
     void Update()
     {
+        EnergyController.EnergysTypes _powerStatePlayer = _energyController._typeEnergy;
+
+        switch (_powerStatePlayer) 
+        {
+            case EnergyController.EnergysTypes.Normal:
+                PowerStateNormal();
+                break;
+            case EnergyController.EnergysTypes.Green:
+                PowerStateGreen();
+                break;
+        }
 
             Move();
             savePosition();
@@ -74,7 +92,11 @@ public class PlayerController : MonoBehaviour
         else 
         {
             if(_energyController._regeneratingEnergy == true) { _velocitySpeed = _slowSpeed; }
-            else { _velocitySpeed = _initialSpeedPlayer;}
+            else 
+            { 
+                _velocitySpeed = _initialSpeedPlayer;
+                _isRunning = false;
+            }
         }
     }
 
@@ -112,6 +134,17 @@ public class PlayerController : MonoBehaviour
         {
             _velocitySpeed = _runSpeed;
             _energyController.ReduceRunEnergy();
+            _isRunning = true;
         }        
+    }
+
+    public void PowerStateNormal() 
+    {
+        if (!_isRunning) { _velocitySpeed = _initialSpeedPlayer; }       
+    }
+
+    public void PowerStateGreen()
+    {
+        _tweenManager.TweenPowerGreenEnergyOn();
     }
 }

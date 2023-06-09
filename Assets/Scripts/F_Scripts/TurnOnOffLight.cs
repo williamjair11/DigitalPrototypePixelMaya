@@ -26,20 +26,21 @@ public class TurnOnOffLight : MonoBehaviour
     [SerializeField] private float _intensityLightOff;
     [SerializeField] private float _intensityLightMiddle;
     [SerializeField] private float _costTurnOnTorch;
+    
     #endregion
     private void Start()
     {
         _inputController = FindObjectOfType<InputController>();
         _energyController = FindObjectOfType<EnergyController>();
         PlayerInZone = false;
-        //txtToDisplay.SetActive(false);
+        txtToDisplay.SetActive(false);
     }
 
     private void Update()
     {
         bool stateButtonControl = _inputController.Interact();
 
-        if (PlayerInZone && _inputController.Interact() && _energyController.ConsultCurrentEnergy() >= _costTurnOnTorch)
+        if (PlayerInZone && _inputController.Interact() && _energyController.ConsultCurrentGreenEnergy() >= _costTurnOnTorch && _torchTurnedOn == false)
         {
             TorchOn();
             _energyTorchOnEvent.Invoke(_costTurnOnTorch);
@@ -50,7 +51,7 @@ public class TurnOnOffLight : MonoBehaviour
     {
         if (other.gameObject.tag == "Player") //player in zone
         {
-            //txtToDisplay.SetActive(true);
+            txtToDisplay.SetActive(true);
             PlayerInZone = true;
         }
     }
@@ -61,7 +62,7 @@ public class TurnOnOffLight : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             PlayerInZone = false;
-            //txtToDisplay.SetActive(false);
+            txtToDisplay.SetActive(false);
         }
     }
 

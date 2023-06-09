@@ -54,8 +54,7 @@ if (!Api.HasDeviceParams())
     }
     public void Update()
     {
-#if !UNITY_EDITOR
-if (Api.IsCloseButtonPressed)
+            if (Api.IsCloseButtonPressed)
             {               
                 ExitVR();               
             }
@@ -66,7 +65,6 @@ if (Api.IsCloseButtonPressed)
             }
              
             Api.UpdateScreenParams();  
-#endif
     }
 
     public void EnterVR()

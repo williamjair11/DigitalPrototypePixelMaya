@@ -10,28 +10,38 @@ public class AbsorbEnergy : MonoBehaviour
 
     [SerializeField] private float speedAbsorb;
 
+    [SerializeField] private GameObject txtToDisplay;
+
     private bool _playerInRange;
 
     private InputController _inputController;
 
     private EnergyController _energyController;
 
-    private GreenEnergy _greenEnergy;
+  
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player") { _playerInRange = true; }
+        if (other.tag == "Player") 
+        { 
+            _playerInRange = true;
+            txtToDisplay.SetActive(true);
+        }
         
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player") { _playerInRange = false; }
+        if (other.tag == "Player") 
+        { 
+            _playerInRange = false; 
+           txtToDisplay.SetActive(false);
+        }
     }
     void Start()
     {
         _inputController = FindObjectOfType<InputController>();
         _energyController = FindObjectOfType<EnergyController>();
-        _greenEnergy = FindObjectOfType<GreenEnergy>();
+        txtToDisplay.SetActive(false);
     }
 
     // Update is called once per frame
@@ -44,18 +54,19 @@ public class AbsorbEnergy : MonoBehaviour
         switch (energyType) 
         {
             case EnergyType.Normal:
-                if (_playerInRange && stateButton && _energyController.ConsultCurrentEnergy()<=100)
+                if (_playerInRange && stateButton && _energyController.ConsultCurrentEnergy()<=_energyController._initialEnergy)
                 {
-                    float currentEnergy = _energyController.ConsultCurrentEnergy();
                     _energyController.IncrementEnergy();
                 }
                 break;
 
             case EnergyType.Green:
-                if (_playerInRange && stateButton && _greenEnergy.ConsultCurrentEnergy() <= 100)
+                if (_playerInRange && stateButton && _energyController.ConsultCurrentGreenEnergy() <= _energyController._initialValueGreenEnergy)
                 {
-                    float currentEnergy = _energyController.ConsultCurrentEnergy();
-                    _greenEnergy.IncrementEnergy();
+                    _energyController._greenEnergyIsActivated = true;
+                    _energyController._normalEnergyIsActivated = false;
+                    _energyController.AbsorbGreenEnergy();
+                    
                 }
                 break;
         }       
