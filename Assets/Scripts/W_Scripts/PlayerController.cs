@@ -25,8 +25,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 _lastPlayerPosition;
 
-    [SerializeField] private bool _canMove = true;
-
     [Header("Events")]
 
     [SerializeField] private UnityEvent<float> _jumpEvent;

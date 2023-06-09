@@ -7,8 +7,6 @@ using UnityEngine;
 public class IsGrounded : MonoBehaviour
 {
     [SerializeField] private GameObject _objectTransform;
-    private float heigth = 100f;
-    
     [NonSerialized]public bool _floorDetected;
     private float _distanceFromGround;
     private RaycastHit _raycastHit;

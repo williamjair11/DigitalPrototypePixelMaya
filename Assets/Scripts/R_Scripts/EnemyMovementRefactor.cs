@@ -1,96 +1,72 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyMovement : MonoBehaviour
+
+public class EnemyMovementRefactor : MonoBehaviour
 {
-    //Animation states
+    #region Enemy Animation states
     const string ENEMY_IS_WALKING = "isWalking";
     const string ENEMY_IS_RUNNING = "isRunning";
     const string ENEMY_IS_ROTATING = "isRotating";
     const string ENEMY_IS_IDLE = "isIdle";
     const string ENEMY_IS_ATACKING = "isAtacking";
+    #endregion
+    #region
     AnimationController _enemyAnimatorController;
-    [HideInInspector] public Transform _currentWaypoint;
     [SerializeField] private Waypoints _waypoint;
     [HideInInspector] public NavMeshAgent _enemy;
     [SerializeField] private PlayerController _playerController;
-    [SerializeField] private float _atackingDistance = 1f;
-    [SerializeField] private float _trackingDistance = 10f; //The distance at which the enemy will search for the player 
+    #endregion
+    #region Enemy Parameters
+    [SerializeField] private float _trackingDistance = 10f;
     [SerializeField] private float runningSpeed = 6f;
     [SerializeField] private float walkingSpeed = 3f;
-    [HideInInspector] private float distanceThreshold = 0.1f; //distance threshold for the the waypoints
+    [HideInInspector] private float distanceThreshold = 1f;
+    #endregion
+    #region Script variables
+    private Transform _currentWaypoint;
     private Vector3 _playerLastPosition;
-    private float distance;
-    private bool _playerMoved;    
-    private bool _canMove = true;
-    private bool _playerIsInsideGreenLight = false;
-    private bool _onLightDetection = false;
     private Vector3 _lightSourcePosition;
-
-    void Start() 
+    private bool _canMove = true;
+    [HideInInspector] internal bool _playerIsInsideGreenLight = false;
+    private bool _onLightDetection = false;
+    private bool _onPlayerDetection = false;
+    private bool _enemyIsPatroling = false;
+    #endregion
+    private void Awake() 
+    {
+        _playerLastPosition = _playerController.savePosition();
+    }
+    private void Start()
     {
         _enemyAnimatorController = GetComponent<AnimationController>();
         _enemy = GetComponent<NavMeshAgent>();
-        _playerLastPosition = _playerController.savePosition();
 
         //Set initial position to the first waypoint
         _currentWaypoint = _waypoint.GetNextWaypoint(_currentWaypoint);
         transform.position = _currentWaypoint.position;
         
         //Set the next waypoint target
-
         _currentWaypoint = _waypoint.GetNextWaypoint(_currentWaypoint);
     }
-    void Update()
+
+    private void Update()
     {
+        
         _playerLastPosition = _playerController.savePosition();
         GetEnemyState();
         if (_canMove)
         {
-            if (_onLightDetection)
+            if (Vector3.Distance(transform.position, _playerLastPosition) < _trackingDistance)
             {
-                _enemy.destination = GameObject.Find("TorchLighting (1)").transform.position;
-                _enemy.speed = runningSpeed;
+                ChasePlayer();
             }
-            else if (_playerIsInsideGreenLight)
+            else
             {
-                _enemy.speed = walkingSpeed;
-                _enemy.destination = _currentWaypoint.position;
-            }
-
-            if (Vector3.Distance(_enemy.transform.position, _playerLastPosition) > _trackingDistance) //Enemy follows waypoints
-            {
-                _enemy.speed = walkingSpeed;
-                _enemy.destination = _currentWaypoint.position;
-                if (!_enemy.isStopped)
-                {
-                    _enemy.speed = walkingSpeed;
-                    _enemy.destination = _currentWaypoint.position;
-                    if (Vector3.Distance(transform.position, _currentWaypoint.position) < distanceThreshold)
-                    {
-                        _currentWaypoint = _waypoint.GetNextWaypoint(_currentWaypoint);
-                        _enemy.destination = _currentWaypoint.position;
-                    }
-                }
-            }
-            else if (Vector3.Distance(_enemy.transform.position, _playerLastPosition) < _trackingDistance)
-            {
-                if (Vector3.Distance(_enemy.transform.position, _playerLastPosition) <= 2f)
-                {
-                    _enemy.speed = 0f;
-                    _enemyAnimatorController._animator.Play("Enemy_Atack");
-                }
-                else
-                {
-                    _enemy.speed = runningSpeed;
-                    _enemy.destination = _playerLastPosition;
-                    _enemy.speed = runningSpeed;
-                }
+                EnemyPatrols();
             }
         } 
-        Debug.Log(_enemy.speed);
     }
     public enum EnemyState
     {
@@ -111,7 +87,7 @@ public class EnemyMovement : MonoBehaviour
             _enemyAnimatorController.ChangeAnimationStateTo(ENEMY_IS_RUNNING);
             return EnemyState.Runing;
         }
-        else if (_enemy.speed <= 0.1){
+        else if (_enemy.speed <= 1){
             _enemyAnimatorController.ChangeAnimationStateTo(ENEMY_IS_IDLE);
             return EnemyState.Idle;
         }
@@ -119,9 +95,8 @@ public class EnemyMovement : MonoBehaviour
             _enemyAnimatorController.ChangeAnimationStateTo(ENEMY_IS_ROTATING);
             return EnemyState.Rotating;
         }
-        else if (Vector3.Distance(transform.position, _playerLastPosition) < _atackingDistance)
+        else if (_onPlayerDetection)
         {
-            _enemy.isStopped = true;
             _enemyAnimatorController.ChangeAnimationStateTo(ENEMY_IS_ATACKING);
             return EnemyState.Atacking;
         }
@@ -154,26 +129,78 @@ public class EnemyMovement : MonoBehaviour
     }
         private void OnTriggerEnter(Collider other) 
     {
-        if (other.CompareTag("greenTorch"))
-        {
-            _playerIsInsideGreenLight = true;
-        }
-        else
-        {
-            _playerIsInsideGreenLight = false;
-        }
         if (other.CompareTag("Light"))
         {
-            _lightSourcePosition = other.transform.position;
+            _lightSourcePosition = other.gameObject.transform.position;
             _onLightDetection = true;
         }
-        else
+        else if (other.CompareTag("destroyOrb"))
+        {
+            Destroy(GameObject.Find("EnergyBall(Clone)"));
+        }
+        else if (other.CompareTag("Player")){
+            _onPlayerDetection = true;
+        }
+    }
+    private void OnTriggerExit(Collider other) {
+        if (other.CompareTag("Light"))
         {
             _onLightDetection = false;
         }
-        if (other.CompareTag("destroyOrb"))
+        else if (other.CompareTag("Player"))
         {
-            Destroy(GameObject.Find("EnergyBall(Clone)"));
-        }    
+            _onPlayerDetection = false;
+        }
     }
+    void FollowLight()
+    {
+            _enemy.isStopped = false;
+            _enemy.destination = _lightSourcePosition;
+            _enemy.speed = runningSpeed;
+            Debug.Log("Follow light");
+    }
+    void EnemyPatrols()
+    {
+        _enemy.isStopped = false;
+        Debug.Log("Enemy patrols");
+        if(_onLightDetection)
+        {
+            FollowLight();
+        }
+        else
+        {
+            _enemy.destination = _currentWaypoint.position;
+            _enemy.speed = walkingSpeed;
+            Debug.Log($"Distance between Enemy and waypoint{(Vector3.Distance(_enemy.transform.position, _currentWaypoint.position))}");
+            if (Vector3.Distance(transform.position, _currentWaypoint.position) < distanceThreshold)
+            {
+                _currentWaypoint = _waypoint.GetNextWaypoint(_currentWaypoint);
+                Debug.Log("next Waypoint");
+            }
+        }
+    }
+    void StopEnemy()
+    {
+        Debug.Log("Stop Enemy");
+        _enemy.isStopped = true;
+        _enemy.speed = 0f;
+    }
+    void ChasePlayer()
+    {
+        if (Vector3.Distance(transform.position, _playerLastPosition) < _trackingDistance && !_playerIsInsideGreenLight)
+        {
+            Debug.Log("Chase Player");
+            if (_enemy.remainingDistance - _enemy.stoppingDistance <= 1)
+            {
+                StopEnemy();
+            }
+            else
+            {
+                _enemy.isStopped = false;
+                _enemy.speed = runningSpeed;
+                _enemy.destination = _playerLastPosition;
+            }
+        }
+    }
+
 }

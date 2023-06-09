@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 1099453856035051211}
   m_Layer: 0
   m_Name: EnergyBall
-  m_TagString: playerLightOrb
+  m_TagString: Light
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -214,6 +214,38 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 35.1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1099453856035051211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253779998325101997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fa2bb2749c2cbb41af9f393dd473e87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damageAmount: 50
+  _canMakeDamage: 1
+  OnMakeDamagePlayer:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMakeDamageEnemy:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: HealthController, Assembly-CSharp
+        m_MethodName: ReciveDamage
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3964998303109027335
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,41 +286,8 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3964998303109027335}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1.81
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1099453856035051211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2253779998325101997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fa2bb2749c2cbb41af9f393dd473e87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _objectType: 0
-  _damageAmount: 50
-  _canMakeDamage: 1
-  OnMakeDamagePlayer:
-    m_PersistentCalls:
-      m_Calls: []
-  OnMakeDamageEnemy:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4630292067490905164, guid: 5c110b84191ebe649a7ca34880c91af2, type: 3}
-        m_TargetAssemblyTypeName: HealthController, Assembly-CSharp
-        m_MethodName: ReciveDamage
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
