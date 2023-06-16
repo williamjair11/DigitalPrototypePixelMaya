@@ -187,17 +187,10 @@ public class EnemyMovementRefactor : MonoBehaviour
     {
         if (!_playerIsInsideGreenLight)
         {
+            _enemy.isStopped = false;
+            _enemy.speed = runningSpeed;
+            _enemy.SetDestination(_playerLastPosition);
             Debug.Log("Chase Player");
-            if (_enemy.remainingDistance - _enemy.stoppingDistance <= 1)
-            {
-                StopEnemy();
-            }
-            else
-            {
-                _enemy.isStopped = false;
-                _enemy.speed = runningSpeed;
-                _enemy.SetDestination(_playerLastPosition);
-            }
         }
     }
 

@@ -15,6 +15,7 @@ TagManager:
   - Interactable
   - destroyOrb
   - Light
+  - PlayerDetection
   layers:
   - Default
   - TransparentFX

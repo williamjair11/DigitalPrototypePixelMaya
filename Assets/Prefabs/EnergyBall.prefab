@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -8140018054752924606}
   - component: {fileID: 1812895090039017260}
   - component: {fileID: 1099453856035051211}
+  - component: {fileID: 8192864071482725011}
   m_Layer: 0
   m_Name: EnergyBall
   m_TagString: Light
@@ -246,6 +247,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8192864071482725011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253779998325101997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f2b733bd98354b67b31ef8047c03179, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _timeToDesactivate: 3
+  _deactivating: 0
 --- !u!1 &3964998303109027335
 GameObject:
   m_ObjectHideFlags: 0

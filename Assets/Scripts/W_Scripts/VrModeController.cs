@@ -63,8 +63,9 @@ if (!Api.HasDeviceParams())
             {
                 Api.ScanDeviceParams();
             }
-             
+#if !UNITY_EDITOR             
             Api.UpdateScreenParams();  
+#endif
     }
 
     public void EnterVR()
