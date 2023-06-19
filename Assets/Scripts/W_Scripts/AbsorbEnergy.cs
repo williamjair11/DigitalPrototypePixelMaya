@@ -6,6 +6,8 @@ public class AbsorbEnergy : MonoBehaviour
 {
     enum EnergyType {Normal, Green}
 
+    [SerializeField] Light _lightTorch;
+
     [SerializeField] EnergyType energyType;
 
     [SerializeField] private float speedAbsorb;
@@ -54,6 +56,8 @@ public class AbsorbEnergy : MonoBehaviour
         switch (energyType) 
         {
             case EnergyType.Normal:
+                _lightTorch.color = Color.white;
+
                 if (_playerInRange && stateButton && _energyController.ConsultCurrentEnergy()<=_energyController._initialEnergy)
                 {
                     _energyController.IncrementEnergy();
@@ -61,12 +65,13 @@ public class AbsorbEnergy : MonoBehaviour
                 break;
 
             case EnergyType.Green:
+                _lightTorch.color = Color.green;
+
                 if (_playerInRange && stateButton && _energyController.ConsultCurrentGreenEnergy() <= _energyController._initialValueGreenEnergy)
                 {
                     _energyController._greenEnergyIsActivated = true;
                     _energyController._normalEnergyIsActivated = false;
-                    _energyController.AbsorbGreenEnergy();
-                    
+                    _energyController.AbsorbGreenEnergy();                    
                 }
                 break;
         }       

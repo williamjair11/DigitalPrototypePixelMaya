@@ -72,44 +72,23 @@ public class EnergyController : MonoBehaviour
         switch (_typeEnergy) 
         {
             case EnergysTypes.Normal:
-
-                _activatedSliderEnergy.Invoke();
                 _desactivatedSliderGreenEnergy.Invoke();
+                VerifyEnergyState();
 
-                if (_regeneratingEnergy == false)
-                {
-                    _currentTime -= Time.deltaTime;
-                }
-
-                if (_currentTime <= 0)
-                {
-                    _counterActivate = true;
-                }
-
-                if (_counterActivate)
-                {
-                    RegeneratingPasiveEnergy();
-                }
-
-                if (_currentEnergy <= 0)
-                {
-                    _onEnergyEndsEvent.Invoke();
-                    _regeneratingEnergy = true;
-                    _currentEnergy = _initialEnergy;
-                    StartCoroutine(RegeneratingAllEnergy());
-                }
                 break;
 
             case EnergysTypes.Green:
 
-                _desactivatedSliderEnergy.Invoke();
                 _activatedSliderGreenEnergy.Invoke();
-                
+
+                VerifyEnergyState();
+
                 if(_currentGreenEnergy <= 0) { _normalEnergyIsActivated = true; }
                 else { _greenEnergyIsActivated = true; }
 
                 break;
-        }       
+        }
+               
     }
 
     #region Normal Energy
@@ -209,6 +188,32 @@ public class EnergyController : MonoBehaviour
     {
         _counterActivate = false;
     }
+
+    public void VerifyEnergyState() 
+    {
+        if (_regeneratingEnergy == false)
+        {
+            _currentTime -= Time.deltaTime;
+        }
+
+        if (_currentTime <= 0)
+        {
+            _counterActivate = true;
+        }
+
+        if (_counterActivate)
+        {
+            RegeneratingPasiveEnergy();
+        }
+
+        if (_currentEnergy <= 0)
+        {
+            _onEnergyEndsEvent.Invoke();
+            _regeneratingEnergy = true;
+            _currentEnergy = _initialEnergy;
+            StartCoroutine(RegeneratingAllEnergy());
+        }
+    }
     #endregion
 
     #region Green Energy
@@ -247,6 +252,7 @@ public class EnergyController : MonoBehaviour
         {
             num = 0;
             Debug.Log("No se puede reducir más la energia");
+            _currentGreenEnergy = 0;
         }
     }
     #endregion

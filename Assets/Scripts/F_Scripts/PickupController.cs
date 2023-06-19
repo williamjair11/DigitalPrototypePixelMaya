@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
 public class PickupController : MonoBehaviour
 {
     [SerializeField] Transform HoldArea;
-    private GameObject heldObj;
+    public GameObject heldObj;
     private Rigidbody heldObjRB;
     private Transform Obj;
 
@@ -20,7 +16,7 @@ public class PickupController : MonoBehaviour
 
     public void Start()
     {
-        _inputController = GetComponent<InputController>();
+        _inputController = FindObjectOfType<InputController>();
     }
     public void Update()
     {
@@ -29,7 +25,7 @@ public class PickupController : MonoBehaviour
             Grab(); 
         }
 
-        if (_inputController.ThrowObject())
+        if (_inputController.ThrowObject() && heldObj != null)
         {
             ThrowObj();
         }
@@ -63,13 +59,13 @@ public class PickupController : MonoBehaviour
     }
    public void DropObject()
     {
-            heldObjRB.useGravity = true;
-            heldObjRB.drag = 1;
-            heldObjRB.constraints = RigidbodyConstraints.None;
-
+        heldObjRB.useGravity = true;
+        heldObjRB.isKinematic = false;
+        heldObjRB.drag = 1;
+        heldObjRB.constraints = RigidbodyConstraints.None;
         heldObjRB.transform.parent = null;
-            heldObj = null;
-        }
+        heldObj = null;
+   }
     public void ThrowObj()
     {
         heldObjRB.useGravity = true;

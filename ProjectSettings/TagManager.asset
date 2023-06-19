@@ -11,7 +11,12 @@ TagManager:
   - Interactable
   - playerLightOrb
   - greenTorch
-  - whiteTorch
+  - Light
+  - destroyOrb
+  - Waypoint
+  - WhiteLight
+  - GreenLight
+  - WhiteTorch
   layers:
   - Default
   - TransparentFX
@@ -21,8 +26,8 @@ TagManager:
   - UI
   - TouchControlsLayer
   - PauseLayer
-  - 
-  - 
+  - Interactable
+  - Wall
   - 
   - 
   - 

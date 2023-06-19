@@ -43,6 +43,9 @@ public class PlayerHability : MonoBehaviour
 
     [Header("Green Ball Energy")]
 
+    [SerializeField]
+    private GameObject _greenBall;
+
     [SerializeField] private float _greenBallEnergyCost;
 
     private bool _shootGreenEnergyIsAvaible = true;
@@ -73,13 +76,18 @@ public class PlayerHability : MonoBehaviour
 
     private TweenManager _tweenManager;
 
+    private PickupController _pickupController;
+
+    private MoveEnemy _moveEnemy=null;
+
    
     private void Awake()
     {
         _energyController = GetComponent<EnergyController>();
         _playerGameObject = GetComponent<PlayerController>();
-        _inputController = GetComponent<InputController>();
-        _tweenManager= FindObjectOfType<TweenManager>();
+        _inputController = FindObjectOfType<InputController>();
+        _tweenManager = FindObjectOfType<TweenManager>();
+        _pickupController = FindObjectOfType<PickupController>();
         DOTween.Init();
     }
     private void Update()
@@ -95,15 +103,34 @@ public class PlayerHability : MonoBehaviour
         
         if( _currentTypeEnergy == EnergyController.EnergysTypes.Green)
         {
-            if (_inputController.ThrowBallEnergy()) { ThrowGreenBallEnergy(); }
+            if (_inputController.ThrowBallEnergy()) { throwGreenBall(); }
 
             if (_inputController.FlashHability()) { CastFlashHability(); }
         }       
     }
 
+    public void throwGreenBall()
+    {
+        if (_shootGreenEnergyIsAvaible && _pickupController.heldObj ==null)
+        {
+            GameObject _temporaryEnergyBall = Instantiate(_greenBall, _positionBall.transform.position, _positionBall.transform.rotation);
+            Rigidbody _rb = _temporaryEnergyBall.GetComponent<Rigidbody>();
+            _rb.AddForce(_temporaryEnergyBall.transform.forward * _ballForceForward, ForceMode.Impulse);
+            _rb.AddForce(_temporaryEnergyBall.transform.up * _ballForceUp, ForceMode.Impulse);
+            _greenEnergyBallEvent.Invoke(_greenBallEnergyCost);
+            StartCoroutine(waitForNextGreenEnergyBall());
+            Destroy(_temporaryEnergyBall, 10f);
+        }
+        else
+        {
+            //Play sound ball in cooldown
+            
+        }
+    }
+
     public void throwBall()
     {
-        if (_shotAvailable && _energyController.ConsultCurrentEnergy() >= _ballEnergyCost && _energyController._regeneratingEnergy == false)
+        if (_shotAvailable && _energyController.ConsultCurrentEnergy() >= _ballEnergyCost && _energyController._regeneratingEnergy == false && _pickupController.heldObj == null)
         {
             GameObject _temporaryEnergyBall = Instantiate(_EnergyBall, _positionBall.transform.position, _positionBall.transform.rotation);
             Rigidbody _rb = _temporaryEnergyBall.GetComponent<Rigidbody>();
@@ -111,12 +138,12 @@ public class PlayerHability : MonoBehaviour
             _rb.AddForce(_temporaryEnergyBall.transform.up * _ballForceUp, ForceMode.Impulse);
             _energyBallEvent.Invoke(_ballEnergyCost);
             StartCoroutine(waitForNextShot());
-            Destroy(_temporaryEnergyBall, 5f);
+            Destroy(_temporaryEnergyBall, 10f);
         }
         else
         {
             //Play sound ball in cooldown
-            if(_energyController.ConsultCurrentEnergy()<= _ballEnergyCost) { _tweenManager.TweenInsufficientEnergySlider(); }
+            if (_energyController.ConsultCurrentEnergy() <= _ballEnergyCost) { _tweenManager.TweenInsufficientEnergySlider(); }
         }
     }
 
@@ -126,6 +153,7 @@ public class PlayerHability : MonoBehaviour
         {
             _decrementEnergyFlashEvent.Invoke(_costFlashEnergy);
             _enemyStunEvent.Invoke(_timeStunFlash);
+           // _moveEnemy.StunEnemy(_timeStunFlash);
 
             Sequence _flashSequence = DOTween.Sequence();
             _flashSequence.Insert(0, _lightPlayer.DOIntensity(100f, 0.5f));
@@ -142,12 +170,20 @@ public class PlayerHability : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Enemy") { _rangeToFlash = true; }
+        if (other.tag == "Enemy") 
+        { 
+            _rangeToFlash = true; 
+            _moveEnemy = other.GetComponent<MoveEnemy>();
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Enemy") { _rangeToFlash = false; }
+        if (other.tag == "Enemy") 
+        { 
+            _rangeToFlash = false; 
+            _moveEnemy = null;
+        }
     }
 
     IEnumerator waitForNextShot()
@@ -169,15 +205,5 @@ public class PlayerHability : MonoBehaviour
         _flashIsAvaible = false;
         yield return new WaitForSeconds(_timeNextFlash);
         _flashIsAvaible = true;
-    }
-
-    public void ThrowGreenBallEnergy() 
-    {
-        if(_shootGreenEnergyIsAvaible) 
-        {
-            Debug.Log("Lanzando bola verde");
-            StartCoroutine(waitForNextGreenEnergyBall());
-            _greenEnergyBallEvent.Invoke(_greenBallEnergyCost);
-        }       
     }
 }

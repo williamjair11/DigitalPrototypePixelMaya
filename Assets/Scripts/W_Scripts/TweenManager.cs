@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class TweenManager : MonoBehaviour
 {
@@ -8,12 +9,11 @@ public class TweenManager : MonoBehaviour
     [SerializeField] private Image _sliderImage;
     [SerializeField] private Image _sliderNormalEnergy;
 
+    [SerializeField] private Camera _camera;
+
     [SerializeField] private Light _lightPlayer;
 
     private EnergyController _energyController;
-
-
-    
 
     void Start()
     {
@@ -48,12 +48,13 @@ public class TweenManager : MonoBehaviour
     }
     #endregion
 
-    public void TweenPowerGreenEnergyOn() 
+    #region Green energy Tween
+    public void TweenPowerGreenEnergyOn()
     {
         Sequence _sequence = DOTween.Sequence();
 
         _sequence.Append(_lightPlayer.DOColor(Color.green, 0))
-            .Append(_lightPlayer.DOIntensity(20, 1));           
+            .Append(_lightPlayer.DOIntensity(20, 1));
     }
     public void TweenPowerGreenEnergyOff()
     {
@@ -62,4 +63,12 @@ public class TweenManager : MonoBehaviour
         _sequence.Append(_lightPlayer.DOColor(Color.green, 0))
             .Append(_lightPlayer.DOIntensity(0, 1));
     }
+    #endregion
+
+    #region Camera Tween
+    public void ShakeCameraForReciveDamage() 
+    {
+        
+    }
+    #endregion
 }

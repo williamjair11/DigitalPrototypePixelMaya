@@ -1,14 +1,19 @@
 using DG.Tweening;
+using System;
 using System.Collections;
+using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem.XInput;
 using static UnityEngine.EventSystems.EventTrigger;
 
-[RequireComponent(typeof(InputController))]
 public class PlayerController : MonoBehaviour
 {
-    
+    public enum ControlType { Normal, Vr }
+
     [Header("Player")]
+
+    [NonSerialized]public ControlType _controlType;
 
     [SerializeField] private Rigidbody _rbPlayer;
 
@@ -22,6 +27,10 @@ public class PlayerController : MonoBehaviour
 
     private bool _isRunning;
 
+    private Vector3 _initialPosition;
+
+    [SerializeField] private bool _inGreenZone = false;
+
     [SerializeField] private float _slowSpeed;
 
     [SerializeField] private float _jumpForce = 10f;
@@ -34,85 +43,81 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private UnityEvent<float> _jumpEvent;
 
+    [SerializeField] private UnityEvent<float, string> _fallEvent;
+
 
     [Header("Inicialition objects")]
 
-    InputController _inputcontroller = null;
+    InputController _inputController = null;
 
     IsGrounded _isGrounded;
 
     EnergyController _energyController;
 
-    TweenManager _tweenManager;
+    Camera _camera;
+
+
 
     private void Awake()
     {
-        _inputcontroller = GetComponent<InputController>();
+        _inputController = FindObjectOfType<InputController>();
         _isGrounded = GetComponent<IsGrounded>();
-        _energyController = GetComponent<EnergyController>();
-        _tweenManager = FindObjectOfType<TweenManager>();
+        _energyController = FindObjectOfType<EnergyController>();
         _velocitySpeed = _initialSpeedPlayer;
-        
+        _initialPosition = transform.position;
+        _controlType = ControlType.Normal;
+        _camera = Camera.main;
+
     }
     void Update()
     {
-        EnergyController.EnergysTypes _powerStatePlayer = _energyController._typeEnergy;
 
-        switch (_powerStatePlayer) 
+        switch (_controlType) 
         {
-            case EnergyController.EnergysTypes.Normal:
-                PowerStateNormal();
+            case ControlType.Normal:
+                Move();
                 break;
-            case EnergyController.EnergysTypes.Green:
-                PowerStateGreen();
+
+            case ControlType.Vr:
+                MoveVr();
                 break;
         }
 
-            Move();
-            savePosition();
+        OffStage();
+     
+        savePosition();
 
-        if (_energyController._regeneratingEnergy == true)
-        {
-            _velocitySpeed= _slowSpeed;
-        }
-        else 
-        {
-            _velocitySpeed = _initialSpeedPlayer;
-        }
+        RechargeEnergyMove();
 
-        if (_inputcontroller.Jump()) 
-        {
-            Jump();
-        }
+        JumpIsPressed();
 
-        if (_inputcontroller.RunPlayer()) 
-        {
-            if(_energyController._regeneratingEnergy == false) { Run(); }           
-        }
-        else 
-        {
-            if(_energyController._regeneratingEnergy == true) { _velocitySpeed = _slowSpeed; }
-            else 
-            { 
-                _velocitySpeed = _initialSpeedPlayer;
-                _isRunning = false;
-            }
-        }
+        RunIsPressed();       
     }
 
-    void Move() 
+    void Move()
     {
-        Vector2  Input = _inputcontroller.MoveInput();
-        
-        transform.position += transform.forward * Input.y  *_velocitySpeed  *Time.deltaTime;
+        Vector2 Input = _inputController.MoveInput();
+
+        transform.position += transform.forward * Input.y * _velocitySpeed * Time.deltaTime;
         transform.position += transform.right * Input.x * _velocitySpeed * Time.deltaTime;
 
-        if(Input.x > 0 || Input.y > 0) { _movePlayer = true; }
+        if (Input.x > 0 || Input.y > 0) { _movePlayer = true; }
         else { _movePlayer = false; }
     }
-    public Vector3 savePosition() 
+
+    void MoveVr()
     {
-        if(_lastPlayerPosition != null && _lastPlayerPosition != transform.position) 
+        Vector2 Input = _inputController.MoveInput();
+
+        Vector3 velocity = _camera.transform.forward * Input.y * _velocitySpeed;
+        transform.position += velocity * Time.deltaTime;
+
+        if (Input.y > 0) { _movePlayer = true; }
+        else { _movePlayer = false; }
+    }
+    public Vector3 savePosition()
+    {
+        if (_lastPlayerPosition != null && _lastPlayerPosition != transform.position)
         {
             _lastPlayerPosition = transform.position;
         }
@@ -120,7 +125,7 @@ public class PlayerController : MonoBehaviour
         return _lastPlayerPosition;
     }
 
-    public void Jump() 
+    public void Jump()
     {
         if (_isGrounded._floorDetected)
         {
@@ -128,23 +133,52 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Run() 
+    public void Run()
     {
-        if (_isGrounded._floorDetected && _movePlayer) 
+        if (_isGrounded._floorDetected && _movePlayer)
         {
             _velocitySpeed = _runSpeed;
             _energyController.ReduceRunEnergy();
             _isRunning = true;
-        }        
+        }
     }
 
-    public void PowerStateNormal() 
+    public void ResetPosition() 
     {
-        if (!_isRunning) { _velocitySpeed = _initialSpeedPlayer; }       
+        transform.position = _initialPosition;
     }
 
-    public void PowerStateGreen()
+    void RechargeEnergyMove() 
     {
-        _tweenManager.TweenPowerGreenEnergyOn();
+        if (_energyController._regeneratingEnergy == true)
+        {
+            _velocitySpeed = _slowSpeed;
+        }
+        else
+        {
+            _velocitySpeed = _initialSpeedPlayer;
+        }
+    }
+
+    void JumpIsPressed() 
+    {
+        if (_inputController.Jump())
+        {
+            Jump();
+        }
+    }
+
+    void RunIsPressed() 
+    {
+
+    }
+
+    void OffStage() 
+    {
+        if (transform.position.y < -20)
+        {
+            ResetPosition();
+            _fallEvent.Invoke(20f, "Fall");
+        }
     }
 }

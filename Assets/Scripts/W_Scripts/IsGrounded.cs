@@ -6,24 +6,27 @@ using UnityEngine;
 
 public class IsGrounded : MonoBehaviour
 {
-    [SerializeField] private GameObject _objectTransform;
-    private float heigth = 100f;
+    [SerializeField] private GameObject _groundedObject;
+    [SerializeField] private float _distanceGroundRaycast;
+    [SerializeField] public bool _floorDetected;
+    [SerializeField] private float _distanceFromGround;
+
     
-    [NonSerialized]public bool _floorDetected;
-    private float _distanceFromGround;
-    private RaycastHit _raycastHit;
     void Update()
     {
+        Debug.DrawRay(transform.position, Vector3.down * _distanceGroundRaycast, Color.red);
+
         ObjectIsGrounded();
         DistanceFromGround();
     }
 
     public float DistanceFromGround() 
     {
-        Ray _rayDistance = new Ray(_objectTransform.transform.position, Vector3.down);
+        RaycastHit _raycastHit;
+        Ray _rayDistance = new Ray(_groundedObject.transform.position, Vector3.down);
         if (Physics.Raycast(_rayDistance, out _raycastHit)) 
         {          
-            if(_raycastHit.collider.tag == "ground") 
+            if(_raycastHit.transform.tag == "ground") 
             {
                 _distanceFromGround = _raycastHit.distance;
             }         
@@ -33,15 +36,19 @@ public class IsGrounded : MonoBehaviour
 
     void ObjectIsGrounded() 
     {
-        Ray _rayGround = new Ray(_objectTransform.transform.position, Vector3.down);
-        Debug.DrawRay(transform.position, Vector3.down , Color.red);
-        if (Physics.Raycast(_rayGround, 0.4f))
+        RaycastHit _raycastHit;
+        Ray _ray = new Ray(transform.position, Vector3.down);
+
+        if (Physics.Raycast(_ray, out _raycastHit, _distanceGroundRaycast))
         {
-            _floorDetected = true;
-        }
-        else 
-        {
-            _floorDetected = false;
-        }
+            if(_raycastHit.transform.tag == "ground") 
+            {
+                _floorDetected = true;
+            }
+            else
+            {
+                _floorDetected = false;
+            }
+        }       
     }
 }
