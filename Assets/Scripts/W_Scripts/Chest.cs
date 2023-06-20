@@ -17,13 +17,13 @@ public class Chest : MonoBehaviour
     {
         if(other.tag == "Player") 
         {
-            if (inputController.Interact() && _chestIsOpen == false) { OpenChest(); }
+            if (inputController._interact.WasPressedThisFrame() && _chestIsOpen == false) { OpenChest(); }
         }
     }
 
    public void OpenChest() 
    {
-        transform.DORotate(new Vector3(-140f, 0, 0), 3);
+        transform.DORotate(new Vector3(-140f, 0, 0),4f);
         Debug.Log("abriendo");
         _chestIsOpen = true;
    }

@@ -14,11 +14,13 @@ public class TweenManager : MonoBehaviour
     [SerializeField] private Light _lightPlayer;
 
     private EnergyController _energyController;
+    private WhiteEnergy _whiteEnergy;
 
     void Start()
     {
         DOTween.Init();
         _energyController = FindObjectOfType<EnergyController>();
+        _whiteEnergy = FindObjectOfType<WhiteEnergy>();
     }
 
     #region Slider normal energy Tween
@@ -40,7 +42,7 @@ public class TweenManager : MonoBehaviour
 
     public void TweenRegenerateAllEnergy() 
     {
-        float timeRecovery = _energyController._timeToRechargeAllEnergy;
+        float timeRecovery = _whiteEnergy._timeToRechargeAllEnergy;
         Sequence _sequence = DOTween.Sequence();
 
         _sequence.Insert(0, _sliderImage.DOColor(Color.blue, timeRecovery));
@@ -48,22 +50,6 @@ public class TweenManager : MonoBehaviour
     }
     #endregion
 
-    #region Green energy Tween
-    public void TweenPowerGreenEnergyOn()
-    {
-        Sequence _sequence = DOTween.Sequence();
-
-        _sequence.Append(_lightPlayer.DOColor(Color.green, 0))
-            .Append(_lightPlayer.DOIntensity(20, 1));
-    }
-    public void TweenPowerGreenEnergyOff()
-    {
-        Sequence _sequence = DOTween.Sequence();
-
-        _sequence.Append(_lightPlayer.DOColor(Color.green, 0))
-            .Append(_lightPlayer.DOIntensity(0, 1));
-    }
-    #endregion
 
     #region Camera Tween
     public void ShakeCameraForReciveDamage() 

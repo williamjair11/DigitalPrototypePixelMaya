@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class AbsorbEnergy : MonoBehaviour
 {
-    enum EnergyType {Normal, Green}
-
     [SerializeField] Light _lightTorch;
 
-    [SerializeField] EnergyType energyType;
+    [SerializeField] private bool _isAbsorbable;
 
     [SerializeField] private float speedAbsorb;
 
@@ -19,6 +17,8 @@ public class AbsorbEnergy : MonoBehaviour
     private InputController _inputController;
 
     private EnergyController _energyController;
+
+    private TurnOnOffLight _turnOnOffLight;
 
   
     private void OnTriggerEnter(Collider other)
@@ -43,37 +43,25 @@ public class AbsorbEnergy : MonoBehaviour
     {
         _inputController = FindObjectOfType<InputController>();
         _energyController = FindObjectOfType<EnergyController>();
+        _turnOnOffLight = GetComponent<TurnOnOffLight>();
         txtToDisplay.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        bool stateButton;
-        if(_inputController._interact.IsPressed()) { stateButton = true; }
-        else { stateButton = false; }
-
-        switch (energyType) 
+        if(_inputController._interact.IsPressed() && _playerInRange && _turnOnOffLight._torchTurnedOn && _isAbsorbable) 
         {
-            case EnergyType.Normal:
-                _lightTorch.color = Color.white;
-
-                if (_playerInRange && stateButton && _energyController.ConsultCurrentEnergy()<=_energyController._initialEnergy)
-                {
-                    _energyController.IncrementEnergy();
-                }
-                break;
-
-            case EnergyType.Green:
-                _lightTorch.color = Color.green;
-
-                if (_playerInRange && stateButton && _energyController.ConsultCurrentGreenEnergy() <= _energyController._initialValueGreenEnergy)
-                {
-                    _energyController._greenEnergyIsActivated = true;
-                    _energyController._normalEnergyIsActivated = false;
-                    _energyController.AbsorbGreenEnergy();                    
-                }
-                break;
-        }       
+            if(_turnOnOffLight._funtionalEnergy == EnergyController.EnergyTypes.White) 
+            {
+                _energyController._energyType = EnergyController.EnergyTypes.White;
+                _energyController.AbsorbEnergy();
+            }
+            if (_turnOnOffLight._funtionalEnergy == EnergyController.EnergyTypes.Green)
+            {
+                _energyController._energyType = EnergyController.EnergyTypes.Green;
+                _energyController.AbsorbEnergy();
+            }
+        }             
     }
 }

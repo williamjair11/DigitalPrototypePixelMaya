@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour
 
     public void Run()
     {
-        if (_isGrounded._floorDetected && _movePlayer)
+        if (_movePlayer && _energyController._regeneratingEnergy == false)
         {
             _velocitySpeed = _runSpeed;
             _energyController.ReduceRunEnergy();
@@ -170,7 +170,10 @@ public class PlayerController : MonoBehaviour
 
     void RunIsPressed() 
     {
-
+        if (_inputController.RunPlayer()) 
+        {
+            Run();
+        }
     }
 
     void OffStage() 
@@ -180,5 +183,15 @@ public class PlayerController : MonoBehaviour
             ResetPosition();
             _fallEvent.Invoke(20f, "Fall");
         }
+    }
+
+    public void SlowSpeed() 
+    {
+        _velocitySpeed = _slowSpeed;
+    }
+
+    public void ReturnsToNormalSpeed() 
+    {
+        _velocitySpeed = _initialSpeedPlayer;
     }
 }

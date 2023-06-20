@@ -7,6 +7,9 @@ using UnityEngine.Events;
 
 public class TurnOnOffLight : MonoBehaviour
 {
+    
+    [SerializeField] public EnergyController.EnergyTypes _funtionalEnergy;
+
     [SerializeField] private UnityEvent<float> _energyTorchOnEvent;
 
     private bool PlayerInZone;
@@ -34,16 +37,25 @@ public class TurnOnOffLight : MonoBehaviour
         _energyController = FindObjectOfType<EnergyController>();
         PlayerInZone = false;
         txtToDisplay.SetActive(false);
+
+        if (_torchTurnedOn) { TorchOn(); }
     }
 
     private void Update()
     {
+
+        if(_funtionalEnergy == EnergyController.EnergyTypes.White) { _torch.color = Color.white; }
+        if (_funtionalEnergy == EnergyController.EnergyTypes.Green) { _torch.color = Color.green; }
+
         bool stateButtonControl = _inputController.Interact();
 
-        if (PlayerInZone && _inputController.Interact() && _energyController.ConsultCurrentGreenEnergy() >= _costTurnOnTorch && _torchTurnedOn == false)
-        {
-            TorchOn();
-            _energyTorchOnEvent.Invoke(_costTurnOnTorch);
+        if (PlayerInZone && _inputController.Interact() && _energyController._energyType == _funtionalEnergy && _torchTurnedOn == false)
+        {                            
+           if(_energyController.ConsultCurrentEnergy() >= _costTurnOnTorch) 
+            {
+                TorchOn();
+                _energyTorchOnEvent.Invoke(_costTurnOnTorch);
+            }                                                 
         }
     }
 

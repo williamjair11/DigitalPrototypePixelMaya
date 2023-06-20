@@ -14,7 +14,7 @@ public class GreenBallEnergy : MonoBehaviour
     {
         if(other.tag == "Enemy") 
         {
-            other.GetComponent<MoveEnemy>().StunEnemy(_timeStun);
+            
         }
     }
 }
