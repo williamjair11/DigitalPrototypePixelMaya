@@ -5,7 +5,29 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: d1c3109bdb54ad54c8a2b2838528e640
-  m_configObjects: {}
+  - enabled: 0
+    path: Assets/Scenes/MovementScene.unity
+    guid: 64bab769a08cc024aa73d4972aee7b66
+  - enabled: 0
+    path: Assets/Samples/Google Cardboard XR Plugin for Unity/1.20.0/Hello Cardboard/Scenes/HelloCardboard.unity
+    guid: 145a2a45d7bc746b19cb68410368bf96
+  - enabled: 0
+    path: Assets/Scenes/testVR.unity
+    guid: 835eb6933cc610941925ace91e1050ce
+  - enabled: 1
+<<<<<<< HEAD
+    path: Assets/Scenes/MapaPrototipe.unity
+    guid: 9ec582508e128b1458fc37f4ebff8819
+=======
+    path: Assets/Scenes/FeatureEnemy.unity
+    guid: 56af59890253b472da6facea9c0418b7
+  - enabled: 0
+    path: Assets/Scenes/PauseMenu.unity
+    guid: d03eef49e880d46dfb09db0e01cf82f9
+>>>>>>> df11c1115fe645394f91c43d3454c172a1e2a260
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: f9ea22ca0489cb947bcbd0a06bc72e5b, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 5e3b954c38955f84a842258eb711418d, type: 2}
