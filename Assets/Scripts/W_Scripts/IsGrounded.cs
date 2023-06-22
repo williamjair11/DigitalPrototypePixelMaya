@@ -25,11 +25,9 @@ public class IsGrounded : MonoBehaviour
         RaycastHit _raycastHit;
         Ray _rayDistance = new Ray(_groundedObject.transform.position, Vector3.down);
         if (Physics.Raycast(_rayDistance, out _raycastHit)) 
-        {          
-            if(_raycastHit.transform.tag == "ground") 
-            {
-                _distanceFromGround = _raycastHit.distance;
-            }         
+        {
+            _distanceFromGround = _raycastHit.distance;
+                    
         }
         return _distanceFromGround;
     }
@@ -40,15 +38,12 @@ public class IsGrounded : MonoBehaviour
         Ray _ray = new Ray(transform.position, Vector3.down);
 
         if (Physics.Raycast(_ray, out _raycastHit, _distanceGroundRaycast))
+        {            
+            _floorDetected = true;
+        }
+        else 
         {
-            if(_raycastHit.transform.tag == "ground") 
-            {
-                _floorDetected = true;
-            }
-            else
-            {
-                _floorDetected = false;
-            }
-        }       
+            _floorDetected = false;
+        }
     }
 }

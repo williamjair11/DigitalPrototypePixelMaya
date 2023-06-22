@@ -1,21 +1,3 @@
-//-----------------------------------------------------------------------
-// <copyright file="VrModeController.cs" company="Google LLC">
-// Copyright 2020 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-// </copyright>
-//-----------------------------------------------------------------------
-
 using System.Collections;
 using Google.XR.Cardboard;
 using UnityEngine;
@@ -28,21 +10,9 @@ using UnityEngine.XR.Management;
 public class VrModeController : MonoBehaviour
 {
     
-    private const float _defaultFieldOfView = 60.0f;
+    private const float _defaultFieldOfView = 70.0f;
     private Camera _mainCamera;
     private ChangeModeControls changeModeControls;
-
-    /// <summary>
-    /// Gets a value indicating whether the screen has been touched this frame.
-    /// </summary>
-    private bool _isScreenTouched
-    {
-        get
-        {
-            return Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
-        }
-    }
-
 
     /// <summary>
     /// Start is called before the first frame update.
@@ -96,11 +66,6 @@ public class VrModeController : MonoBehaviour
         StopXR();
     }
 
-    /// <summary>
-    /// Initializes and starts the Cardboard XR plugin.
-    /// See https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html.
-    /// </summary>
-    ///
     /// <returns>
     /// Returns result value of <c>InitializeLoader</c> method from the XR General Settings Manager.
     /// </returns>
@@ -125,8 +90,6 @@ public class VrModeController : MonoBehaviour
 
     /// <summary>
     /// Stops and deinitializes the Cardboard XR plugin.
-    /// See https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html.
-    /// </summary>
     private void StopXR()
     {
         Debug.Log("Stopping XR...");

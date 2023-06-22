@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections;
 using System;
+using TMPro;
 
 public class WhiteEnergy : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class WhiteEnergy : MonoBehaviour
     [Header("Energy Bar references")]
     [SerializeField] private Slider _energySlider;
     [SerializeField] private GameObject _energyContainer;
+    [SerializeField] private TMP_Text _energyMeter;
 
     [Header("Twween manager References")]
     private TweenManager _tweenManager;
@@ -56,6 +58,9 @@ public class WhiteEnergy : MonoBehaviour
 
     void Update()
     {
+        int valueEnergy = (int)_currentValueEnergy;
+        _energyMeter.text = valueEnergy.ToString();
+
         VerifyEnergyState();
 
         if(_energyController._energyType == EnergyController.EnergyTypes.White) { _energyContainer.SetActive(true); }

@@ -28,6 +28,9 @@ public class PlayerHability : MonoBehaviour
     private GameObject _EnergyBallPrefab;
 
     [SerializeField]
+    private GameObject _GreenEnergyBallPrefab;
+
+    [SerializeField]
     private float _ballEnergyCost;
 
     [SerializeField]
@@ -86,10 +89,23 @@ public class PlayerHability : MonoBehaviour
 
     public void throwBall()
     {
+        GameObject _temporaryEnergyBall = null;
+        Rigidbody _rb = null;
+
         if (_shotAvailable && _energyController._regeneratingEnergy == false && _pickupController.heldObj == null && _energyController.ConsultCurrentEnergy() >= _ballEnergyCost)
         {
-            GameObject _temporaryEnergyBall = Instantiate(_EnergyBallPrefab, _positionBall.transform.position, _positionBall.transform.rotation);
-            Rigidbody _rb = _temporaryEnergyBall.GetComponent<Rigidbody>();
+            switch (_energyController._energyType)
+            {
+                case EnergyController.EnergyTypes.White:
+                    _temporaryEnergyBall = Instantiate(_EnergyBallPrefab, _positionBall.transform.position, _positionBall.transform.rotation);
+                    _rb = _temporaryEnergyBall.GetComponent<Rigidbody>();
+                    break;
+                case EnergyController.EnergyTypes.Green:
+                    _temporaryEnergyBall = Instantiate(_GreenEnergyBallPrefab, _positionBall.transform.position, _positionBall.transform.rotation);
+                    _rb = _temporaryEnergyBall.GetComponent<Rigidbody>();
+                    break;
+            }
+            
             _rb.AddForce(_temporaryEnergyBall.transform.forward * _ballForceForward, ForceMode.Impulse);
             _rb.AddForce(_temporaryEnergyBall.transform.up * _ballForceUp, ForceMode.Impulse);
             _energyBallEvent.Invoke(_ballEnergyCost);

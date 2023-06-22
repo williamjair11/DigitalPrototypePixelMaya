@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -19,6 +20,7 @@ public class GreenEnergy : MonoBehaviour
     [Header("Energy Bar references")]
     [SerializeField] private Slider _energySlider;
     [SerializeField] private GameObject _energyContainer;
+    [SerializeField] private TMP_Text _energyMeter;
 
     [Header("Twween manager References")]
     private TweenManager _tweenManager;
@@ -42,6 +44,9 @@ public class GreenEnergy : MonoBehaviour
 
     private void Update()
     {
+        int valueEnergy = (int)_currentValueEnergy;
+        _energyMeter.text = valueEnergy.ToString();
+
         if (_energyController._energyType == EnergyController.EnergyTypes.Green) { _energyContainer.SetActive(true); }
         else { _energyContainer.SetActive(false); }  
         
@@ -92,8 +97,11 @@ public class GreenEnergy : MonoBehaviour
 
     public void IncrementEnergy()  //Method to increase energy over time
     {
-        _currentValueEnergy += _speedAbsorbEnergy * Time.deltaTime;
-        _energySlider.value = _currentValueEnergy;
+        if( _currentValueEnergy <= 100) 
+        {
+            _currentValueEnergy += _speedAbsorbEnergy * Time.deltaTime;
+            _energySlider.value = _currentValueEnergy;
+        }       
     }
 
     public float ConsultCurrentEnergy() // Method to obtained the curren Energy 

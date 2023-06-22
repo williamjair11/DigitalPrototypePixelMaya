@@ -49,7 +49,7 @@ public class TurnOnOffLight : MonoBehaviour
 
         bool stateButtonControl = _inputController.Interact();
 
-        if (PlayerInZone && _inputController.Interact() && _energyController._energyType == _funtionalEnergy && _torchTurnedOn == false)
+        if (PlayerInZone && _inputController.Interact() && _energyController._energyType == _funtionalEnergy && _torchTurnedOn == false && _energyController._regeneratingEnergy == false)
         {                            
            if(_energyController.ConsultCurrentEnergy() >= _costTurnOnTorch) 
             {
