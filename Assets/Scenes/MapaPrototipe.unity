@@ -16085,6 +16085,9 @@ MonoBehaviour:
   _distanceThreshold: 1
   _playerController: {fileID: 6616036793410451029}
   _waypoints: {fileID: 7355092343182623441}
+  raycastRadius: 6.09
+  raycastDistance: 10
+  verticalOffset: 1
 --- !u!23 &9204209932783404153
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -12,42 +12,52 @@ public class EnemyMovement : MonoBehaviour
     const string ENEMY_IS_IDLE = "isIdle";
     const string ENEMY_IS_ATTACKING = "isAtacking";
     #endregion
-    #region Enemy configuration
+    #region Enemy movement settings
     NavMeshAgent _enemy;
     [SerializeField] private float _walkingSpeed;
     [SerializeField] private float runningSpeed;
-    private float _stoppedSpeed = 0f;
-    [SerializeField] 
-    private float _trackingDistance;
+    [SerializeField] private float _trackingDistance;
+
     [SerializeField] [Tooltip("Distance threshold between enemy and waypoint")]
     private float _distanceThreshold = 1f;
     private float _rotatingMagnitud = 10f;
+    private float _stoppedSpeed = 0f;
     #endregion
     #region Name
     [SerializeField] private PlayerController _playerController;
     [SerializeField] private Waypoints _waypoints;
     AnimationController _enemyAnimatorController;
     #endregion
-    #region Name
+    #region bools
     Transform _currentWaypoint;
     private bool _canMove = true;
     private Vector3 _playerLastPosition;
     [HideInInspector] internal bool _playerIsInsideGreenLight;
-    private float _distanceForPlayerBeingHitByEnemy = 1.5f;
     private bool _isTheEnemyHittingPlayer = false;
-    private RaycastHit hit;
     private float _stopDistance = 1.5f;
     private bool _onPlayerDetection = false;
-    float raycastDistance = 10f;
-    float raycastRadius = 6f;
+    #endregion
+    #region Raycast
+    [Header("Raycast settings")]
+    private RaycastHit hit;
+    [SerializeField]
+    float raycastRadius = 5f;
+    [SerializeField]
+    float raycastDistance = 15f;
+    [SerializeField]
+    float verticalOffset = 1f;
 
+    [SerializeField] [Tooltip("The distance that the enemy will start playing the attack animation")]
+    private float _distanceForPlayerBeingHitByEnemy = 1.5f;
 
+    [SerializeField] [Tooltip("The tag name of the object that will be chased by the enemy")]
+     private string _playerTag;
     #endregion
     private void Awake() 
     {
         _enemyAnimatorController = GetComponent<AnimationController>();
         _enemy = GetComponent<NavMeshAgent>();
-        _playerLastPosition = _playerController.savePosition();    
+        _playerLastPosition = _playerController.savePosition();
     }
     private void Start() 
     {
@@ -60,11 +70,15 @@ public class EnemyMovement : MonoBehaviour
     }
     private void Update() 
     {
+        Debug.Log($"VELOCITY{_enemy.velocity.magnitude}");
+        Debug.Log($"SPEED{_enemy.speed}");
+        Debug.Log($"isStopped{_enemy.isStopped}");
         _playerLastPosition = _playerController.savePosition();
+        ShootRaycast();
         SetEnemyAnimation();
         if (_canMove)
         {
-            if ((Vector3.Distance(transform.position, _playerLastPosition) < _trackingDistance) && !_playerIsInsideGreenLight)
+            if (_onPlayerDetection && !_playerIsInsideGreenLight)
             {
                 ChasePlayer();
             }
@@ -76,9 +90,11 @@ public class EnemyMovement : MonoBehaviour
     }
     void ChasePlayer()
     {
-        //Recuerden quitar el autobrake del NavMeshAgent component
+        Vector3 raycastOrigin = transform.position + Vector3.up * verticalOffset;
+
         Vector3 direction = (_playerLastPosition - transform.position).normalized;
         Vector3 targetPosition = _playerLastPosition - direction * _stopDistance;
+
         if (Vector3.Distance(transform.position, targetPosition) < _stopDistance)
         {
         _enemy.speed = _stoppedSpeed;
@@ -88,11 +104,9 @@ public class EnemyMovement : MonoBehaviour
             _enemy.speed = runningSpeed;
             _enemy.SetDestination(_playerLastPosition);
         }
-        float verticalOffset = 1;
-        Vector3 raycastOrigin = transform.position + Vector3.up * verticalOffset;
-        if (Physics.Raycast(transform.position, _playerLastPosition - transform.position, out hit, _trackingDistance))
+        if (Physics.Raycast(raycastOrigin, transform.forward, out hit, _distanceForPlayerBeingHitByEnemy))
         {
-            if (hit.collider.CompareTag("PlayerDetection"))
+            if (hit.collider.CompareTag(_playerTag))
             {
                 _isTheEnemyHittingPlayer = true;
             }
@@ -151,13 +165,13 @@ public class EnemyMovement : MonoBehaviour
         }
     }
     private void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("PlayerDetection"))
+        if (other.CompareTag(_playerTag))
         {
             _isTheEnemyHittingPlayer = true;
         }
     }
     private void OnTriggerExit(Collider other) {
-        if (other.CompareTag("PlayerDetection"))
+        if (other.CompareTag(_playerTag))
         {
             _isTheEnemyHittingPlayer = false;
         }
@@ -165,34 +179,23 @@ public class EnemyMovement : MonoBehaviour
     }
     void ShootRaycast()
     {
-        float raycastRadius = 2f;
-        float raycastDistance = 10f;
-        float verticalOffset = 1f;
-
-        // Calculate the modified origin position
         Vector3 raycastOrigin = transform.position + Vector3.up * verticalOffset;
-
-        // Perform the sphere cast
-        RaycastHit[] hits = Physics.SphereCastAll(transform.position, raycastRadius, transform.forward, raycastDistance);
-        foreach (RaycastHit hit in hits)
+        if (Physics.SphereCast(raycastOrigin, raycastRadius, transform.forward, out hit, _trackingDistance))
         {
-            if (hit.collider.CompareTag("PlayerDetection"))
+            if (hit.collider.CompareTag(_playerTag))
             {
-                _onPlayerDetection = true;
+                _onPlayerDetection = true; 
             }
             else{
                 _onPlayerDetection = false;
             }
         }
-        Debug.DrawRay(raycastOrigin, transform.forward * raycastDistance, Color.red); // Draw a line representing the direction and distance of the sphere cast
+        // Debug.DrawRay(raycastOrigin, transform.forward * raycastDistance, Color.red);
     }
     private void OnDrawGizmosSelected() {
-        float verticalOffset = 1;
         Vector3 raycastOrigin = transform.position + Vector3.up * verticalOffset;
         Gizmos.color = Color.red;
-        Debug.DrawLine(raycastOrigin, transform.position + transform.forward * raycastDistance);
-        Gizmos.DrawWireSphere(raycastOrigin + transform.forward * raycastDistance,raycastRadius);
+        Debug.DrawLine(raycastOrigin, transform.position + transform.forward * _trackingDistance);
+        Gizmos.DrawWireSphere(raycastOrigin + transform.forward * _trackingDistance,raycastRadius);
     }
 }
-
-//((Vector3.Distance(transform.position, _playerLastPosition) < _trackingDistance) && !_playerIsInsideGreenLight)

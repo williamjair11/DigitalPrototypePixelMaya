@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.Animations;
 
 public class AnimationController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class AnimationController : MonoBehaviour
     void Start()
     {
         _animator = GetComponent<Animator>();
+        AnimatorController _controller = _animator.runtimeAnimatorController as AnimatorController;
     }
     public void ChangeAnimationStateTo(string _newState)
     {
