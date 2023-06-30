@@ -5,14 +5,14 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
-    #region Enemy Animation states
+    #region NavMeshAgent Animation states
     const string ENEMY_IS_WALKING = "isWalking";
     const string ENEMY_IS_RUNNING = "isRunning";
     const string ENEMY_IS_ROTATING = "isRotating";
     const string ENEMY_IS_IDLE = "isIdle";
     const string ENEMY_IS_ATTACKING = "isAtacking";
     #endregion
-    #region Enemy movement settings
+    #region NavMeshAgent movement settings
     NavMeshAgent _enemy;
     [SerializeField] private float _walkingSpeed;
     [SerializeField] private float runningSpeed;
@@ -23,13 +23,15 @@ public class EnemyMovement : MonoBehaviour
     private float _rotatingMagnitud = 10f;
     private float _stoppedSpeed = 0f;
     #endregion
-    #region Name
+    #region Objects
     [SerializeField] private PlayerController _playerController;
     [SerializeField] private Waypoints _waypoints;
     AnimationController _enemyAnimatorController;
+    Transform _currentWaypoint;
+    EnergyBallScript _energyBallScript;
+    TurnOnOffLight _turnOnOffLight;
     #endregion
     #region bools
-    Transform _currentWaypoint;
     private bool _canMove = true;
     private Vector3 _playerLastPosition;
     [HideInInspector] internal bool _playerIsInsideGreenLight;
@@ -53,6 +55,18 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] [Tooltip("The tag name of the object that will be chased by the enemy")]
      private string _playerTag;
     #endregion
+    #region LightDetection
+        [SerializeField]
+        private string _lightTag;
+        private bool _onLightDetection = false;
+        [SerializeField]
+        private string _whiteTorchtag;
+        private bool _onWhitetorchDetection = false;
+        private Vector3 _whiteTorchPosition;
+        
+        
+    #endregion
+
     private void Awake() 
     {
         _enemyAnimatorController = GetComponent<AnimationController>();
@@ -78,7 +92,7 @@ public class EnemyMovement : MonoBehaviour
         SetEnemyAnimation();
         if (_canMove)
         {
-            if (_onPlayerDetection && !_playerIsInsideGreenLight)
+            if (_onPlayerDetection && !_playerIsInsideGreenLight && !_onLightDetection & !_onWhitetorchDetection)
             {
                 ChasePlayer();
             }
@@ -97,22 +111,11 @@ public class EnemyMovement : MonoBehaviour
 
         if (Vector3.Distance(transform.position, targetPosition) < _stopDistance)
         {
-        _enemy.speed = _stoppedSpeed;
+            _isTheEnemyHittingPlayer = true;
+            _enemy.speed = _stoppedSpeed;
         }
-        else
-        {
-            _enemy.speed = runningSpeed;
-            _enemy.SetDestination(_playerLastPosition);
-        }
-        if (Physics.Raycast(raycastOrigin, transform.forward, out hit, _distanceForPlayerBeingHitByEnemy))
-        {
-            if (hit.collider.CompareTag(_playerTag))
-            {
-                _isTheEnemyHittingPlayer = true;
-            }
-            else{
-                _isTheEnemyHittingPlayer = false;
-            }
+        else{
+            _isTheEnemyHittingPlayer = false;
         }
         Debug.Log("Chase Player");
         
@@ -120,7 +123,44 @@ public class EnemyMovement : MonoBehaviour
     void PatrolArea()
     {
         _enemy.speed = _walkingSpeed;
-        if (_enemy.remainingDistance < _distanceThreshold)
+        if (_onLightDetection)
+        {
+            _enemy.SetDestination(_energyBallScript.SavePosition());
+            _enemy.speed = runningSpeed;
+
+            Vector3 direction = (_energyBallScript.SavePosition() - transform.position).normalized;
+            Vector3 targetPosition = _energyBallScript.SavePosition() - direction * _stopDistance;
+
+            if (Vector3.Distance(transform.position, targetPosition) < _stopDistance)
+            {
+                _enemy.speed = _stoppedSpeed;
+                _energyBallScript.DesactivateEnergy();
+                if (_energyBallScript == null)
+                {
+                    _onLightDetection = false;
+                }
+            }
+
+        }
+        else if (_onWhitetorchDetection)
+        {
+            _enemy.SetDestination(_whiteTorchPosition);
+            _enemy.speed = runningSpeed;
+
+            Vector3 direction = (_whiteTorchPosition - transform.position).normalized;
+            Vector3 targetPosition = _whiteTorchPosition - direction * _stopDistance;
+
+            if (Vector3.Distance(transform.position, targetPosition) < _stopDistance)
+            {
+                _enemy.speed = _stoppedSpeed;
+                _turnOnOffLight.TorchOff();
+                if (_turnOnOffLight._torchTurnedOn == false)
+                {
+                    _onWhitetorchDetection = false;
+                }
+            }
+        }
+        else if (Vector3.Distance(transform.position, _currentWaypoint.position) < _distanceThreshold)
         {
             _currentWaypoint = _waypoints.GetNextWaypoint(_currentWaypoint);
             _enemy.SetDestination(_currentWaypoint.position);
@@ -180,14 +220,32 @@ public class EnemyMovement : MonoBehaviour
     void ShootRaycast()
     {
         Vector3 raycastOrigin = transform.position + Vector3.up * verticalOffset;
-        if (Physics.SphereCast(raycastOrigin, raycastRadius, transform.forward, out hit, _trackingDistance))
+        if (Physics.SphereCast(raycastOrigin, raycastRadius, transform.forward, out hit, raycastDistance))
         {
-            if (hit.collider.CompareTag(_playerTag))
+            if (hit.collider.CompareTag(_lightTag))
             {
-                _onPlayerDetection = true; 
+                _onLightDetection = true;
+                _energyBallScript = hit.collider.GetComponent<EnergyBallScript>();
+                
+            }
+            else if  (hit.collider.CompareTag(_whiteTorchtag))
+            {
+                _turnOnOffLight = hit.collider.GetComponent<TurnOnOffLight>();
+                if (_turnOnOffLight._torchTurnedOn)
+                {
+                    _onWhitetorchDetection = true;
+                    _turnOnOffLight = hit.collider.GetComponent<TurnOnOffLight>();
+                    _whiteTorchPosition = hit.collider.transform.position;
+                }
+            }
+            if  (hit.collider.CompareTag(_playerTag))
+            {
+                _onPlayerDetection = true;
+                _enemy.speed = runningSpeed;
+                _enemy.SetDestination(_playerLastPosition);                
             }
             else{
-                _onPlayerDetection = false;
+                
             }
         }
         // Debug.DrawRay(raycastOrigin, transform.forward * raycastDistance, Color.red);
@@ -195,7 +253,7 @@ public class EnemyMovement : MonoBehaviour
     private void OnDrawGizmosSelected() {
         Vector3 raycastOrigin = transform.position + Vector3.up * verticalOffset;
         Gizmos.color = Color.red;
-        Debug.DrawLine(raycastOrigin, transform.position + transform.forward * _trackingDistance);
-        Gizmos.DrawWireSphere(raycastOrigin + transform.forward * _trackingDistance,raycastRadius);
+        Debug.DrawLine(raycastOrigin, transform.position + transform.forward * raycastDistance);
+        Gizmos.DrawWireSphere(raycastOrigin + transform.forward * raycastDistance,raycastRadius);
     }
 }

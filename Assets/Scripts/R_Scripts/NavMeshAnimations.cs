@@ -1,16 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.Animations;
+using UnityEngine.Animations;
 
-public class AnimationController : MonoBehaviour
+public class NavMeshAnimations : MonoBehaviour
 {
     private string _currentState;
     [HideInInspector] public Animator _animator;
     void Start()
     {
         _animator = GetComponent<Animator>();
-        AnimatorController _controller = _animator.runtimeAnimatorController as AnimatorController;
     }
     public void ChangeAnimationStateTo(string _newState)
     {
