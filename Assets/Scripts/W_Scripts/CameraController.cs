@@ -10,13 +10,13 @@ using UnityEngine.UIElements;
 public class CameraController : MonoBehaviour
 {
     [Header("Camera states")]
-    [SerializeField] private float _cameraSensitivity= 30f;
+    [SerializeField] private float _cameraSensitivityX= 30f;
+    [SerializeField] private float _cameraSensitivityY = 30f;
     [SerializeField] private float _positiveAngleLimit = 90f;
     [SerializeField] private float _negativeAngleLimit = -90f;
     [SerializeField] Transform _cameraTransform= null;
-    public quaternion DEFAULT_CAMERA;
+    [SerializeField] private quaternion DEFAULT_CAMERA;
     private float rotationX;
-    private float rotationY;
 
     [Header("References")]
     InputController _inputController= null;
@@ -27,30 +27,24 @@ public class CameraController : MonoBehaviour
         _inputController = GetComponent<InputController>();
         DEFAULT_CAMERA = transform.rotation;
         rotationX = _cameraTransform.rotation.x;
-        rotationY = _cameraTransform.rotation.y;
-
     }
     void Update()
     {
-        MoveCamera();
-        
+        MoveCamera();       
     }
     void MoveCamera() 
     {
         Vector2 input = _inputController.CameraInput();
 
-        rotationX -= input.y;
-        rotationY -= input.x;
+        rotationX -= input.y * _cameraSensitivityY;
         rotationX = Mathf.Clamp(rotationX, _negativeAngleLimit, _positiveAngleLimit);
-        
-        transform.Rotate(Vector3.up * input.x * _cameraSensitivity * Time.deltaTime, Space.World);       
-        //_cameraTransform.Rotate(Vector3.left * input.x * Time.deltaTime, Space.Self);
-
+       
+        transform.Rotate(Vector3.up * input.x * _cameraSensitivityX * Time.deltaTime, Space.World);       
         _cameraTransform.localRotation = Quaternion.Euler(rotationX, 0, 0);
     }
 
-    public void DefaultCameraState() 
+    public quaternion DefaultCameraState() 
     {
-        _cameraTransform.rotation = (DEFAULT_CAMERA);        
+        return DEFAULT_CAMERA;      
     }
 }
