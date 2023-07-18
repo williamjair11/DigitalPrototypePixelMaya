@@ -45,8 +45,8 @@ public class NavMeshAgentStates : MonoBehaviour
         navMeshAgent.speed = 0f;
         yield return new WaitForSeconds(observingTime);
         navMeshAgent.speed = navMeshSpeed;
-
     }
+
     public void FollowWhiteLight(NavMeshAgent navMeshAgent, float navMeshSpeed, float stopDistance, Vector3 lightSource)
     {
         navMeshAgent.speed = navMeshSpeed;
@@ -55,6 +55,7 @@ public class NavMeshAgentStates : MonoBehaviour
 
 
     }
+    
     public void StunEnemy(float timeStun, bool canMove)
     {
         canMove = false;
