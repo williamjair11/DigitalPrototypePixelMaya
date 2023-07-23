@@ -8,39 +8,29 @@ public class Shootraycast : MonoBehaviour
     
     [Header("Raycast settings")]
     private RaycastHit hit;
-    [SerializeField] private float raycastRadius = 5f;
-    [SerializeField] private float raycastDistance = 15f;
-    [SerializeField] private float verticalOffset = 1f;
+    [SerializeField] private float _raycastRadius = 5f;
+    [SerializeField] private float _raycastDistance = 15f;
+    [SerializeField] private float _verticalOffset = 1f;
     #endregion
-
-    EnergyBallScript _energyBallScript;
-    public bool ShootRaycast(string gameObjectTag)
+    #region Getters and setters
+    public float  RaycastRadius { get { return _raycastRadius; } set { _raycastRadius = value; } }    
+    public float  RaycastDistance { get { return _raycastDistance; } set { _raycastRadius = value; } }    
+    public float  VerticalOffset { get { return _verticalOffset; } set { _raycastRadius = value; } }    
+    #endregion
+    public bool ShootRaycast(List<string> gameObjectTagList)
     {
         bool raycastHit = false;
-        Vector3 raycastOrigin = transform.position + Vector3.up * verticalOffset;
-        if (Physics.SphereCast(raycastOrigin, raycastRadius, transform.forward, out hit, raycastDistance))
+        Vector3 raycastOrigin = transform.position + Vector3.up * _verticalOffset;
+        if (Physics.SphereCast(raycastOrigin, _raycastRadius, transform.forward, out hit, _raycastDistance))
         {
-            if(hit.collider.CompareTag(gameObjectTag))
+            foreach (string gameObject in gameObjectTagList)
             {
-                raycastHit = true;
+                if(hit.collider.CompareTag(gameObject))
+                {
+                    raycastHit = true;
+                }
             }
         }
         return raycastHit;   
-    }
-    public Vector3 GetWhiteLightPosition(string lightTag)
-    {
-        Vector3 lightSourcePosition = Vector3.zero;
-        Vector3 raycastOrigin = transform.position + Vector3.up * verticalOffset;
-        if (Physics.SphereCast(raycastOrigin, raycastRadius, transform.forward, out hit, raycastDistance))
-        {
-            if(hit.collider.CompareTag(lightTag) && hit.collider.gameObject != null)
-            {
-                _energyBallScript = hit.collider.GetComponent<EnergyBallScript>();
-                lightSourcePosition = _energyBallScript.SavePosition();
-                
-                
-            }
-        }
-        return lightSourcePosition;  
     }
 }
