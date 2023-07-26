@@ -1,38 +1,29 @@
-using JetBrains.Annotations;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class InputController : MonoBehaviour
 {
-    [Header("Status controllers")]
-    public bool _inputTouchscreenIsActived = false;
-    public bool _inputGamepadIsActived = false;
-    public bool _inputHybridIsActived = true;
-
     [Header("InputAction")]
     [SerializeField] InputAction _moveInput = null;
     [SerializeField] InputAction _cameraInput = null;
     [SerializeField] InputAction _jump = null;
-
-    [Header("Events")]
-    [SerializeField] private UnityEvent showPauseCanvas;
-    [SerializeField] private UnityEvent hidePauseCanvas;
-
-    [SerializeField] private UnityEvent showHudCanvas;
-    [SerializeField] private UnityEvent hideHudCanvas;
-
-    [SerializeField] private UnityEvent showTouchControlsCanvas;
-    [SerializeField] private UnityEvent hideTouchControlsCanvas;
-
-    [SerializeField] private UnityEvent activatedApiVR;
+    [SerializeField] InputAction _throwBallEnergy = null;
+    [SerializeField] InputAction _flashHability = null;
+    [SerializeField] public InputAction _interact = null;
+    [SerializeField] InputAction _twrowObject = null;
+    [SerializeField] InputAction _runPlayer = null;
 
     void OnEnable()
     {
         _moveInput.Enable();
         _cameraInput.Enable();
         _jump.Enable();
+        _flashHability.Enable();
+        _throwBallEnergy.Enable();
+        _interact.Enable();
+        _twrowObject.Enable();
+        _runPlayer.Enable();
     }
 
     private void OnDisable()
@@ -40,6 +31,20 @@ public class InputController : MonoBehaviour
         _moveInput.Disable();
         _cameraInput.Disable();
         _jump.Disable();
+        _flashHability.Disable();
+        _throwBallEnergy.Disable();
+        _interact.Disable();
+        _twrowObject.Disable();
+        _runPlayer.Disable();
+    }
+
+    private void Update()
+    {
+        ThrowBallEnergy();
+        FlashHability();
+        Interact();
+        ThrowObject();
+        
     }
 
     public Vector2 CameraInput() 
@@ -54,61 +59,61 @@ public class InputController : MonoBehaviour
 
     public bool Jump() 
     {
-        return true;
-    }
-
-    public void ChangedModeController(int value) 
-    {
-        //Value 0 = Touchscreen mode controller
-        //Value 1 = Gamepad mode controller      
-        
-        if (value == 0) 
+        bool state = false;
+        if (_jump.WasPressedThisFrame()) 
         {
-            TouchScreenIsActived();
+            state = true;
         }
-        else
+        return state;
+    }
 
-        if(value == 1) 
+    public bool Interact() 
+    {
+        bool state = false;
+        if (_interact.WasPressedThisFrame())
         {
-            GamepadIsActived();    
+            state = true;
         }
-        if(value == 2) 
+        return state;
+    }
+
+    public bool ThrowObject()
+    {
+        bool state = false;
+        if (_twrowObject.WasPressedThisFrame())
         {
-            VrIsActived();
+            state = true;
         }
+        return state;
+    }
+    public bool FlashHability() 
+    {
+
+        bool state = false;
+        if (_flashHability.WasPressedThisFrame())
+        {
+            state = true;            
+        }
+        return state;
     }
 
-    public void TouchScreenIsActived() 
+    public bool RunPlayer()
     {
-        _inputTouchscreenIsActived = true;
-        _inputHybridIsActived = false;
-        _inputGamepadIsActived = false;
-
-        showHudCanvas.Invoke();
-        Debug.Log("Entrando a modo screen");
+        bool state = false;
+        if (_runPlayer.IsPressed())
+        {
+            state = true;
+        }
+        return state;
     }
 
-    public void GamepadIsActived() 
+    public bool ThrowBallEnergy()
     {
-        _inputGamepadIsActived = true;
-        _inputHybridIsActived = false;
-        _inputTouchscreenIsActived = false;
-
-        hideTouchControlsCanvas.Invoke();
-        showHudCanvas.Invoke();
-        Debug.Log("Entrando a modo gamepad");
-    }
-
-    public void VrIsActived() 
-    {
-        _inputHybridIsActived = true;
-        _inputTouchscreenIsActived = false;
-        _inputGamepadIsActived = false;
-
-        hideHudCanvas.Invoke();
-        hidePauseCanvas.Invoke();
-        hideTouchControlsCanvas.Invoke();
-        activatedApiVR.Invoke();
-        Debug.Log("Entrando a modo hibryd");
+        bool state = false;
+        if (_throwBallEnergy.WasPressedThisFrame()) 
+        {
+            state = true;
+        }
+        return state;
     }
 }

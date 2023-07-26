@@ -8,54 +8,47 @@ using UnityEngine.UI;
 
 public class PauseController : MonoBehaviour
 {
-    private bool _pauseIsActivated;
+    [SerializeField] private GameObject _pauseCanvas;
 
-    [SerializeField] private GameObject _pause;
-    
-    [SerializeField] private TMP_Dropdown _dropdown;
+    public bool _pauseIsActivated = false;
 
-    [SerializeField] private UnityEvent showHudCanvas;
-    [SerializeField] private UnityEvent hideHudCanvas;
-
-    [SerializeField] private UnityEvent showTouchControlsCanvas;
-    [SerializeField] private UnityEvent hideTouchControlsCanvas;
-
-    [SerializeField] private InputController _touchControlsIsActivated;
-
-    private bool activatedControls;
-
-    void Update()
+    private HudController _hudController;
+    private TouchControlsController _touchControlsController;
+    private ChangeModeControls _changeModeControls;
+    void Start()
     {
-
-    }
-    public void HidePause()
-    {
-        if (_pauseIsActivated)
-        {
-            _pause.SetActive(false);
-            _pauseIsActivated = false;
-            if (_dropdown.value == 0)
-            {
-                showTouchControlsCanvas.Invoke();
-                showHudCanvas.Invoke();
-            }
-            if (_dropdown.value == 1) 
-            {
-                showHudCanvas.Invoke();
-            }
-        }            
+        _hudController = FindObjectOfType<HudController>();
+        _touchControlsController = FindObjectOfType<TouchControlsController>();
+        _changeModeControls = FindObjectOfType<ChangeModeControls>();
+        _pauseCanvas.SetActive(false);
     }
 
-    public void ShowPause() 
+    public void RutineActivatePause() 
     {
-        if (_pauseIsActivated == false) 
+        if (!_pauseIsActivated) 
         {
-            _pause.SetActive(true);
-            hideTouchControlsCanvas.Invoke();
-            hideHudCanvas.Invoke();
+            Time.timeScale = 0f;
+            _pauseCanvas.SetActive(true);
             _pauseIsActivated = true;
-        }   
-    }   
+            _touchControlsController.HideTouchControls();
+            _hudController.HideHud();           
+        }
+    }
+
+    public void RutineDesactivatePause() 
+    {
+        if (_pauseIsActivated) 
+        {
+            Time.timeScale = 1.0f;
+            _pauseCanvas.SetActive(false);
+            _pauseIsActivated = false;
+            _hudController.showHud();
+            if(_changeModeControls._modeControlType == ChangeModeControls.ModeControlType.Touch) 
+            {
+                _touchControlsController.showTouchControls();
+            }
+        }      
+    }
 }
 
 

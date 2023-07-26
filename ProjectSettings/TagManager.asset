@@ -8,6 +8,15 @@ TagManager:
   - LeftJoystick
   - ground
   - Enemy
+  - Interactable
+  - playerLightOrb
+  - greenTorch
+  - Light
+  - destroyOrb
+  - Waypoint
+  - WhiteLight
+  - GreenLight
+  - WhiteTorch
   layers:
   - Default
   - TransparentFX
@@ -17,8 +26,8 @@ TagManager:
   - UI
   - TouchControlsLayer
   - PauseLayer
-  - 
-  - 
+  - Interactable
+  - Wall
   - 
   - 
   - 

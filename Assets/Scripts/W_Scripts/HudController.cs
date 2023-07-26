@@ -4,19 +4,25 @@ using UnityEngine;
 
 public class HudController : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _hudCanvas;
+    [SerializeField] private GameObject _hudCanvas;
+
     public bool _hudIsActivated;
  
     public void showHud() 
     {
-        _hudCanvas.SetActive(true);
-        _hudIsActivated = true;
+        if (!_hudIsActivated) 
+        {
+            _hudCanvas.SetActive(true);
+            _hudIsActivated = true;
+        }       
     }
 
     public void HideHud() 
     {
-        _hudCanvas.SetActive(false);
-        _hudIsActivated = false;
+        if (_hudIsActivated) 
+        {
+            _hudCanvas.SetActive(false);
+            _hudIsActivated = false;
+        }
     }
 }

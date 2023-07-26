@@ -1,100 +1,75 @@
 using System.Collections;
 using Google.XR.Cardboard;
-using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.XR;
 using UnityEngine.XR.Management;
-using UnityEngine.Events;
 
+/// <summary>
+/// Turns VR mode on and off.
+/// </summary>
 public class VrModeController : MonoBehaviour
 {
-    [Header("Camera")]
-    public Transform _cameraTransform;
-    private quaternion DEFAULT_CAMERA;
-    public CameraController _cameraController;
+    
+    private const float _defaultFieldOfView = 70.0f;
+    private Camera _mainCamera;
+    private ChangeModeControls changeModeControls;
 
-    [Header("Selection controls Canvas")]
-    [SerializeField] private TMP_Dropdown _dropdown;
-
-    [Header("Events")]
-    [SerializeField] private UnityEvent showPauseCanvas;
-
-    public bool _isScreenTouched
-    {
-        get
-        {
-            return Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
-        }
-    }
-
-    public bool _isVrModeEnabled
-    {
-        get
-        {
-            return XRGeneralSettings.Instance.Manager.isInitializationComplete;
-        }
-    }
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
     public void Start()
     {
-        //Save states camera
-        _cameraController = new CameraController();
-        DEFAULT_CAMERA = _cameraController.DEFAULT_CAMERA;
+        // Saves the main camera from the scene.
+        _mainCamera = Camera.main;
 
-        //Parameters 
+        changeModeControls = FindObjectOfType<ChangeModeControls>();
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Screen.brightness = 1.0f;
 
-        //if (!Api.HasDeviceParams())
-        //{
-        //    Api.ScanDeviceParams();
-        //}
+        
     }
     public void Update()
     {
-        #if !UNITY_EDITOR
-        if (_isVrModeEnabled)
+        if (changeModeControls._VrModeIsActivated)
         {
             if (Api.IsCloseButtonPressed)
-            {               
-                ExitVR();               
+            {
+                ExitVR();
             }
 
             if (Api.IsGearButtonPressed)
             {
                 Api.ScanDeviceParams();
             }
-             
-                Api.UpdateScreenParams();
-            
+
+            Api.UpdateScreenParams();
         }
-        else
-        {
-            // TODO(b/171727815): Add a button to switch to VR mode.
-            //if (_isScreenTouched)
-            //{
-            //    EnterVR();
-            //}
-        }
-        #endif
     }
 
+    /// <summary>
+    /// Enters VR mode.
+    /// </summary>
     public void EnterVR()
-    {       
-            Debug.Log("entrando a modo VR");
-            
-            StartCoroutine(StartXR());           
-            if (Api.HasNewDeviceParams())
-            {
-                Api.ReloadDeviceParams();
-            }          
+    {
+        StartCoroutine(StartXR());
+        if (Api.HasNewDeviceParams())
+        {
+            Api.ReloadDeviceParams();
+        }
     }
 
+    /// <summary>
+    /// Exits VR mode.
+    /// </summary>
     public void ExitVR()
     {
         StopXR();
     }
 
-    public IEnumerator StartXR()
+    /// <returns>
+    /// Returns result value of <c>InitializeLoader</c> method from the XR General Settings Manager.
+    /// </returns>
+    private IEnumerator StartXR()
     {
         Debug.Log("Initializing XR...");
         yield return XRGeneralSettings.Instance.Manager.InitializeLoader();
@@ -104,16 +79,19 @@ public class VrModeController : MonoBehaviour
             Debug.LogError("Initializing XR Failed.");
         }
         else
-        {           
+        {
             Debug.Log("XR initialized.");
 
             Debug.Log("Starting XR...");
             XRGeneralSettings.Instance.Manager.StartSubsystems();
-            Debug.Log("XR started.");          
+            Debug.Log("XR started.");
         }
     }
-    public void StopXR()
-    {      
+
+    /// <summary>
+    /// Stops and deinitializes the Cardboard XR plugin.
+    private void StopXR()
+    {
         Debug.Log("Stopping XR...");
         XRGeneralSettings.Instance.Manager.StopSubsystems();
         Debug.Log("XR stopped.");
@@ -122,8 +100,9 @@ public class VrModeController : MonoBehaviour
         XRGeneralSettings.Instance.Manager.DeinitializeLoader();
         Debug.Log("XR deinitialized.");
 
-        _cameraTransform.rotation = DEFAULT_CAMERA;
-        showPauseCanvas.Invoke();
-        _dropdown.value = 0;
+        _mainCamera.ResetAspect();
+        _mainCamera.fieldOfView = _defaultFieldOfView;
+        changeModeControls.ChangedModeControlDropdown(0);
+        changeModeControls.DesactivateVr();
     }
 }
