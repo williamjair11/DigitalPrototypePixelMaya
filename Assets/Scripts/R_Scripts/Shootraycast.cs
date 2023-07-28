@@ -2,35 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shootraycast : MonoBehaviour
+public abstract class Shootraycast : StateMachineContext
 {
-    #region Raycast
-    
-    [Header("Raycast settings")]
+#region Raycast
+    [SerializeField][Header("Raycast settings")]
     private RaycastHit hit;
-    [SerializeField] private float _raycastRadius = 5f;
-    [SerializeField] private float _raycastDistance = 15f;
-    [SerializeField] private float _verticalOffset = 1f;
-    #endregion
-    #region Getters and setters
-    public float  RaycastRadius { get { return _raycastRadius; } set { _raycastRadius = value; } }    
-    public float  RaycastDistance { get { return _raycastDistance; } set { _raycastRadius = value; } }    
-    public float  VerticalOffset { get { return _verticalOffset; } set { _raycastRadius = value; } }    
-    #endregion
-    public bool ShootRaycast(List<string> gameObjectTagList)
+    [SerializeField] protected Vector3 _boxcastSize = new Vector3(10f, 10f, 10f);
+    [SerializeField] protected float _raycastDistance = 10f;
+    [SerializeField] protected float _verticalOffset = 1f;
+#endregion
+#region NavMeshAgent
+    protected Vector3 _targetPosition;
+    protected PlayerController _playerController;
+    protected IsPlayerSafe _isPlayer;
+    protected TurnOnOffLight _turnOnOffLight;
+    protected Component _objectComponent = null;
+    protected bool _targetIsLocked = false;
+#endregion 
+    public bool ShootRaycast(List<string> tagList)    
     {
-        bool raycastHit = false;
         Vector3 raycastOrigin = transform.position + Vector3.up * _verticalOffset;
-        if (Physics.SphereCast(raycastOrigin, _raycastRadius, transform.forward, out hit, _raycastDistance))
+        if (Physics.BoxCast(raycastOrigin, _boxcastSize / 2f, transform.forward, out hit, transform.rotation, _raycastDistance))
         {
-            foreach (string gameObject in gameObjectTagList)
+            foreach (string tag in tagList)
             {
-                if(hit.collider.CompareTag(gameObject))
+                if (hit.collider.CompareTag(tag))
                 {
-                    raycastHit = true;
+                    _targetIsLocked = true;
+                    _targetPosition = hit.collider.gameObject.transform.position;
+
+                    if (hit.collider.GetComponent<PlayerController>() != null)
+                    {
+                        _objectComponent = GetComponent<PlayerController>();
+                        _isPlayer = GetComponent<IsPlayerSafe>();
+
+                    }
+                    if (hit.collider.GetComponent<TurnOnOffLight>() != null)
+                    {
+                        _objectComponent = GetComponent<TurnOnOffLight>();
+                    }
                 }
             }
         }
-        return raycastHit;   
+        return _targetIsLocked;   
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Vector3 raycastOrigin = transform.position + Vector3.up * _verticalOffset;
+        Gizmos.DrawWireCube(raycastOrigin + transform.forward * _raycastDistance / 2f, _boxcastSize);
+        Gizmos.DrawRay(raycastOrigin, transform.forward * _raycastDistance);
     }
 }
