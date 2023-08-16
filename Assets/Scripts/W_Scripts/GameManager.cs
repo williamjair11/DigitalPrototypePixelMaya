@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 public enum ControlType { Gamepad, Vr, PC, Touch}
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class GameManager : MonoBehaviour
     public UIController uIController;
     public PlayerController playerController;
     public VrModeController vrModeController;
+    [SerializeField] ResizeCanvas _resizeCanvas;
     [SerializeField] private int _targetFrameRate;
     [SerializeField] UnityEvent _onSetVRMode, _onSetGamepadMode, _onSetTouchMode, _onSetPcMode;
 
@@ -50,10 +53,16 @@ public class GameManager : MonoBehaviour
 
     public void SetControlMode(ControlType controlType)
     {
-        if(controlType != ControlType.Vr && _currentControlType == ControlType.Vr) 
-        vrModeController.ExitVR();
         if(controlType != ControlType.Touch)
         uIController.SetActiveTouchControls = false;
+        if(controlType != ControlType.Vr && _currentControlType == ControlType.Vr) 
+        {
+            uIController.SetActiveTouchControls = true;
+            uIController.SetActiveHud = true;
+            _resizeCanvas.SetNormalMode();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            //vrModeController.ExitVR();
+        }
 
         switch (controlType)
         {
