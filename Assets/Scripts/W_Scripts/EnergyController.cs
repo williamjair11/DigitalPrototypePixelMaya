@@ -1,102 +1,84 @@
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
-using DG.Tweening;
+using System.Collections.Generic;
 using System.Collections;
 using System;
 
+//TODO: usar unityEvents o actions para hacer que los cambios de energía se ejecuten uno tras otro
+//hacer que este script solo se encargue de llevar la cuenta de la energía y que el hud se encargue de
+//representar visualmente los cambios
 public class EnergyController : MonoBehaviour
 {
-    public enum EnergyTypes { White, Green}
-    [SerializeField] public EnergyTypes _energyType;        
-   
-    [Header("Variables Energy")]
-    private WhiteEnergy _whiteEnergy;
-    private GreenEnergy _greenEnergy;
-
-    public bool _regeneratingEnergy = false;
-
-    private void Awake()
+    public enum EnergyType { White, Green}
+    [Serializable]
+    public struct EnergyData
     {
-        _whiteEnergy = FindObjectOfType<WhiteEnergy>();
-        _greenEnergy = FindObjectOfType<GreenEnergy>();
-        _energyType = EnergyTypes.White;
+            public EnergyType type;
+            public int damageMultiplier;
+            public float wasteForSecond;
+            public float recoveryForSecond;
+            public float isInfinite;
     }
 
-    private void Update()
+    
+    private EnergyData _currentEnergyData;
+    private float _currentEnergy = 0;
+    private bool _updatingEnergy;
+    [SerializeField] private float _initialEnergy = 1, _maxEnergy = 1;
+    [SerializeField] private List<EnergyData> _energyList;
+    [SerializeField] UnityEvent<float> _onChangeCurrentEnergy;
+
+    public bool UpdatingEnergy { get => _updatingEnergy;}
+    public float CurrentEnergy { get => _currentEnergy;}
+    public void Start()
     {
-        _regeneratingEnergy = _whiteEnergy._regeneratingEnergy;
+        SetEnergyType();
+        IncreaseEnergy(_initialEnergy);
     }
 
-    public void ReduceEnergy(float value) 
+    public void IncreaseEnergy(float energyAmount)
     {
-        switch (_energyType) 
+        _currentEnergy += energyAmount;
+        if(_currentEnergy > _maxEnergy) _currentEnergy = _maxEnergy;
+            _onChangeCurrentEnergy?.Invoke(_currentEnergy);
+    }
+
+
+    public void DecreaseEnergy(float energyAmount)
+    {
+            _currentEnergy -= energyAmount;
+            if(_currentEnergy <= 0)
+            {
+                if(_currentEnergyData.type != EnergyType.White)
+                SetEnergyType(EnergyType.White);
+                _currentEnergy = 0;
+            }
+            _onChangeCurrentEnergy?.Invoke(_currentEnergy);
+            if(_currentEnergyData.type == EnergyType.White)
+            {
+                if(_updatingEnergy)
+                StopAllCoroutines();
+                StartCoroutine(RegenerateEnergy());
+            }
+    }
+
+    public void SetEnergyType(EnergyType energyType = EnergyType.White)
+    {
+        foreach (EnergyData item in _energyList)
         {
-            case EnergyTypes.White:
-                _whiteEnergy.ReduceEnergy(value);
+            if(item.type == energyType)
+            {
+                _currentEnergyData = item;
                 break;
-            case EnergyTypes.Green:
-                _greenEnergy.ReduceEnergy(value);
-                break;
+            }
         }
     }
 
-    public void RegenerateEnergy(float value) 
+    public IEnumerator RegenerateEnergy()
     {
-        switch (_energyType)
-        {
-            case EnergyTypes.White:
-                _whiteEnergy.RegenerateEnergy(value);
-                break;
-            case EnergyTypes.Green:
-                _greenEnergy.RegenerateEnergy(value);
-                break;
-        }
-    }
-
-    public float ConsultCurrentEnergy() // Method to obtained the current Energy 
-    {
-        float value = 0;
-        switch (_energyType)
-        {
-            case EnergyTypes.White:
-                value = _whiteEnergy.ConsultCurrentEnergy();
-                break;
-            case EnergyTypes.Green:
-                value = _greenEnergy.ConsultCurrentEnergy();
-                break;
-        }
-        return value;
-    }
-
-    public void ReduceRunEnergy() // METHOD TO REDUCE ENERGY WHILE THE PLAYER RUNS
-    {
-        switch (_energyType)
-        {
-            case EnergyTypes.White:
-                _whiteEnergy.ReduceRunEnergy();
-                break;
-            case EnergyTypes.Green:
-                _greenEnergy.ReduceRunEnergy();
-                break;
-        }
-    }
-
-    public void AbsorbEnergy()  //Method to increase energy over time
-    {
-        switch (_energyType)
-        {
-            case EnergyTypes.White:
-                _whiteEnergy.IncrementEnergy();
-                break;
-            case EnergyTypes.Green:
-                _greenEnergy.IncrementEnergy();
-                break;
-        }
-    }
-
-    public void ReturnToTheDefaultEnergy() 
-    {
-        _energyType = EnergyTypes.White;
+        _updatingEnergy = true;
+        yield return new WaitForSeconds(3);
+        IncreaseEnergy(1);
+        _updatingEnergy = false;
     }
 }

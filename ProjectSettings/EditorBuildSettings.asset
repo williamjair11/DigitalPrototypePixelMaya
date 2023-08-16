@@ -9,4 +9,5 @@ EditorBuildSettings:
     path: Assets/Scenes/MapaPrototipe.unity
     guid: 9ec582508e128b1458fc37f4ebff8819
   m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: f9ea22ca0489cb947bcbd0a06bc72e5b, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 5e3b954c38955f84a842258eb711418d, type: 2}

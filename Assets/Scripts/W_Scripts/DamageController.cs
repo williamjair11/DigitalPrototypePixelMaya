@@ -7,36 +7,39 @@ using UnityEngine.Rendering;
 
 public class DamageController : MonoBehaviour
 {
-    [SerializeField] public float _damageAmount;
+    [SerializeField] protected int _damageAmount;
+    [SerializeField] private bool _canMakeDamage;
+    [SerializeField] public List<string> _targets = new List<string>();
+    [SerializeField] private UnityEvent OnMakeDamage;
 
-    [SerializeField] public bool _canMakeDamage;
-
-    [SerializeField]
-    private UnityEvent<float, string> OnMakeDamagePlayer;
-
-    [SerializeField]
-    private UnityEvent<float, string> OnMakeDamageEnemy;
-
-
-    private void OnTriggerEnter(Collider other)
+    public int DamageAmount
     {
-        if (_canMakeDamage && other.tag == "Player")
-        {
-            OnMakeDamagePlayer.Invoke(_damageAmount, other.tag);
-        }
-        else if(_canMakeDamage && other.tag == "Enemy") 
-        {
-            OnMakeDamageEnemy.Invoke(_damageAmount, other.tag);
-        }
+        get => _damageAmount;
+        set => _damageAmount = value;
     }
-  
-    public void DesactivatedCanMakeDamage() 
+    void Start()
     {
+    }
+    public bool CanMakeDamage{get=> _canMakeDamage; set => _canMakeDamage = value;}
+    public void SetCanMakeDamageFalse()
+    { 
         _canMakeDamage = false;
     }
 
-    public void ActivatedCanMakeDamage() 
+    public void SetDamageAmount()
     {
-        _canMakeDamage = true;
+
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(_targets.Contains(other.tag) && CanMakeDamage)
+        {
+            HealthController targetHealthController =  other.gameObject.GetComponent<HealthController>();
+            targetHealthController.ReciveDamage(_damageAmount);
+            OnMakeDamage?.Invoke();
+        }
+    }
+  
+    
 }

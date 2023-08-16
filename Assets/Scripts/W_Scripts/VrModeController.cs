@@ -11,7 +11,7 @@ public class VrModeController : MonoBehaviour
 {
     
     private const float _defaultFieldOfView = 70.0f;
-    private Camera _mainCamera;
+    [SerializeField] private Camera _mainCamera;
     private ChangeModeControls changeModeControls;
 
     /// <summary>
@@ -19,10 +19,6 @@ public class VrModeController : MonoBehaviour
     /// </summary>
     public void Start()
     {
-        // Saves the main camera from the scene.
-        _mainCamera = Camera.main;
-
-        changeModeControls = FindObjectOfType<ChangeModeControls>();
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Screen.brightness = 1.0f;
 
@@ -30,7 +26,7 @@ public class VrModeController : MonoBehaviour
     }
     public void Update()
     {
-        if (changeModeControls._VrModeIsActivated)
+        if (GameManager.Instance.CurrentControlType == ControlType.Vr)
         {
             if (Api.IsCloseButtonPressed)
             {
@@ -102,7 +98,7 @@ public class VrModeController : MonoBehaviour
 
         _mainCamera.ResetAspect();
         _mainCamera.fieldOfView = _defaultFieldOfView;
-        changeModeControls.ChangedModeControlDropdown(0);
-        changeModeControls.DesactivateVr();
+        //changeModeControls.ChangedModeControlDropdown(0);
+        //changeModeControls.DesactivateVr();
     }
 }

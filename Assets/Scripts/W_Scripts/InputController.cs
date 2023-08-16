@@ -5,115 +5,94 @@ using UnityEngine.InputSystem;
 public class InputController : MonoBehaviour
 {
     [Header("InputAction")]
-    [SerializeField] InputAction _moveInput = null;
-    [SerializeField] InputAction _cameraInput = null;
-    [SerializeField] InputAction _jump = null;
-    [SerializeField] InputAction _throwBallEnergy = null;
-    [SerializeField] InputAction _flashHability = null;
-    [SerializeField] public InputAction _interact = null;
-    [SerializeField] InputAction _twrowObject = null;
-    [SerializeField] InputAction _runPlayer = null;
+    PlayerInput _playerInput;
+    [SerializeField] UnityEvent<Vector2> _onMoveEvent, _onRotateCameraEvent;
+    [SerializeField] UnityEvent
+    _onMoveInputStart,
+    _onMoveInputCancel,
+    _onPressDownAttackButton, 
+    _onPressUpAttackButton, 
+    _onPressDownSpecialAttackButton, 
+    _onPressUpSpecialAttackButton,
+    _onPressDownInteractButton, 
+    _onPressUpInteractButton,
+    _onPressShorTWeaponsInventoryButton,
+    _onPressLongWeaponsInventoryButton,
+    _onPressSpecialAttackInventoryButton,
+    _onPressUpRunButton,
+    _onPressDownRunButton,
+    _onPressInventoryButton,
+    _onPressUpJumpButton,
+    _onPressDownJumpButton,
+    _onPressDownCrouchButton,
+    _onPressUpCrouchButton,
+    _onPressThrowButton,
+    _onRotateCameraStart,
+    _onRotateCameraCancel,
+    _onPressPauseButton;
 
+    void Awake()
+    {
+        _playerInput = new PlayerInput();
+        _playerInput.Gameplay.Move.started += OnMoveStart;
+        _playerInput.Gameplay.Move.performed += OnMoveInputChange;
+        _playerInput.Gameplay.Move.canceled += OnMoveInputCancel;
+        _playerInput.Gameplay.RotateCamera.performed += OnRotateCameraInput;
+        _playerInput.Gameplay.RotateCamera.started += OnRotateCameraStart;
+        _playerInput.Gameplay.RotateCamera.canceled += OnRotateCameraCancel;
+        _playerInput.Gameplay.Attack.started += OnPressDownAttackButton;
+        _playerInput.Gameplay.Attack.canceled += OnPressUpAttackButton;
+        _playerInput.Gameplay.SpecialAttack.started += OnPressDownSpecialAttackButton;
+        _playerInput.Gameplay.SpecialAttack.canceled += OnPressUpSpecialAttackButton;
+        _playerInput.Gameplay.Run.started += OnPressDownRunButton;
+        _playerInput.Gameplay.Run.canceled += OnPressUpRunButton;
+        _playerInput.Gameplay.Interact.started += OnPressDownInteractButton;
+        _playerInput.Gameplay.Interact.canceled += OnPressUpInteractButton;
+        _playerInput.Gameplay.Jump.started += OnPressDownJumpButton;
+        _playerInput.Gameplay.Jump.canceled += OnPressUpJumpButton;
+        _playerInput.Gameplay.Inventory.started += OnPressInventoryButton;
+        _playerInput.Gameplay.Crouch.started += OnPressDownCrouchButton;
+        _playerInput.Gameplay.Crouch.canceled += OnPressUpCrouchButton;
+        _playerInput.Gameplay.Pause.started += OnPressPauseButton;
+    }
+
+    void OnMoveInputChange(InputAction.CallbackContext ctx) { _onMoveEvent?.Invoke(ctx.ReadValue<Vector2>());}
+    void OnMoveStart(InputAction.CallbackContext ctx) { _onMoveInputStart?.Invoke();}
+    void OnMoveInputCancel(InputAction.CallbackContext ctx) { _onMoveInputCancel?.Invoke();}
+    void OnRotateCameraInput(InputAction.CallbackContext ctx) => _onRotateCameraEvent?.Invoke(ctx.ReadValue<Vector2>());
+    void OnRotateCameraStart(InputAction.CallbackContext ctx) => _onRotateCameraStart?.Invoke();
+    void OnRotateCameraCancel(InputAction.CallbackContext ctx) => _onRotateCameraCancel?.Invoke();
+    void OnPressDownAttackButton(InputAction.CallbackContext ctx) => _onPressDownAttackButton?.Invoke();
+    void OnPressUpAttackButton(InputAction.CallbackContext ctx) => _onPressUpAttackButton?.Invoke();
+    void OnPressDownSpecialAttackButton(InputAction.CallbackContext ctx) => _onPressDownSpecialAttackButton?.Invoke();
+    void OnPressUpSpecialAttackButton(InputAction.CallbackContext ctx) => _onPressUpSpecialAttackButton?.Invoke();
+    void OnPressDownInteractButton(InputAction.CallbackContext ctx) => _onPressDownInteractButton?.Invoke();
+    void OnPressUpInteractButton(InputAction.CallbackContext ctx) => _onPressUpInteractButton?.Invoke();
+    void OnPressShorWeaponsInventoryButton(InputAction.CallbackContext ctx) => _onPressUpInteractButton?.Invoke();
+    void OnPressDownRunButton(InputAction.CallbackContext ctx) => _onPressDownRunButton?.Invoke();
+    void OnPressUpRunButton(InputAction.CallbackContext ctx) => _onPressUpRunButton?.Invoke();
+    void OnPressDownJumpButton(InputAction.CallbackContext ctx) => _onPressDownJumpButton?.Invoke();
+    void OnPressUpJumpButton(InputAction.CallbackContext ctx) => _onPressUpJumpButton?.Invoke();    
+    void OnPressInventoryButton(InputAction.CallbackContext ctx) => _onPressInventoryButton?.Invoke();
+    void OnPressDownCrouchButton(InputAction.CallbackContext ctx) => _onPressDownCrouchButton?.Invoke();
+    void OnPressUpCrouchButton(InputAction.CallbackContext ctx) => _onPressUpCrouchButton?.Invoke();
+    void OnPressPauseButton(InputAction.CallbackContext ctx) => _onPressPauseButton?.Invoke();
+    
+    
     void OnEnable()
     {
-        _moveInput.Enable();
-        _cameraInput.Enable();
-        _jump.Enable();
-        _flashHability.Enable();
-        _throwBallEnergy.Enable();
-        _interact.Enable();
-        _twrowObject.Enable();
-        _runPlayer.Enable();
+        _playerInput.Enable();
+      
     }
 
     private void OnDisable()
     {
-        _moveInput.Disable();
-        _cameraInput.Disable();
-        _jump.Disable();
-        _flashHability.Disable();
-        _throwBallEnergy.Disable();
-        _interact.Disable();
-        _twrowObject.Disable();
-        _runPlayer.Disable();
+        _playerInput.Disable();
     }
 
     private void Update()
     {
-        ThrowBallEnergy();
-        FlashHability();
-        Interact();
-        ThrowObject();
         
     }
 
-    public Vector2 CameraInput() 
-    {     
-        return _cameraInput.ReadValue<Vector2>();
-    }
-
-    public Vector2 MoveInput() 
-    {
-        return _moveInput.ReadValue<Vector2>();
-    }
-
-    public bool Jump() 
-    {
-        bool state = false;
-        if (_jump.WasPressedThisFrame()) 
-        {
-            state = true;
-        }
-        return state;
-    }
-
-    public bool Interact() 
-    {
-        bool state = false;
-        if (_interact.WasPressedThisFrame())
-        {
-            state = true;
-        }
-        return state;
-    }
-
-    public bool ThrowObject()
-    {
-        bool state = false;
-        if (_twrowObject.WasPressedThisFrame())
-        {
-            state = true;
-        }
-        return state;
-    }
-    public bool FlashHability() 
-    {
-
-        bool state = false;
-        if (_flashHability.WasPressedThisFrame())
-        {
-            state = true;            
-        }
-        return state;
-    }
-
-    public bool RunPlayer()
-    {
-        bool state = false;
-        if (_runPlayer.IsPressed())
-        {
-            state = true;
-        }
-        return state;
-    }
-
-    public bool ThrowBallEnergy()
-    {
-        bool state = false;
-        if (_throwBallEnergy.WasPressedThisFrame()) 
-        {
-            state = true;
-        }
-        return state;
-    }
 }

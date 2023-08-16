@@ -11,7 +11,10 @@ public class IsGrounded : MonoBehaviour
     [SerializeField] public bool _floorDetected;
     [SerializeField] private float _distanceFromGround;
 
-    
+    void Awake()
+    {
+        _groundedObject = gameObject;
+    }
     void Update()
     {
         Debug.DrawRay(transform.position, Vector3.down * _distanceGroundRaycast, Color.red);

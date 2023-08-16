@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ChangeModeControls : MonoBehaviour
 {
-    public enum ModeControlType {Gamepad, Touch, Vr}
+   /* public enum ModeControlType {Gamepad, Touch, Vr}
     [SerializeField] public ModeControlType _modeControlType;
 
     [SerializeField] private TMP_Dropdown _dropdownModeControl;
@@ -35,24 +35,6 @@ public class ChangeModeControls : MonoBehaviour
         _modeControlType = ModeControlType.Touch;       
     }
 
-    
-    void Update()
-    {      
-        switch (_modeControlType) 
-        {
-            case ModeControlType.Gamepad:
-                ActivateModeGamepad();
-                break;
-
-            case ModeControlType.Touch:
-                ActivateModeTouch();
-                break;
-
-            case ModeControlType.Vr:
-                ActivateModeVr();
-                break;
-        }
-    }
 
     void ActivateModeGamepad() 
     {
@@ -64,7 +46,6 @@ public class ChangeModeControls : MonoBehaviour
             _GamepadModeIsActivated = true;
             _TouchModeIsActivated = false;
             _cameraController.isActivated = true;
-            _playerController._controlType = PlayerController.ControlType.Normal;
         }                            
     }
 
@@ -94,7 +75,6 @@ public class ChangeModeControls : MonoBehaviour
             _VrModeIsActivated = true;
             _TouchModeIsActivated = false;
             _GamepadModeIsActivated = false;
-            _playerController._controlType = PlayerController.ControlType.Vr;
             _vrModeController.EnterVR();
             _cameraController.isActivated = false;
             
@@ -127,7 +107,6 @@ public class ChangeModeControls : MonoBehaviour
     public void DesactivateVr() 
     {               
         _VrModeIsActivated = false;
-        _playerController._controlType = PlayerController.ControlType.Normal;
         _cameraController.isActivated = true;
-    }
+    }*/
 }

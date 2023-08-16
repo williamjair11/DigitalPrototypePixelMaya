@@ -1,30 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;  
+using UnityEngine.Events;
 
-public class Chest : MonoBehaviour
+public class Chest : InteractiveObject
 {
-    private InputController inputController;
+    [SerializeField] UnityEvent _onOpenChest;
     private bool _chestIsOpen = false;
+    [SerializeField] private List<InventoryObject>  _inventoryObjects;
 
-    private void Start()
-    {
-        DOTween.Init();
-        inputController = FindObjectOfType<InputController>();
-    }
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player") 
         {
-            if (inputController._interact.WasPressedThisFrame() && _chestIsOpen == false) { OpenChest(); }
+            if(!_chestIsOpen) 
+            {
+                GameManager.Instance.playerController.SetInteractiveObject(this);
+            }
         }
     }
 
-   public void OpenChest() 
-   {
-        transform.DORotate(new Vector3(-140f, 0, 0),4f);
-        Debug.Log("abriendo");
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.tag == "Player") 
+        {
+                GameManager.Instance.playerController.SetNullInteractiveObject();
+        }
+    }
+
+    //En este caso deje una dependencia con el uiController debido a que siempre existirá una relación directa
+    //entre los cofres que no se puede evitar ni con unity events.
+    public override void Interact()
+    {
+        base.Interact();
         _chestIsOpen = true;
-   }
+        GameManager.Instance.uIController.SetInventoryObjects(_inventoryObjects);
+        _onOpenChest?.Invoke();
+    }
 }

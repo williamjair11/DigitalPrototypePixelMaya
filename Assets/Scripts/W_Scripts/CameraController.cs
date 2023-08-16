@@ -11,32 +11,33 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float _cameraSensitivityY = 30f;
     [SerializeField] private float _positiveAngleLimit = 90f;
     [SerializeField] private float _negativeAngleLimit = -90f;
+
+
+    public bool CameraIsMoving {get; set;}
+    private Vector2 _cameraInput = Vector2.zero;
+    public Vector2 CameraInput {get => _cameraInput; set => _cameraInput = value;}
     private float rotationX;
-
-    [Header("References")]
-    InputController _inputController= null;
-
     
     private void Awake()
     {
-        _inputController = FindObjectOfType<InputController>();
         rotationX = _camera.transform.rotation.x;
     }
-    void Update()
-    {
-        if (isActivated) 
-        {
-            MoveCamera();
-        }             
-    }
-    void MoveCamera() 
-    {
-        Vector2 input = _inputController.CameraInput();
 
-        rotationX -= input.y * _cameraSensitivityY;
+    void LateUpdate()
+    {
+        if(CameraIsMoving) MoveCamera();
+
+        if(CameraIsMoving && GameManager.Instance.CurrentControlType != ControlType.Vr)
+        GameManager.Instance.uIController.HideShortMenu();
+    }
+
+    public void MoveCamera() 
+    {
+        if(!isActivated) return;
+        rotationX -= CameraInput.y * _cameraSensitivityY;
         rotationX = Mathf.Clamp(rotationX, _negativeAngleLimit, _positiveAngleLimit);
        
-        _playerGameObject.transform.Rotate(Vector3.up * input.x * _cameraSensitivityX * Time.deltaTime, Space.World);       
+        _playerGameObject.transform.Rotate(Vector3.up * CameraInput.x * _cameraSensitivityX * Time.deltaTime, Space.World);       
         _camera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
     }
 }
