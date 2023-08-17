@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public enum ControlType { Gamepad, Vr, PC, Touch}
+public enum GamepadType {dualShok, XInput, None}
 public class GameManager : MonoBehaviour
 {
     //Todo: Para el código del juego (ya no prototipo) manejar cambio de controlType con Actions o con el patron observer en lugar de Unity Events
@@ -18,7 +20,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] ResizeCanvas _resizeCanvas;
     [SerializeField] private int _targetFrameRate;
     [SerializeField] UnityEvent _onSetVRMode, _onSetGamepadMode, _onSetTouchMode, _onSetPcMode;
+    GamepadType _currentGamepadType = GamepadType.None;
 
+    public GamepadType CurrentGamepadType
+    {get => _currentGamepadType;}
     void Awake()
     {
         if(Instance == null)
@@ -31,6 +36,28 @@ public class GameManager : MonoBehaviour
         }
 
         Application.targetFrameRate = _targetFrameRate;
+    }
+
+    public void CheckGamepadType()
+    {
+        var gamepad = Gamepad.current;
+        if (gamepad == null)
+        {
+            _currentGamepadType = GamepadType.None;
+            Debug.Log("No hay ningún control conectado.");
+            return;
+        }
+
+        if (gamepad is UnityEngine.InputSystem.DualShock.DualShockGamepad)
+        {
+            _currentGamepadType = GamepadType.dualShok;
+            Debug.Log("Se ha conectado un control de PlayStation.");
+        }
+        else if (gamepad is UnityEngine.InputSystem.XInput.XInputController)
+        {
+            _currentGamepadType = GamepadType.XInput;
+            Debug.Log("Se ha conectado un control de Xbox.");
+        }
     }
 
     void Start()
@@ -68,6 +95,7 @@ public class GameManager : MonoBehaviour
         {
             case ControlType.Gamepad:
                 _currentControlType =  ControlType.Gamepad;
+                uIController.SetInteractionMessageIcon();
                 break;
             case ControlType.PC:
                 _currentControlType =  ControlType.PC;
@@ -79,6 +107,7 @@ public class GameManager : MonoBehaviour
             case ControlType.Touch:
                 _currentControlType =  ControlType.Touch;
                 uIController.SetActiveTouchControls = true;
+                uIController.SetInteractionMessageIcon();
                 break;
             default:
                 break;

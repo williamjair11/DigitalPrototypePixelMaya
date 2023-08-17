@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class ResizeCanvas : MonoBehaviour
 {

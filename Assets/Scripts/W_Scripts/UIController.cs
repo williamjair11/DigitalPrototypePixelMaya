@@ -14,9 +14,10 @@ public class UIController : MonoBehaviour
     _shortMenu, 
     shortMenuDynamicContainer,
     _shortMenuItemPrefab;
-    [SerializeField] private Image _objectMessageImage;
+    [SerializeField] private Image _objectMessageImage, _interactionIcon;
     [SerializeField] TextMeshProUGUI _objectMessageText;
     [SerializeField] private List<InventoryObject> _inventoryObjects = new List<InventoryObject>();
+    [SerializeField] Sprite _psIcon, _xboxIcon, _touchIcon;
 
     public bool SetActiveTouchControls
     {
@@ -78,8 +79,17 @@ public class UIController : MonoBehaviour
         //if(_pauseMenu.activeSelf) GameManager.Instance.setGameState(pause);
     }
 
-    //Cada icono el de la espada, arco etc, tendra un componente button que mandará a llamar esta función
-    //Ese boton tambien se encargara de activar el GameObject
+    public void SetInteractionMessageIcon()
+    {
+        if(GameManager.Instance.CurrentGamepadType == GamepadType.dualShok)
+        _interactionIcon.sprite = _psIcon;
+        else
+        if(GameManager.Instance.CurrentGamepadType == GamepadType.XInput)
+        _interactionIcon.sprite = _xboxIcon;
+        else
+        _interactionIcon.sprite = _touchIcon;
+    }
+
     public void SetShortMenuItems(string type)
     {
         Debug.Log(type);
