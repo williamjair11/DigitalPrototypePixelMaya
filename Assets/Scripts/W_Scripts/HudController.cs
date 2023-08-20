@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using DG.Tweening;
 
 public class HudController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class HudController : MonoBehaviour
     GameObject _shortInventoryMenu;
     [SerializeField] GameObject _heartPrefab, _heartsContainer;
     [SerializeField] HealthController _playerHealtController;
+    [SerializeField] Image _energyFill;
     int _heartsCount = 0;
     private bool _updatingEnergy = false;
     float _targetEnergy = 0;
@@ -33,42 +35,26 @@ public class HudController : MonoBehaviour
     }
 
     void RemoveHearts()
-    {
+    { int counter = 0;
         foreach(Transform child in _heartsContainer.transform)
         {
-            if(_heartsCount == _heartsContainer.transform.childCount) break;
-
-            child.GetComponent<ResizeUIImage>().MakeSmall();
+            if(_heartsContainer.transform.childCount -_heartsCount <= counter) break;
+            child.transform.DOScale(0,1f);
+            child.GetComponent<DestroyWithDelay>().Destroy(1f);
+            counter++;
         }
     }
 
     public void UpdateEnergy(float energy)
     {
-        
-        if(_updatingEnergy)
-            StopAllCoroutines();
-        
-
-        if(Mathf.Abs(_energySlider.value - energy) >= .10f && gameObject.activeSelf)
-        {
-                _updatingEnergy = true;
-                StartCoroutine(AnimateEnergyBar(energy));
-        }
-        else
-        _energySlider.value = energy;
-        
+        float animDuration = .1f;
+        if(Mathf.Abs(_energySlider.value - energy) >= .10f) animDuration = 1;
+        _updatingEnergy = true;
+        _energySlider.DOValue(energy, animDuration);  
     }
 
-    public IEnumerator AnimateEnergyBar(float targetEnergy)
+    public void UpdateEnergyColor(Color energyColor)
     {
-        while(_energySlider.value != targetEnergy)
-        {
-            yield return new WaitForSeconds(.2f);
-            if(targetEnergy > _energySlider.value)
-                _energySlider.value += .05f;
-            else
-                _energySlider.value -= .05f;
-        }
-        _updatingEnergy = false;
+        _energyFill.DOColor(energyColor, 1f);
     }
 }

@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 7233500718842444054}
   - component: {fileID: 9000228844268666882}
   - component: {fileID: 1678053082670591138}
+  - component: {fileID: 6627042698881738206}
   m_Layer: 0
   m_Name: ObsidianSword
   m_TagString: Untagged
@@ -156,8 +157,8 @@ MonoBehaviour:
   type: 0
   sprite: {fileID: 21300000, guid: cbd03c60b507a7244a9f963dd0ae005b, type: 3}
   descrition: Poderosa espada de obsidiana que se cree guarda el poder de  kukulcan
-  _maxDamage: 100
-  _baseDamage: 30
+  _maxDamage: 7
+  _baseDamage: 3
   _damage: 0
   _animator: {fileID: 0}
   _onPrepareAttack:
@@ -208,5 +209,18 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 15.518142, z: 1}
+  m_Size: {x: 4.3, y: 15.518142, z: 2.95}
+  m_Center: {x: 0, y: 7.2590714, z: 0}
+--- !u!65 &6627042698881738206
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6171826090422841519}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.3, y: 15.518142, z: 2.95}
   m_Center: {x: 0, y: 7.2590714, z: 0}

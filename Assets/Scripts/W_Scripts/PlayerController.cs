@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     _gravityForce = 9.8f;
 
     [SerializeField] private float _jumpForce = 10f, _jumTimeCounter, _jumpMaxTime;
-    [SerializeField] private bool _playerIsMoving, _isRunning, _isJumpping, _usingGravity;
+    [SerializeField] private bool _playerIsMoving, _isRunning, _isJumpping, _usingGravity, _isPlayerInSafeZone;
     private bool _playerIsCrouch;    
     private Vector3 _lastPlayerPosition;
 
@@ -49,8 +49,9 @@ public class PlayerController : MonoBehaviour
         get => _weapon; set => _weapon = value;
     }
     Vector2 _movementVector;
-
+    public InteractiveObject CurrentInteractiveObject { get => _currentInteractiveObject;}
     public Vector2 MovementVector{set => _movementVector = value;}
+    public EnergyController EnergyController{ get => _energyController;}
     public bool PlayerIsMoving
     {
         get => _playerIsMoving; 
@@ -68,6 +69,11 @@ public class PlayerController : MonoBehaviour
                 _isJumpping = value;
                 if(!_isJumpping && _characterController.isGrounded) _jumTimeCounter = 0;
             }
+    }
+    public bool IsPlayerInSafeZone
+    {
+        get => _isPlayerInSafeZone; 
+        set => _isPlayerInSafeZone = value;
     }
 
     void Awake()
@@ -193,7 +199,6 @@ public class PlayerController : MonoBehaviour
     {
         if(CurrentWeapon != null && !_isHoldingSomething)
         {
-            CurrentWeapon.GetComponent<DamageController>().CanMakeDamage = true;
             _isPreparingAttack = true;
             if(!_isRunning) StartCoroutine(CalculteWasteOfEnergy());
             _prepareAttackEvent?.Invoke();
@@ -204,8 +209,10 @@ public class PlayerController : MonoBehaviour
 
     public void PerformAttack()
     {
+        
         if((CurrentWeapon != null && !_isHoldingSomething) || _energyController.CurrentEnergy <= 0)
         {
+            CurrentWeapon.GetComponent<DamageController>().CanMakeDamage = true;
             _isPreparingAttack = false;
             _attackEvent?.Invoke();
             CurrentWeapon.GetComponent<Weapon>().PerformAttack();
@@ -284,6 +291,9 @@ public class PlayerController : MonoBehaviour
                 GrabObject();
                 break;
             case InteractionType.Found:
+                _currentInteractiveObject.Interact();
+                break;
+            case InteractionType.TurnOnOff:
                 _currentInteractiveObject.Interact();
                 break;
             default:

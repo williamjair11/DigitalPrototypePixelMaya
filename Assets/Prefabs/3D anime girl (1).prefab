@@ -672,6 +672,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2600814523773241645}
+  - component: {fileID: 1864655875207400377}
+  - component: {fileID: 4897780264161695575}
   m_Layer: 0
   m_Name: mixamorig:LeftHand
   m_TagString: Untagged
@@ -696,6 +698,38 @@ Transform:
   m_Father: {fileID: 1800551147529757207}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1864655875207400377
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4632751449874781474}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.15, y: 0.28, z: 0.14}
+  m_Center: {x: 0, y: 0.07, z: 0}
+--- !u!114 &4897780264161695575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4632751449874781474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fa2bb2749c2cbb41af9f393dd473e87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damageAmount: 1
+  _canMakeDamage: 0
+  _targets:
+  - Player
+  OnMakeDamage:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4686601206775087923
 GameObject:
   m_ObjectHideFlags: 0
@@ -1150,6 +1184,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7466470216783307558}
+  - component: {fileID: 2697632637278150974}
+  - component: {fileID: 5610776702798616406}
+  - component: {fileID: 442291248}
   m_Layer: 0
   m_Name: mixamorig:RightHand
   m_TagString: Untagged
@@ -1174,6 +1211,51 @@ Transform:
   m_Father: {fileID: 6753368889455585606}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2697632637278150974
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6594455754541560303}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.15, y: 0.5, z: 0.14}
+  m_Center: {x: 0, y: 0.15, z: 0}
+--- !u!114 &5610776702798616406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6594455754541560303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fa2bb2749c2cbb41af9f393dd473e87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damageAmount: 1
+  _canMakeDamage: 0
+  _targets:
+  - Player
+  OnMakeDamage:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!65 &442291248
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6594455754541560303}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.15, y: 0.5, z: 0.14}
+  m_Center: {x: 0, y: 0.15, z: 0}
 --- !u!1 &7490270001361297025
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,8 +1460,10 @@ GameObject:
   - component: {fileID: 8764337671791295237}
   - component: {fileID: 3405005515603599743}
   - component: {fileID: 9091527193125510376}
-  - component: {fileID: 9091527193125510379}
   - component: {fileID: 9091527193125510372}
+  - component: {fileID: 4482643729938749509}
+  - component: {fileID: 1695778438797266138}
+  - component: {fileID: 8727437341182470755}
   m_Layer: 0
   m_Name: 3D anime girl (1)
   m_TagString: Untagged
@@ -1396,7 +1480,7 @@ Transform:
   m_GameObject: {fileID: 8280710148478067135}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 11.34823, y: 0.2597084, z: 123.877}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.471778, y: 1.471778, z: 1.471778}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5072460710872085976}
@@ -1439,37 +1523,22 @@ MonoBehaviour:
   _currentState: {fileID: 0}
   _walkSpeed: 1
   _runSpeed: 3
-  _currentTargetDistance: 0
+  _currentPlayerDistance: 0
   _distanceToLook: 20
-  _distanceToGreet: 15
-  _distanceToWalk: 10
-  _distanceToFollow: 3
-  _distanceToAttack: 1
-  _idleAnimationsCount: 3
+  _distanceToGreet: 17
+  _distanceToWalk: 15
+  _distanceToFollow: 5
+  _distanceToAttack: 3
   _target: {fileID: 0}
+  _player: {fileID: 0}
+  _targetPoint: {fileID: 0}
+  _damageZone: {fileID: 5610776702798616406}
+  _idleAnimationsCount: 3
   _initialState: 2
---- !u!114 &9091527193125510379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8280710148478067135}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cf99473354306940899becc4793451b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _initialHealt: 100
-  _maxHealt: 100
-  _minHealt: 0
-  _damageImnunityTime: 3
-  OnRecoverHealt:
-    m_PersistentCalls:
-      m_Calls: []
-  OnLostHealt:
-    m_PersistentCalls:
-      m_Calls: []
+  _currentEnemyState: 2
+  _wayPointsContainer: {fileID: 0}
+  _healthController: {fileID: 0}
+  _canMakeDamage: 0
 --- !u!195 &9091527193125510372
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1492,6 +1561,73 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &4482643729938749509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8280710148478067135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ded8c9a0ed6cd40ac5c38e82e5cb2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _initialHealt: 10
+  _maxHealt: 10
+  _minHealt: 1
+  _currentHealt: 0
+  _timeToRecover: 3
+  _onIncreaseHealt:
+    m_PersistentCalls:
+      m_Calls: []
+  _onReciveDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  _onDie:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1695778438797266138}
+        m_TargetAssemblyTypeName: DestroyWithDelay, Assembly-CSharp
+        m_MethodName: Destroy
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _recoveringFromDamage: 0
+  _canReciveDamage: 1
+  _timeCounter: 0
+--- !u!114 &1695778438797266138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8280710148478067135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3031c98d609a8c54bbc645520426cb33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!136 &8727437341182470755
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8280710148478067135}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.17
+  m_Height: 2.15
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.96, z: 0}
 --- !u!1 &8949978107894668968
 GameObject:
   m_ObjectHideFlags: 0

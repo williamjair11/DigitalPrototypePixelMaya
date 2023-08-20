@@ -40,7 +40,16 @@ public class UIController : MonoBehaviour
 
     public bool SetInteractionMessage
     {
-      get =>  _interactionMessage.activeSelf;  set => _interactionMessage.SetActive(value);
+      get =>  _interactionMessage.activeSelf;  
+      set 
+        {
+            if(value && 
+            GameManager.Instance.playerController.CurrentInteractiveObject &&
+            GameManager.Instance.playerController.CurrentInteractiveObject.PlayerCanInteract)
+                _interactionMessage.SetActive(true);
+            else
+                _interactionMessage.SetActive(false);
+        }
     }
 
     public bool TogleShortMenu 

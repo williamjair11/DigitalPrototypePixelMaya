@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AI;
 using UnityEngine;
+using DG.Tweening;
 
 //Una lista con los distintos states id del enemigo para evitar errores 
 //de escritura al manejar strings
@@ -20,10 +21,11 @@ public enum TzitzimimeAnimationsId
     Idle,
     Greeting,
     Running,
-    Attacking
+    Attacking,
+    ReciveDamage
 }
 
-[RequireComponent(typeof(HealtController), typeof(NavMeshAgent))]
+[RequireComponent( typeof(NavMeshAgent))]
 //Este enemigo cambia su comportamiento en función de la distancia del player, la idea es que 
 //durante el juego parece un personaje inofensivo, cuando te acercas te saluda e incluso camina hacía ti
 //con calma, sin embargo, una vez esta lo suficientemente cerca intenta atacarte
@@ -41,22 +43,23 @@ public class Tzitzimime : StateMachineContext
     _distanceToWalk = 20,
     _distanceToFollow = 10,
     _distanceToAttack = 2;
-    [SerializeField] private GameObject _target, _player, _initialPosition;
+    [SerializeField] private GameObject _target, _player, _targetPoint;
+    [SerializeField] private DamageController _damageZone;
     [SerializeField] private int _idleAnimationsCount = 3;
     [SerializeField] private TzitzimimeStatesId _initialState = TzitzimimeStatesId.Idle;
-    [SerializeField] private TzitzimimeStatesId  _currentEnemyState;
-    private bool _playerIsInGreetingRange = false, _isWalkingToInitialPlace = false;
+    [SerializeField] private TzitzimimeStatesId  _currentEnemyStateId;
+    private bool _playerIsInGreetingRange = false, _isWalkingToTargetPoint = false;
+    [SerializeField] bool _canMakeDamage;
 
     //Componentes y referencias
     Animator _animator;
     NavMeshAgent _agent;
-
-    //Getters y Setters de componentes y referencias
-    public Animator Animator { get => _animator; }
-    private HealtController _healtController;
-    public NavMeshAgent Agent{get=>_agent;}
-
+    
     //Getters y Setters 
+    public Animator Animator { get => _animator; }
+    public NavMeshAgent Agent{get=>_agent;}
+    public TzitzimimeStatesId CurrentEnemyState {get => _currentEnemyStateId;}
+    public GameObject Target { get => _target; }
     public float CurrentPlayerDistance { get => _currentPlayerDistance; }
     public float DistanceToLook { get => _distanceToLook; }
     public float DistanceToGreet { get => _distanceToGreet; }
@@ -65,15 +68,21 @@ public class Tzitzimime : StateMachineContext
     public float DistanceToAttack { get => _distanceToAttack; }
     public int IdleAnimationsCount { get => _idleAnimationsCount; }
     public float RunSpeed { get => _runSpeed; }
-    public float WalkSpeed { get => _walkSpeed; }
-    public GameObject Target { get => _target; }
-    public TzitzimimeStatesId CurrentEnemyState {get => _currentEnemyState;}
+    public float WalkSpeed { get => _walkSpeed; }    public bool CanMakeDamage { get => _canMakeDamage;}
     public bool TargetIsInGreetingRange { get => _playerIsInGreetingRange; set => _playerIsInGreetingRange = value; }
-    public bool IsWalkingToInitialPlace { get => _isWalkingToInitialPlace;}
+    public bool IsWalkingToTargetPoint { get => _isWalkingToTargetPoint;}
+
+// Los métodos EnableCanMakeDamage y DisableCanMakeDamage cambian a true o false la variable 
+// _canMakeDamage la cual determina si el enemigo puede hacer daño o no
+// Estos métodos pueden ser usados en events o AnimationEvents para ajustar el momento exacto en el que se
+// debe activar o desactivar el daño. En este caso por ejemplo el daño del enemigo se activa en un momento
+//exacto de la animación de ataque mediante animationEvents
+    
     void Awake()
     {
         _animator = GetComponent<Animator>();
         _agent = GetComponent<NavMeshAgent>();
+        DisableCanMakeDamage();
     }
 
     void Start()
@@ -82,6 +91,18 @@ public class Tzitzimime : StateMachineContext
         _agent.SetDestination(_target.transform.position);
         _agent.stoppingDistance = 0;
         _agent.speed = _walkSpeed;
+    }
+
+    public void EnableCanMakeDamage()
+    {
+        _damageZone.CanMakeDamage = true;
+        _canMakeDamage = true;
+    }
+
+    public void DisableCanMakeDamage()
+    {
+        _damageZone.CanMakeDamage = false;
+        _canMakeDamage = false;
     }
 
     public override void InitializeStateMachine()
@@ -106,45 +127,58 @@ public class Tzitzimime : StateMachineContext
         _currentState.Update();
     }
 
+    public void OnWalkToTargetPoint()
+    {
+        if(Vector3.Distance(transform.position, _targetPoint.transform.position) > 1) 
+            {   
+                _target = _targetPoint;
+                _isWalkingToTargetPoint = true;
+                _currentEnemyStateId = TzitzimimeStatesId.Walking;
+            }
+            else
+            { 
+                
+                    _isWalkingToTargetPoint = false;
+                    if(!GameManager.Instance.playerController.IsPlayerInSafeZone)
+                    _target = _player;
+                    _currentEnemyStateId = TzitzimimeStatesId.Idle; 
+            }
+    }
+
     //Actualiza el estado actual del enemigo en función de la distancia con el target
     void SetStateByPlayerDistance()
     {
+        if(GameManager.Instance.playerController.IsPlayerInSafeZone)
+        {
+            OnWalkToTargetPoint();
+            return;
+        }
         
         if (_currentPlayerDistance > _distanceToWalk)
         {
             _playerIsInGreetingRange = false;
-            
-            if(Vector3.Distance(transform.position, _initialPosition.transform.position) > 1) 
-            {   
-                _target = _initialPosition;
-                _isWalkingToInitialPlace = true;
-                _currentEnemyState = TzitzimimeStatesId.Walking;
-                Debug.Log("walking");
-            }
-            else
-            { 
-                _isWalkingToInitialPlace = false;
-                _target = _player;
-                _currentEnemyState = TzitzimimeStatesId.Idle;  
-            }
+            OnWalkToTargetPoint();
         }
 
         if (_currentPlayerDistance <= _distanceToWalk && _currentPlayerDistance > DistanceToFollow)
-            _currentEnemyState = TzitzimimeStatesId.Walking;
+        {    
+            _isWalkingToTargetPoint = false;
+            _target = _player;
+            _currentEnemyStateId = TzitzimimeStatesId.Walking;
+        }
 
-        if(_target == _initialPosition) return;
         if (_currentPlayerDistance <= DistanceToGreet && _currentPlayerDistance > _distanceToWalk)
         {
             _playerIsInGreetingRange = true;
-            _currentEnemyState = TzitzimimeStatesId.Idle;
+            _currentEnemyStateId = TzitzimimeStatesId.Idle;
         }
  
         if (_currentPlayerDistance <= DistanceToFollow && _currentPlayerDistance > _distanceToAttack)
-            _currentEnemyState = TzitzimimeStatesId.Following;
+            _currentEnemyStateId = TzitzimimeStatesId.Following;
         
 
         if (_currentPlayerDistance <= DistanceToAttack)
-            _currentEnemyState = TzitzimimeStatesId.Attacking;
+            _currentEnemyStateId = TzitzimimeStatesId.Attacking;
             
     }
 

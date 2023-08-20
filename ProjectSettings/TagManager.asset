@@ -17,6 +17,7 @@ TagManager:
   - WhiteLight
   - GreenLight
   - WhiteTorch
+  - Weapon
   layers:
   - Default
   - TransparentFX

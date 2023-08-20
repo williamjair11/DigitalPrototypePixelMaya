@@ -29,6 +29,8 @@ public class ArrowScript : MonoBehaviour
         //Collision
         if(Physics.Linecast(_lastPosition, _tip.position, out RaycastHit hitInfo, _layerMask))
         {
+            Debug.Log("hitInfo.collider.name");
+            Debug.Log(hitInfo.collider.name);
             Stop();
         }
 
@@ -39,8 +41,9 @@ public class ArrowScript : MonoBehaviour
     void Stop()
     {
         _isStoped = true;
-         _rigidBody.isKinematic = true;
-         _rigidBody.useGravity = false;
+        _rigidBody.isKinematic = true;
+        _rigidBody.useGravity = true;
+        Destroy(gameObject, 1f);
     }
 
     public void Fire(float _arrowForce)
@@ -53,6 +56,6 @@ public class ArrowScript : MonoBehaviour
         _rigidBody.isKinematic = false;
         _rigidBody.useGravity = true;
         _rigidBody.AddForce(Camera.main.transform.forward * _arrowForce);
-        Destroy(gameObject, 5f);
+        
     }
 }

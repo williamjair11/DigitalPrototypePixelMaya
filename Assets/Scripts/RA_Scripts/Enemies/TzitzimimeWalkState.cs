@@ -29,8 +29,8 @@ public class TzitzimimeWalkState : BaseState
         if(_contextState.CurrentEnemyState == TzitzimimeStatesId.Walking)
         _contextState.Agent.SetDestination(_contextState.Target.transform.position);
 
-        if(_contextState.IsWalkingToInitialPlace) return;
-        
+        if(_contextState.IsWalkingToTargetPoint) return;
+
         if(_contextState.CurrentEnemyState == TzitzimimeStatesId.Idle)
             SwitchState(_factory.GetState(TzitzimimeStatesId.Idle.ToString()));
 

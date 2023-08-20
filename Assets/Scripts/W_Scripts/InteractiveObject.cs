@@ -13,8 +13,8 @@ public enum InteractionType
 public class InteractiveObject : MonoBehaviour
 {
 
-    private UnityEvent _onInteract;
-    [SerializeField] private bool _playerCanInteract = true;
+    [SerializeField] private UnityEvent _onInteract;
+    [SerializeField] protected bool _playerCanInteract = true;
     [SerializeField] private InteractionType _interactionType = InteractionType.Grab;
     public bool PlayerCanInteract{get => _playerCanInteract; set => _playerCanInteract = value;}
     public InteractionType InteractionType{get => _interactionType;}
@@ -22,6 +22,7 @@ public class InteractiveObject : MonoBehaviour
 
     public virtual void Interact()
     {
+        _onInteract?.Invoke();
     } 
     
 }

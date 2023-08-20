@@ -19,12 +19,14 @@ public class TzitzimimeAttackState : BaseState
 
     public override void OnExitState()
     {
+        _contextState.DisableCanMakeDamage();
         _contextState.Animator.SetBool(TzitzimimeAnimationsId.Attacking.ToString(),false);
 
     }
 
     public override void Update()
     {
+        
         if(_contextState.CurrentEnemyState == TzitzimimeStatesId.Idle)
             SwitchState(_factory.GetState(TzitzimimeStatesId.Idle.ToString()));
 
@@ -32,9 +34,21 @@ public class TzitzimimeAttackState : BaseState
             SwitchState(_factory.GetState(TzitzimimeStatesId.Walking.ToString()));
 
         if( _contextState.CurrentEnemyState == TzitzimimeStatesId.Following) 
-        _contextState.Agent.SetDestination(_contextState.Target.transform.position);
+            SwitchState(_factory.GetState(TzitzimimeStatesId.Following.ToString()));
+        if( _contextState.CurrentEnemyState == TzitzimimeStatesId.Attacking)
+            RotateTowardsTarget();
+           // _contextState.transform.LookAt(GameManager.Instance.playerController.transform.position);
 
-        //if(_contextState.CurrentEnemyState == TzitzimimeStatesId.Attacking)
     }
 
+    public void RotateTowardsTarget()
+    {
+        Vector3 targetDirection = _contextState.Target.transform.position - _contextState.transform.position;
+        targetDirection.y = 0; // Esto asegura que solo gire en el eje Y
+
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+
+        // Suaviza la rotación
+        _contextState.transform.rotation = Quaternion.Slerp(_contextState.transform.rotation, targetRotation, Time.deltaTime);
+    }
 }

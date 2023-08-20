@@ -31,7 +31,7 @@ public class TzitzimimeIdleState : BaseState
 
         if(_contextState.TargetIsInGreetingRange)
         {
-            _contextState.transform.LookAt(_contextState.Target.transform.position);
+            _contextState.transform.LookAt(GameManager.Instance.playerController.transform);
             _contextState.Animator.SetBool(TzitzimimeAnimationsId.Greeting.ToString(), true);
         }
         else

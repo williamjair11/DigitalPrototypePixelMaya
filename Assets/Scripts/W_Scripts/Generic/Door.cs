@@ -10,6 +10,7 @@ public class Door : MonoBehaviour
     [SerializeField] private GameObject _rigthDoor, _leftDoor; 
     [SerializeField] private UnityEvent _onOpenDoor, _onCloseDoor;
     [SerializeField] private List<Interruptor> _interruptors = new List<Interruptor>();
+    
     private bool _isOpen;
 
     void Start()
@@ -31,6 +32,7 @@ public class Door : MonoBehaviour
 
     public void OpenDoor()
     {
+        Debug.Log("ShoudOpen");
         //_rigthDoor.transform.Rotate(Vector3.forward, -90, Space.Self);
         _rigthDoor.transform.DORotate(new Vector3(-90, 90, 0), 2);
         //_leftDoor.transform.Rotate(Vector3.forward, 90, Space.Self);

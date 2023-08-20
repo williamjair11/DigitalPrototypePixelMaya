@@ -11,35 +11,42 @@ public class DamageController : MonoBehaviour
     [SerializeField] private bool _canMakeDamage;
     [SerializeField] public List<string> _targets = new List<string>();
     [SerializeField] private UnityEvent OnMakeDamage;
-
+    private float _damageDelay = .5f, _timeCounter;
+    private bool _waitingToMakeMoreDamage;
     public int DamageAmount
     {
         get => _damageAmount;
         set => _damageAmount = value;
     }
-    void Start()
+
+    void Update()
     {
+        if(_waitingToMakeMoreDamage)
+        {
+            _canMakeDamage = false;
+            _timeCounter += Time.deltaTime;
+            if(_timeCounter >= _damageDelay)
+            {
+                _timeCounter = 0;
+                _waitingToMakeMoreDamage = false;
+            }
+        }
     }
     public bool CanMakeDamage{get=> _canMakeDamage; set => _canMakeDamage = value;}
-    public void SetCanMakeDamageFalse()
-    { 
-        _canMakeDamage = false;
-    }
-
-    public void SetDamageAmount()
-    {
-
-    }
-
     public void OnTriggerEnter(Collider other)
     {
-        if(_targets.Contains(other.tag) && CanMakeDamage)
+        if(_targets.Contains(other.tag) && CanMakeDamage && !_waitingToMakeMoreDamage)
         {
+            _waitingToMakeMoreDamage = true;
+            Debug.Log("Making Damage");
             HealthController targetHealthController =  other.gameObject.GetComponent<HealthController>();
             targetHealthController.ReciveDamage(_damageAmount);
             OnMakeDamage?.Invoke();
         }
     }
   
-    
+    public void setCanMakeDamageFalse()
+    {
+        _canMakeDamage = false;
+    }
 }

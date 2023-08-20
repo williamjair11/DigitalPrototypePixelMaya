@@ -9,7 +9,7 @@ public class Chest : InteractiveObject
     private bool _chestIsOpen = false;
     [SerializeField] private List<InventoryObject>  _inventoryObjects;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if(other.tag == "Player") 
         {
@@ -36,5 +36,6 @@ public class Chest : InteractiveObject
         _chestIsOpen = true;
         GameManager.Instance.uIController.SetInventoryObjects(_inventoryObjects);
         _onOpenChest?.Invoke();
+        _playerCanInteract = false;
     }
 }

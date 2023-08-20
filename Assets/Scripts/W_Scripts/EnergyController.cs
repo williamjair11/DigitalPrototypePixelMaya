@@ -17,20 +17,24 @@ public class EnergyController : MonoBehaviour
             public int damageMultiplier;
             public float wasteForSecond;
             public float recoveryForSecond;
-            public float isInfinite;
+            public bool isInfinite;
+            public Color _color;
     }
 
     
     private EnergyData _currentEnergyData;
-    private float _currentEnergy = 0;
+    [SerializeField] private float _currentEnergy = 0;
     private bool _updatingEnergy;
     [SerializeField] private float _initialEnergy = 1, _maxEnergy = 1;
     [SerializeField] private List<EnergyData> _energyList;
     [SerializeField] UnityEvent<float> _onChangeCurrentEnergy;
+    [SerializeField] UnityEvent<Color> _onChangeEnergyColor;
+
+    public EnergyType CurrentEnergyType { get => _currentEnergyData.type;}
 
     public bool UpdatingEnergy { get => _updatingEnergy;}
     public float CurrentEnergy { get => _currentEnergy;}
-    public void Start()
+    public void Awake()
     {
         SetEnergyType();
         IncreaseEnergy(_initialEnergy);
@@ -69,6 +73,7 @@ public class EnergyController : MonoBehaviour
             if(item.type == energyType)
             {
                 _currentEnergyData = item;
+                _onChangeEnergyColor?.Invoke(item._color);
                 break;
             }
         }
