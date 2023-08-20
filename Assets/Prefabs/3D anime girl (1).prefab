@@ -233,6 +233,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5072460710872085976}
   - component: {fileID: 2784333628137757708}
+  - component: {fileID: 157176204}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -275,8 +276,8 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bff1b6581ed55fb45af382f56dce3634, type: 2}
-  - {fileID: 2100000, guid: b5db34b307b015047bf6c5798b45031b, type: 2}
+  - {fileID: 2100000, guid: 3c7448741971537449c544e551f0682a, type: 2}
+  - {fileID: 2100000, guid: 3c7448741971537449c544e551f0682a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -343,6 +344,21 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.012146294, y: -0.12114471, z: 0.002906844}
     m_Extent: {x: 0.79863036, y: 1.0058906, z: 0.23350297}
   m_DirtyAABB: 0
+--- !u!114 &157176204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369302879524473268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48159b6caf9879c4dbea69e1d3367b46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _material: {fileID: 2100000, guid: 3c7448741971537449c544e551f0682a, type: 2}
+  _secondaryColor: {r: 0.6981132, g: 0.25482512, b: 0.08891065, a: 0}
+  _effectTime: 1
 --- !u!1 &1567569794691111171
 GameObject:
   m_ObjectHideFlags: 0
@@ -1464,9 +1480,11 @@ GameObject:
   - component: {fileID: 4482643729938749509}
   - component: {fileID: 1695778438797266138}
   - component: {fileID: 8727437341182470755}
+  - component: {fileID: 1719413839}
+  - component: {fileID: 1719413846}
   m_Layer: 0
   m_Name: 3D anime girl (1)
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1504,7 +1522,10 @@ Animator:
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'mixamorig:RightForeArm'\n\tFrom animation clip
+    'ZombiReciveDamage'\n\tFrom animation clip 'ZombiReciveDamage'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -1521,23 +1542,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: {fileID: 0}
-  _walkSpeed: 1
-  _runSpeed: 3
+  _walkSpeed: 3
+  _runSpeed: 7
   _currentPlayerDistance: 0
   _distanceToLook: 20
   _distanceToGreet: 17
   _distanceToWalk: 15
   _distanceToFollow: 5
-  _distanceToAttack: 3
+  _distanceToAttack: 2.5
   _target: {fileID: 0}
   _player: {fileID: 0}
   _targetPoint: {fileID: 0}
   _damageZone: {fileID: 5610776702798616406}
   _idleAnimationsCount: 3
   _initialState: 2
-  _currentEnemyState: 2
-  _wayPointsContainer: {fileID: 0}
-  _healthController: {fileID: 0}
+  _currentEnemyStateId: 0
   _canMakeDamage: 0
 --- !u!195 &9091527193125510372
 NavMeshAgent:
@@ -1573,17 +1592,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13ded8c9a0ed6cd40ac5c38e82e5cb2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initialHealt: 10
-  _maxHealt: 10
+  _initialHealt: 30
+  _maxHealt: 30
   _minHealt: 1
   _currentHealt: 0
-  _timeToRecover: 3
+  _timeToRecover: 1
   _onIncreaseHealt:
     m_PersistentCalls:
       m_Calls: []
   _onReciveDamage:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 157176204}
+        m_TargetAssemblyTypeName: ChangeColorEffect, Assembly-CSharp
+        m_MethodName: ChangeColor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _onDie:
     m_PersistentCalls:
       m_Calls:
@@ -1628,6 +1659,52 @@ CapsuleCollider:
   m_Height: 2.15
   m_Direction: 1
   m_Center: {x: 0, y: 0.96, z: 0}
+--- !u!54 &1719413839
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8280710148478067135}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 1.04
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
+--- !u!114 &1719413846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8280710148478067135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd5f070b93810ce43ac5d4cd12798518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collisionTags:
+  - Weapon
+  force: 59
+  _onCollision:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3405005515603599743}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: SetTrigger
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ReciveDamage
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8949978107894668968
 GameObject:
   m_ObjectHideFlags: 0

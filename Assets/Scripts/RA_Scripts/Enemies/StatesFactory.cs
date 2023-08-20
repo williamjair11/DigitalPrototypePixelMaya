@@ -12,6 +12,7 @@ public abstract class StatesFactory
     {
         
     }
+
     //En este método se deben agregar las instancias de los distintos states del personaje
     public abstract void SetUpStatesList();
     public BaseState GetState(string stateId)

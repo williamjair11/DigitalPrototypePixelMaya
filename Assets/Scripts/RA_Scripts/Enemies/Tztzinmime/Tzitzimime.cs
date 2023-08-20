@@ -127,7 +127,7 @@ public class Tzitzimime : StateMachineContext
         _currentState.Update();
     }
 
-    public void OnWalkToTargetPoint()
+    public void IgnorePlayer()
     {
         if(Vector3.Distance(transform.position, _targetPoint.transform.position) > 1) 
             {   
@@ -150,14 +150,14 @@ public class Tzitzimime : StateMachineContext
     {
         if(GameManager.Instance.playerController.IsPlayerInSafeZone)
         {
-            OnWalkToTargetPoint();
+            IgnorePlayer();
             return;
         }
         
         if (_currentPlayerDistance > _distanceToWalk)
         {
             _playerIsInGreetingRange = false;
-            OnWalkToTargetPoint();
+            IgnorePlayer();
         }
 
         if (_currentPlayerDistance <= _distanceToWalk && _currentPlayerDistance > DistanceToFollow)
