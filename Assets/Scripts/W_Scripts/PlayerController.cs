@@ -2,26 +2,41 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.InputSystem.XInput;
+using System.Security.Cryptography;
 [RequireComponent(typeof(CharacterController), typeof(EnergyController))]
 [RequireComponent(typeof(IsGrounded))]
 public class PlayerController : MonoBehaviour
 {
+    //GameObject's / Scripts References
     [SerializeField] private GetGameObjectByRaycast _getObjectByRay;
     [SerializeField] private GameObject _rigthHand, _grabbedObject;
     private InteractiveObject _currentInteractiveObject;
     [SerializeField] private CharacterController _characterController;
+    IsGrounded _isGrounded;
+    [SerializeField] EnergyController _energyController;
+    Camera _camera;
+    GameObject _weapon = null, _specialAttack = null;
+
+    //Player Settings
     [SerializeField] private float 
     _initialSpeedPlayer = 5f, 
     _runSpeed, 
     _velocitySpeed, 
     _slowSpeed,
     _gravityForce = 9.8f;
+    float _attackTimeCounter, _maxAttackTime;
 
     [SerializeField] private float _jumpForce = 10f, _jumTimeCounter, _jumpMaxTime;
+
+    //Run time data
     [SerializeField] private bool _playerIsMoving, _isRunning, _isJumpping, _usingGravity, _isPlayerInSafeZone;
     private bool _playerIsCrouch;    
     private Vector3 _lastPlayerPosition;
+    Vector2 _movementVector;
+    bool _isPreparingAttack, _isHoldingSomething;
 
+
+    //Events
     [Header("Events")]
     [SerializeField] private UnityEvent 
     _attackEvent,
@@ -35,20 +50,14 @@ public class PlayerController : MonoBehaviour
     _onStopLoockingInteractiveSurface, 
     _onRun, _onStopRunning;
 
-    private bool _isInteractionObjectInRange;
-    public bool IsInteractionObjectInRange{get => _isInteractionObjectInRange;}
 
-    float _attackTimeCounter, _maxAttackTime;
-    bool _isPreparingAttack, _isHoldingSomething;
-    IsGrounded _isGrounded;
-    [SerializeField] EnergyController _energyController;
-    Camera _camera;
-    GameObject _weapon = null;
-    public GameObject CurrentWeapon
-    {
-        get => _weapon; set => _weapon = value;
-    }
-    Vector2 _movementVector;
+    //Getters y Setterts
+    [SerializeField] private bool _isInteractionObjectInRange, _canJump;
+    public bool IsInteractionObjectInRange{get => _isInteractionObjectInRange;}
+    public bool CanJump {get => _canJump; set => _canJump = value;}
+
+    public GameObject CurrentWeapon {get => _weapon; set => _weapon = value;}
+    public GameObject CurrentSpecialAttack {get => _specialAttack; set => _specialAttack = value;}
     public InteractiveObject CurrentInteractiveObject { get => _currentInteractiveObject;}
     public Vector2 MovementVector{set => _movementVector = value;}
     public EnergyController EnergyController{ get => _energyController;}
@@ -67,9 +76,9 @@ public class PlayerController : MonoBehaviour
         get => _isJumpping; 
         set{
                 _isJumpping = value;
-                if(!_isJumpping && _characterController.isGrounded) _jumTimeCounter = 0;
             }
     }
+    
     public bool IsPlayerInSafeZone
     {
         get => _isPlayerInSafeZone; 
@@ -92,21 +101,22 @@ public class PlayerController : MonoBehaviour
         CountPrepareAttackTime();
         if(_isJumpping)
         { 
-            
-            Jump();
             _jumTimeCounter += Time.deltaTime;
-            if(_jumTimeCounter >= _jumpMaxTime)
+            if(_jumTimeCounter <= _jumpMaxTime)
             {
-                _isJumpping = false;
-                _jumTimeCounter = 0;
-               
+                Jump();
+            }
+            else
+            {
+                if(_characterController.isGrounded) _isJumpping = false;
             }
         }
         else
         {
-            
+             _jumTimeCounter = 0;
             _usingGravity = true;
         }
+
         if(_playerIsMoving) Move();
     }
 
@@ -156,6 +166,7 @@ public class PlayerController : MonoBehaviour
 
     public void Jump() 
     {
+        if(_energyController.CurrentEnergy > 0)
         _characterController.Move(Vector3.up * _jumpForce * Time.deltaTime);
     }
 
@@ -209,7 +220,6 @@ public class PlayerController : MonoBehaviour
 
     public void PerformAttack()
     {
-        
         if((CurrentWeapon != null && !_isHoldingSomething) || _energyController.CurrentEnergy <= 0)
         {
             CurrentWeapon.GetComponent<DamageController>().CanMakeDamage = true;
@@ -220,23 +230,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void PrepareSpecialAttack()
+   /* public void PrepareSpecialAttack()
     {   
-        if(CurrentWeapon != null && !_isHoldingSomething)
+        if(CurrentSpecialAttack != null && !_isHoldingSomething)
         {
-            _isPreparingAttack = true;
+            //_isPreparingAttack = true;
             if(!_isRunning) StartCoroutine(CalculteWasteOfEnergy());
             _specialAttackEvent?.Invoke();
         }
-    }
+    }*/
 
     public void PerformSpecialAttack()
     {
-        if(CurrentWeapon != null && !_isHoldingSomething)
+        if(CurrentSpecialAttack != null && !_isHoldingSomething && _energyController.CurrentEnergy > 0)
         {
-            _isPreparingAttack = false;
-            if(!_isRunning && !_isPreparingAttack) StopCoroutine(CalculteWasteOfEnergy());
-            _specialAttackEvent?.Invoke();
+            SpecialAttack specialAttackData = CurrentSpecialAttack.GetComponent<SpecialAttack>();
+            if(_energyController.CurrentEnergy >= specialAttackData.WasteOfEnergy)
+            {
+                float wasteOfEnergy = specialAttackData.WasteOfEnergy;
+                specialAttackData.PerformAttack();
+                _energyController.DecreaseEnergy(wasteOfEnergy);
+                _specialAttackEvent?.Invoke();
+            }
         }
     }
 
@@ -307,7 +322,7 @@ public class PlayerController : MonoBehaviour
         CurrentWeapon?.SetActive(true);
         _grabbedObject.GetComponent<Rigidbody>().isKinematic = false;
         _grabbedObject.transform.SetParent(transform.parent);
-        if(Vector3.Distance(newObjectPosition, _grabbedObject.transform.position) < 3)
+        if(newObjectPosition != null && newObjectPosition != Vector3.zero)
             _grabbedObject.transform.position = newObjectPosition;
         else
         _grabbedObject.transform.position = transform.position + transform.forward;
@@ -362,6 +377,19 @@ public class PlayerController : MonoBehaviour
         CurrentWeapon.transform.localPosition = Vector3.zero;
     }
 
+    public void SetSpecialAttack(SpecialAttack specialAttack)
+    {
+        if(_isHoldingSomething || _energyController.CurrentEnergy <= 0) return;
+        if(CurrentSpecialAttack && 
+        CurrentSpecialAttack.GetComponent<SpecialAttack>().id != specialAttack.id)
+        {
+            CurrentSpecialAttack.GetComponent<DestroyWithDelay>().Destroy();
+            CurrentSpecialAttack = null;
+        }
+        CurrentSpecialAttack = Instantiate(specialAttack.gameObject, transform);
+        CurrentSpecialAttack.transform.localPosition = Vector3.zero;
+    }
+
     public IEnumerator CalculteWasteOfEnergy()
     {
         float energy = 0;
@@ -375,5 +403,4 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
 }

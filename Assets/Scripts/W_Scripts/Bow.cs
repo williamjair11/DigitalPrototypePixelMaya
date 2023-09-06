@@ -13,6 +13,7 @@ public class Bow : Weapon
     public override void PrepareAttack()
     {
         base.PrepareAttack();
+        if(_arrowPoint.childCount < 1)
        _currentArrow = Instantiate(_arrowPrefab, _arrowPoint);
     }
 
@@ -23,7 +24,6 @@ public class Bow : Weapon
         float fireStrength =  _damage * 100/ _maxDamage;
         fireStrength = fireStrength / 100;
         _currentArrow.GetComponent<ArrowScript>().Fire(_arrowForce * fireStrength);
-       
     }
 
 }

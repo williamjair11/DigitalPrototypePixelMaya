@@ -23,7 +23,7 @@ public class EnergyController : MonoBehaviour
 
     
     private EnergyData _currentEnergyData;
-    [SerializeField] private float _currentEnergy = 0;
+    [SerializeField] private float _currentEnergy = 0, _delayToRecover = 3, _delayToRest = 4;
     private bool _updatingEnergy;
     [SerializeField] private float _initialEnergy = 1, _maxEnergy = 1;
     [SerializeField] private List<EnergyData> _energyList;
@@ -82,7 +82,9 @@ public class EnergyController : MonoBehaviour
     public IEnumerator RegenerateEnergy()
     {
         _updatingEnergy = true;
-        yield return new WaitForSeconds(3);
+        float delay = _delayToRecover;
+        if(CurrentEnergy <= 0) delay = _delayToRecover + _delayToRest;
+        yield return new WaitForSeconds(delay);
         IncreaseEnergy(1);
         _updatingEnergy = false;
     }

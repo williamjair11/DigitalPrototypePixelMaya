@@ -16,10 +16,14 @@ GameObject:
   - component: {fileID: 683985019970262621}
   - component: {fileID: 4777159204368938753}
   - component: {fileID: 1889127713526431}
-  - component: {fileID: 4777159204368938758}
+  - component: {fileID: 1845526854263868153}
+  - component: {fileID: 4502992732595490597}
+  - component: {fileID: -7236324107542919826}
+  - component: {fileID: 6279441031144866859}
+  - component: {fileID: 140403292203511501}
   m_Layer: 0
   m_Name: EnergyBall
-  m_TagString: WhiteLight
+  m_TagString: EnergyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,7 +36,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5909902208933441262}
   m_LocalRotation: {x: -0, y: -0, z: 0.000000029802322, w: 1}
-  m_LocalPosition: {x: 18.55, y: 5.87, z: 107.84}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.4000001, y: 0.4000001, z: 0.4000001}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -153,7 +157,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 2
+  m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 30
@@ -213,7 +217,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.49999997
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4777159204368938758
+--- !u!114 &1845526854263868153
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -222,8 +226,128 @@ MonoBehaviour:
   m_GameObject: {fileID: 5909902208933441262}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 710f51b479dbdf54f9d9e77e91d59ef1, type: 3}
+  m_Script: {fileID: 11500000, guid: 36e812e6960492f4a91c9d954287da49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timeToDesactivate: 3
-  _deactivating: 0
+  _blinkEffect: {fileID: 140403292203511501}
+  _rigidbody: {fileID: 4777159204368938753}
+  _destroyWithDelay: {fileID: -7236324107542919826}
+--- !u!114 &4502992732595490597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5909902208933441262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ded8c9a0ed6cd40ac5c38e82e5cb2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _initialHealt: 1
+  _maxHealt: 1
+  _minHealt: 1
+  _currentHealt: 0
+  _timeToRecover: 0
+  _onIncreaseHealt:
+    m_PersistentCalls:
+      m_Calls: []
+  _onReciveDamage:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -7236324107542919826}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _onDie:
+    m_PersistentCalls:
+      m_Calls: []
+  _recoveringFromDamage: 0
+  _canReciveDamage: 1
+  _timeCounter: 0
+--- !u!114 &-7236324107542919826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5909902208933441262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3031c98d609a8c54bbc645520426cb33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _onDestroy:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6279441031144866859}
+        m_TargetAssemblyTypeName: CreateExplosion, Assembly-CSharp
+        m_MethodName: InstantiateExplosion
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6279441031144866859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5909902208933441262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0339fa41079ffc42af4d25cb216385d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _explosionPrefab: {fileID: 6403490854008904938, guid: ba60559fae99f174ab80269183b7dfe2, type: 3}
+  _createExplosionOnCollide: 1
+  _collisionTags:
+  - Enemy
+  _onCreateExplosion:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -7236324107542919826}
+        m_TargetAssemblyTypeName: DestroyWithDelay, Assembly-CSharp
+        m_MethodName: Destroy
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &140403292203511501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5909902208933441262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5cb55b2d51cdd94bb5400d707c22843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _onStopBlink:
+    m_PersistentCalls:
+      m_Calls: []
+  _secondaryColor: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 1}
+  _duration: 10
+  _interval: 0.2
+  material: {fileID: 2100000, guid: ac54e66f0f8f30849a42293370d213ae, type: 2}
+  _blinkOnStart: 0

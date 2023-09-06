@@ -21,12 +21,10 @@ public class TzitzimimeAttackState : BaseState
     {
         _contextState.DisableCanMakeDamage();
         _contextState.Animator.SetBool(TzitzimimeAnimationsId.Attacking.ToString(),false);
-
     }
 
     public override void Update()
     {
-        
         if(_contextState.CurrentEnemyState == TzitzimimeStatesId.Idle)
             SwitchState(_factory.GetState(TzitzimimeStatesId.Idle.ToString()));
 
@@ -38,7 +36,6 @@ public class TzitzimimeAttackState : BaseState
         if( _contextState.CurrentEnemyState == TzitzimimeStatesId.Attacking)
             RotateTowardsTarget();
            // _contextState.transform.LookAt(GameManager.Instance.playerController.transform.position);
-
     }
 
     public void RotateTowardsTarget()

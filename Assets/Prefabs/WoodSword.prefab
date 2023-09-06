@@ -161,7 +161,7 @@ MonoBehaviour:
   _maxDamage: 2
   _baseDamage: 1
   _damage: 15
-  _animator: {fileID: 0}
+  _animator: {fileID: 650742234332885275}
   _onPrepareAttack:
     m_PersistentCalls:
       m_Calls: []
@@ -199,6 +199,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3031c98d609a8c54bbc645520426cb33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _onDestroy:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &3041035943429795556
 BoxCollider:
   m_ObjectHideFlags: 0

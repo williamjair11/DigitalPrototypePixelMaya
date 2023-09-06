@@ -17,5 +17,6 @@ public class TzitzimimeStateFactory : StatesFactory
         _statesList.Add(TzitzimimeStatesId.Walking.ToString(), new TzitzimimeWalkState(_context, this));
         _statesList.Add(TzitzimimeStatesId.Following.ToString(), new TzitzimimeFollowState(_context, this));
         _statesList.Add(TzitzimimeStatesId.Attacking.ToString(), new TzitzimimeAttackState(_context, this));
+        _statesList.Add(TzitzimimeStatesId.Stuned.ToString(), new TzitzimimeStunedState(_context, this));
     }
 }

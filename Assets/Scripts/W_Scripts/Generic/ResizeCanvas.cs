@@ -13,25 +13,13 @@ public class ResizeCanvas : MonoBehaviour
     public RectTransform canvasTransform;
     private float  _lastCameraAspect, _lastScreenWidth, _lastScreenHeigth;
     public float _canvasHeigth, _canvasVRheigth, _canvasZDistance = .3f, _initialFOV;
-
-   /* void Awake()
-    {
-        float canvasHeight = canvasTransform.rect.height;
-        float desiredCanvasWidth = canvasHeight * Camera.main.aspect;
-        canvasTransform.SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, desiredCanvasWidth);
-    }
-
-    void Update () {
-    transform.position = Camera.main.transform.position + Camera.main.transform.forward * distance;
-    } */
-
-
+    [Range(0, 10)] [SerializeField] private float  _scaleFactor;
+    [SerializeField] private bool _scaleToEdit;
     void Start()
     {
         SetNormalMode();
     }
 
-    
     public void SetVRMode()
     {
         CalculateCanvasSize(_canvasVRheigth);
@@ -48,6 +36,4 @@ public class ResizeCanvas : MonoBehaviour
         float canvasWidth = Screen.width * height / Screen.height;
         canvasTransform.SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, canvasWidth);
     }
-
-
 }

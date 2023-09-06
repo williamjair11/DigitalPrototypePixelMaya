@@ -53,6 +53,9 @@ public class PlayerInventory : MonoBehaviour
     {
         if(_inventory.ContainsKey(id))
         {
+            if(_inventory[id].type == ObjectType.SpecialAttack)
+            GameManager.Instance.playerController.SetSpecialAttack((SpecialAttack)_inventory[id]);
+            else
             GameManager.Instance.playerController.SetWeapon((Weapon)_inventory[id]);
         }
     }

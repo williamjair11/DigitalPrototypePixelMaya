@@ -11,7 +11,8 @@ public enum TzitzimimeStatesId
     Walking,
     Following,
     Idle,
-    Attacking
+    Attacking,
+    Stuned
 }
 
 public enum TzitzimimeAnimationsId
@@ -22,7 +23,8 @@ public enum TzitzimimeAnimationsId
     Greeting,
     Running,
     Attacking,
-    ReciveDamage
+    ReciveDamage,
+    Stuned
 }
 
 [RequireComponent( typeof(NavMeshAgent))]
@@ -42,14 +44,15 @@ public class Tzitzimime : StateMachineContext
     _distanceToGreet = 25,
     _distanceToWalk = 20,
     _distanceToFollow = 10,
-    _distanceToAttack = 2;
+    _distanceToAttack = 2,
+    _stunedTime = 5;
     [SerializeField] private GameObject _target, _player, _targetPoint;
     [SerializeField] private DamageController _damageZone;
     [SerializeField] private int _idleAnimationsCount = 3;
     [SerializeField] private TzitzimimeStatesId _initialState = TzitzimimeStatesId.Idle;
     [SerializeField] private TzitzimimeStatesId  _currentEnemyStateId;
     private bool _playerIsInGreetingRange = false, _isWalkingToTargetPoint = false;
-    [SerializeField] bool _canMakeDamage;
+    [SerializeField] bool _canMakeDamage, _isStuned;
 
     //Componentes y referencias
     Animator _animator;
@@ -68,9 +71,13 @@ public class Tzitzimime : StateMachineContext
     public float DistanceToAttack { get => _distanceToAttack; }
     public int IdleAnimationsCount { get => _idleAnimationsCount; }
     public float RunSpeed { get => _runSpeed; }
-    public float WalkSpeed { get => _walkSpeed; }    public bool CanMakeDamage { get => _canMakeDamage;}
+    public float WalkSpeed { get => _walkSpeed; }    
+    public bool CanMakeDamage { get => _canMakeDamage;}
     public bool TargetIsInGreetingRange { get => _playerIsInGreetingRange; set => _playerIsInGreetingRange = value; }
     public bool IsWalkingToTargetPoint { get => _isWalkingToTargetPoint;}
+    public bool IsStuned { get => _isStuned; set => _isStuned = value;}
+    public float StunedTime { get => _stunedTime; } 
+
 
 // Los métodos EnableCanMakeDamage y DisableCanMakeDamage cambian a true o false la variable 
 // _canMakeDamage la cual determina si el enemigo puede hacer daño o no
@@ -105,6 +112,15 @@ public class Tzitzimime : StateMachineContext
         _canMakeDamage = false;
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("EnergyAttack"))
+        {
+            _isStuned = true;
+            _currentState.SwitchState(_stateFactory.GetState(TzitzimimeStatesId.Stuned.ToString()));
+        }
+    }
+
     public override void InitializeStateMachine()
     {
         //Guarda en una variable la instancia de StateFactory
@@ -122,7 +138,8 @@ public class Tzitzimime : StateMachineContext
     void Update()
     {
         _currentPlayerDistance = Vector3.Distance(_player.transform.position, transform.position);
-        SetStateByPlayerDistance();
+        if(!_isStuned) SetStateByPlayerDistance();
+
         //Es importante colocar _currentSate.Update al final de todas las lineas de código
         _currentState.Update();
     }

@@ -8,6 +8,7 @@ public class ButtonInterruptor : Interruptor
     // Start is called before the first frame update
     void OnTriggerStay(Collider other)
     {
+        
         if(_tags.Contains(other.tag))
         {
             _isActive = true;

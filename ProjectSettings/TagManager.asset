@@ -18,11 +18,13 @@ TagManager:
   - GreenLight
   - WhiteTorch
   - Weapon
+  - EnergyBall
+  - EnergyAttack
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - EnergyBall
   - Water
   - UI
   - TouchControlsLayer
@@ -30,9 +32,9 @@ TagManager:
   - Interactable
   - Wall
   - HardSurface
-  - 
-  - 
-  - 
+  - Damageable
+  - Player
+  - PlayerProyectil
   - 
   - 
   - 

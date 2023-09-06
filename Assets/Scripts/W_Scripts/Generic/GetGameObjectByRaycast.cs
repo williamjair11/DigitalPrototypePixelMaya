@@ -37,6 +37,8 @@ public class GetGameObjectByRaycast : MonoBehaviour
             hitObject = hit.transform.gameObject;
             _lastHitPoint = hit.point;
         }
+        else
+        _lastHitPoint = Vector3.zero;
         return hitObject;
     }
 

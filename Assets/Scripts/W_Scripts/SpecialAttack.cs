@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SpecialAttack : InventoryObject
 {
-    // Start is called before the first frame update
-    void Start()
+
+    UnityEvent _onPerformAttack;
+    [SerializeField] private float _wasteOfEnergy, _damagePoints;
+
+    public float WasteOfEnergy { get => _wasteOfEnergy; }
+
+    public virtual void PerformAttack()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

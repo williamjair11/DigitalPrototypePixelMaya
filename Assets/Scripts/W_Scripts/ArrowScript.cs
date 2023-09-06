@@ -30,7 +30,7 @@ public class ArrowScript : MonoBehaviour
         if(Physics.Linecast(_lastPosition, _tip.position, out RaycastHit hitInfo, _layerMask))
         {
             Debug.Log("hitInfo.collider.name");
-            Debug.Log(hitInfo.collider.name);
+            Debug.Log(hitInfo.collider.tag);
             Stop();
         }
 
@@ -48,11 +48,11 @@ public class ArrowScript : MonoBehaviour
 
     public void Fire(float _arrowForce)
     {
+        transform.parent = null;
         transform.position = Camera.main.transform.position;
         transform.position += transform.forward * 2;
         transform.rotation = Camera.main.transform.rotation;
         _isStoped = false;
-        transform.parent = null;
         _rigidBody.isKinematic = false;
         _rigidBody.useGravity = true;
         _rigidBody.AddForce(Camera.main.transform.forward * _arrowForce);

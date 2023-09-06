@@ -347,6 +347,7 @@ GameObject:
   - component: {fileID: 9129804051850153749}
   - component: {fileID: 9129804051850153750}
   - component: {fileID: 9021783769988538640}
+  - component: {fileID: 6007997888908771438}
   m_Layer: 8
   m_Name: AntorchaApagadaZonaSegura
   m_TagString: greenTorch
@@ -524,7 +525,8 @@ MonoBehaviour:
   _interactionType: 3
   _isActive: 0
   _energyType: 1
-  _interruptor: {fileID: 0}
+  _interruptor: {fileID: 9129804051850153770}
+  _safeZone: {fileID: 9129804051850153749}
 --- !u!54 &9129804051850153748
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -553,6 +555,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ce0d2cf05ed66419acbc4b720f2c67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isEnabled: 0
 --- !u!135 &9129804051850153750
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -582,6 +585,19 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.01, z: -0.03}
   m_TimeToStationary: 0.5
+--- !u!65 &6007997888908771438
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9129804051850153751}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0653537, y: 0.0653537, z: 0.23662636}
+  m_Center: {x: 0.00000060107595, y: 0.00000064577944, z: 0.08786931}
 --- !u!1 &9129804052083823228
 GameObject:
   m_ObjectHideFlags: 0

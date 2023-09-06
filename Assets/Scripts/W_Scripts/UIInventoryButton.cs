@@ -10,6 +10,7 @@ public class UIInventoryButton : MonoBehaviour
     public OnClickButton _onClickDelegate;
     public void OnClick()
     {
+        GameManager.Instance.playerController.CanJump = false;
         GameManager.Instance.playerInventory.UseWeapon(objectId);
         _onClickDelegate?.Invoke();
     }

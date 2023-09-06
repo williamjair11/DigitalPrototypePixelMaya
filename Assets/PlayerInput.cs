@@ -109,25 +109,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Long range weaponMenu1"",
-                    ""type"": ""Button"",
-                    ""id"": ""8f97c03a-c8c7-4799-a55a-a10b5d12945a"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Short range weaponMenu"",
-                    ""type"": ""Button"",
-                    ""id"": ""5578c146-7dce-4dfe-811e-5a0482fd39e0"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""SpecialAttacksMenu"",
+                    ""name"": ""ShortMenu"",
                     ""type"": ""Button"",
                     ""id"": ""7eda888b-3715-4131-8266-12124254ecc6"",
                     ""expectedControlType"": ""Button"",
@@ -213,7 +195,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""1d288327-94f5-493b-882a-c94691a8f175"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -224,7 +206,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""8df71c1d-21cf-4095-9b5f-96056fa624e0"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -267,34 +249,12 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""fb3274f1-4a49-45dd-b001-b408370c384d"",
-                    ""path"": ""<Gamepad>/dpad/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Long range weaponMenu1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fdf392dd-ecfd-4b3f-86a1-425307662430"",
-                    ""path"": ""<Gamepad>/dpad/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Short range weaponMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""d6eaa068-4a7a-4503-80c2-10a21adef6e8"",
                     ""path"": ""<Gamepad>/dpad/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SpecialAttacksMenu"",
+                    ""action"": ""ShortMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -336,9 +296,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Gameplay_Crouch = m_Gameplay.FindAction("Crouch", throwIfNotFound: true);
         m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
         m_Gameplay_Inventory = m_Gameplay.FindAction("Inventory", throwIfNotFound: true);
-        m_Gameplay_LongrangeweaponMenu1 = m_Gameplay.FindAction("Long range weaponMenu1", throwIfNotFound: true);
-        m_Gameplay_ShortrangeweaponMenu = m_Gameplay.FindAction("Short range weaponMenu", throwIfNotFound: true);
-        m_Gameplay_SpecialAttacksMenu = m_Gameplay.FindAction("SpecialAttacksMenu", throwIfNotFound: true);
+        m_Gameplay_ShortMenu = m_Gameplay.FindAction("ShortMenu", throwIfNotFound: true);
         m_Gameplay_ThrowButton = m_Gameplay.FindAction("ThrowButton", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
     }
@@ -409,9 +367,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Crouch;
     private readonly InputAction m_Gameplay_Interact;
     private readonly InputAction m_Gameplay_Inventory;
-    private readonly InputAction m_Gameplay_LongrangeweaponMenu1;
-    private readonly InputAction m_Gameplay_ShortrangeweaponMenu;
-    private readonly InputAction m_Gameplay_SpecialAttacksMenu;
+    private readonly InputAction m_Gameplay_ShortMenu;
     private readonly InputAction m_Gameplay_ThrowButton;
     private readonly InputAction m_Gameplay_Pause;
     public struct GameplayActions
@@ -427,9 +383,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @Crouch => m_Wrapper.m_Gameplay_Crouch;
         public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
         public InputAction @Inventory => m_Wrapper.m_Gameplay_Inventory;
-        public InputAction @LongrangeweaponMenu1 => m_Wrapper.m_Gameplay_LongrangeweaponMenu1;
-        public InputAction @ShortrangeweaponMenu => m_Wrapper.m_Gameplay_ShortrangeweaponMenu;
-        public InputAction @SpecialAttacksMenu => m_Wrapper.m_Gameplay_SpecialAttacksMenu;
+        public InputAction @ShortMenu => m_Wrapper.m_Gameplay_ShortMenu;
         public InputAction @ThrowButton => m_Wrapper.m_Gameplay_ThrowButton;
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
@@ -468,15 +422,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Inventory.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInventory;
                 @Inventory.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInventory;
                 @Inventory.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInventory;
-                @LongrangeweaponMenu1.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLongrangeweaponMenu1;
-                @LongrangeweaponMenu1.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLongrangeweaponMenu1;
-                @LongrangeweaponMenu1.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLongrangeweaponMenu1;
-                @ShortrangeweaponMenu.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShortrangeweaponMenu;
-                @ShortrangeweaponMenu.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShortrangeweaponMenu;
-                @ShortrangeweaponMenu.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShortrangeweaponMenu;
-                @SpecialAttacksMenu.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSpecialAttacksMenu;
-                @SpecialAttacksMenu.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSpecialAttacksMenu;
-                @SpecialAttacksMenu.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSpecialAttacksMenu;
+                @ShortMenu.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShortMenu;
+                @ShortMenu.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShortMenu;
+                @ShortMenu.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShortMenu;
                 @ThrowButton.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnThrowButton;
                 @ThrowButton.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnThrowButton;
                 @ThrowButton.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnThrowButton;
@@ -514,15 +462,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Inventory.started += instance.OnInventory;
                 @Inventory.performed += instance.OnInventory;
                 @Inventory.canceled += instance.OnInventory;
-                @LongrangeweaponMenu1.started += instance.OnLongrangeweaponMenu1;
-                @LongrangeweaponMenu1.performed += instance.OnLongrangeweaponMenu1;
-                @LongrangeweaponMenu1.canceled += instance.OnLongrangeweaponMenu1;
-                @ShortrangeweaponMenu.started += instance.OnShortrangeweaponMenu;
-                @ShortrangeweaponMenu.performed += instance.OnShortrangeweaponMenu;
-                @ShortrangeweaponMenu.canceled += instance.OnShortrangeweaponMenu;
-                @SpecialAttacksMenu.started += instance.OnSpecialAttacksMenu;
-                @SpecialAttacksMenu.performed += instance.OnSpecialAttacksMenu;
-                @SpecialAttacksMenu.canceled += instance.OnSpecialAttacksMenu;
+                @ShortMenu.started += instance.OnShortMenu;
+                @ShortMenu.performed += instance.OnShortMenu;
+                @ShortMenu.canceled += instance.OnShortMenu;
                 @ThrowButton.started += instance.OnThrowButton;
                 @ThrowButton.performed += instance.OnThrowButton;
                 @ThrowButton.canceled += instance.OnThrowButton;
@@ -544,9 +486,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
-        void OnLongrangeweaponMenu1(InputAction.CallbackContext context);
-        void OnShortrangeweaponMenu(InputAction.CallbackContext context);
-        void OnSpecialAttacksMenu(InputAction.CallbackContext context);
+        void OnShortMenu(InputAction.CallbackContext context);
         void OnThrowButton(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
     }

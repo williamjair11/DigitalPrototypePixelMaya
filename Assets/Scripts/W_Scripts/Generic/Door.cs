@@ -11,20 +11,23 @@ public class Door : MonoBehaviour
     [SerializeField] private UnityEvent _onOpenDoor, _onCloseDoor;
     [SerializeField] private List<Interruptor> _interruptors = new List<Interruptor>();
     
-    private bool _isOpen;
-
-    void Start()
-    {
-        DOTween.Init();
-    }
+    [SerializeField] private bool _isOpen;
 
     public void CheckDoorState()
     {
+        Debug.Log("_interruptors[0]");
+        Debug.Log(_interruptors[0].IsActive);
+        Debug.Log(_interruptors.Count);
         bool interruptorsAreActive = true;
         foreach (var Interruptor in _interruptors)
         {
             
-            if(!Interruptor.IsActive) { interruptorsAreActive = false; break; }
+            
+            if(!Interruptor.IsActive)
+            { 
+                interruptorsAreActive = false; break; 
+                
+            }
         }
         if(interruptorsAreActive && !_isOpen) OpenDoor();
         if(!interruptorsAreActive && _isOpen) CloseDoor();
@@ -32,7 +35,7 @@ public class Door : MonoBehaviour
 
     public void OpenDoor()
     {
-        Debug.Log("ShoudOpen");
+        Debug.Log("ShouldOpen");
         //_rigthDoor.transform.Rotate(Vector3.forward, -90, Space.Self);
         _rigthDoor.transform.DORotate(new Vector3(-90, 90, 0), 2);
         //_leftDoor.transform.Rotate(Vector3.forward, 90, Space.Self);
@@ -43,6 +46,7 @@ public class Door : MonoBehaviour
 
     public void CloseDoor()
     {
+        Debug.Log("ShouldClose");
         //_rigthDoor.transform.Rotate(Vector3.forward, 90, Space.Self);
         _rigthDoor.transform.DORotate(new Vector3(-90, 0, 0), 2);
         //_leftDoor.transform.Rotate(Vector3.forward, -90, Space.Self);

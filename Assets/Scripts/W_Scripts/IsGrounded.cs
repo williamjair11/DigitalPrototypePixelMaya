@@ -17,8 +17,6 @@ public class IsGrounded : MonoBehaviour
     }
     void Update()
     {
-        Debug.DrawRay(transform.position, Vector3.down * _distanceGroundRaycast, Color.red);
-
         ObjectIsGrounded();
         DistanceFromGround();
     }

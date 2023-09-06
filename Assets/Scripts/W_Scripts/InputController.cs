@@ -16,7 +16,7 @@ public class InputController : MonoBehaviour
     _onPressUpSpecialAttackButton,
     _onPressDownInteractButton, 
     _onPressUpInteractButton,
-    _onPressShorTWeaponsInventoryButton,
+    _onPressShorMenuButton,
     _onPressLongWeaponsInventoryButton,
     _onPressSpecialAttackInventoryButton,
     _onPressUpRunButton,
@@ -50,7 +50,7 @@ public class InputController : MonoBehaviour
         _playerInput.Gameplay.Interact.canceled += OnPressUpInteractButton;
         _playerInput.Gameplay.Jump.started += OnPressDownJumpButton;
         _playerInput.Gameplay.Jump.canceled += OnPressUpJumpButton;
-        _playerInput.Gameplay.Inventory.started += OnPressInventoryButton;
+        _playerInput.Gameplay.ShortMenu.started += OnPressShortMenuButton;
         _playerInput.Gameplay.Crouch.started += OnPressDownCrouchButton;
         _playerInput.Gameplay.Crouch.canceled += OnPressUpCrouchButton;
         _playerInput.Gameplay.Pause.started += OnPressPauseButton;
@@ -73,7 +73,7 @@ public class InputController : MonoBehaviour
     void OnPressUpRunButton(InputAction.CallbackContext ctx) => _onPressUpRunButton?.Invoke();
     void OnPressDownJumpButton(InputAction.CallbackContext ctx) => _onPressDownJumpButton?.Invoke();
     void OnPressUpJumpButton(InputAction.CallbackContext ctx) => _onPressUpJumpButton?.Invoke();    
-    void OnPressInventoryButton(InputAction.CallbackContext ctx) => _onPressInventoryButton?.Invoke();
+    void OnPressShortMenuButton(InputAction.CallbackContext ctx) => _onPressShorMenuButton?.Invoke();
     void OnPressDownCrouchButton(InputAction.CallbackContext ctx) => _onPressDownCrouchButton?.Invoke();
     void OnPressUpCrouchButton(InputAction.CallbackContext ctx) => _onPressUpCrouchButton?.Invoke();
     void OnPressPauseButton(InputAction.CallbackContext ctx) => _onPressPauseButton?.Invoke();

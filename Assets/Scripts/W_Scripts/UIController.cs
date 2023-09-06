@@ -4,25 +4,39 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class UIController : MonoBehaviour
 {
+    [SerializeField] EventSystem _eventSystem;
     [SerializeField] private GameObject _objectMessageContainer, _touchControls, _pauseMenu;
     [SerializeField] private GameObject 
     _hud, 
     _interactionMessage, 
     _shortMenu, 
     shortMenuDynamicContainer,
-    _shortMenuItemPrefab;
+    _shortMenuItemPrefab,
+    _shortMenuWorldCanvas,
+    _shortMenuDynamicContainerWorldCanvas;
     [SerializeField] private Image _objectMessageImage, _interactionIcon;
     [SerializeField] TextMeshProUGUI _objectMessageText;
     [SerializeField] private List<InventoryObject> _inventoryObjects = new List<InventoryObject>();
     [SerializeField] Sprite _psIcon, _xboxIcon, _touchIcon;
+    private GameObject _lastShorMenuButtonSelected;
+    [SerializeField] Color _selectedButtonColor;
 
     public bool SetActiveTouchControls
     {
-        get => _touchControls.activeSelf; set => _touchControls.SetActive(value);
+        get => _touchControls.activeSelf; 
+        set 
+        {
+            if(GameManager.Instance.CurrentControlType == ControlType.Touch)
+                _touchControls.SetActive(value);
+            else
+                _touchControls.SetActive(false);
+        } 
     }
+
     public bool SetActiveHud
     {
         get => _hud.activeSelf; set => _hud.SetActive(value);
@@ -30,12 +44,43 @@ public class UIController : MonoBehaviour
 
     public bool SetActivePauseMenu
     {
-        get => _pauseMenu.activeSelf; set => _pauseMenu.SetActive(value);
+        get => _pauseMenu.activeSelf; 
+        set 
+        {
+            _pauseMenu.SetActive(value);
+            if(_pauseMenu.activeSelf) 
+                GameManager.Instance.SetGameState(GameState.Pause);
+            else
+                GameManager.Instance.SetGameState(GameState.InGame);
+        }
     }
 
+    public void SetCurrentSlectedGameObject(GameObject newSelectedObject)
+    {
+        _eventSystem.SetSelectedGameObject(newSelectedObject);
+    }
+
+    public void SetCurrentSelectedShortMenuButtonColor()
+    {
+        if(GameManager.Instance.CurrentGameState == GameState.Pause) return;
+        if(GameManager.Instance.CurrentControlType != ControlType.Touch)
+        {
+            if(_lastShorMenuButtonSelected == null) _lastShorMenuButtonSelected = _eventSystem.currentSelectedGameObject;
+            if(_shortMenuWorldCanvas.activeSelf || _shortMenuDynamicContainerWorldCanvas.activeSelf)
+            {
+                _lastShorMenuButtonSelected.GetComponent<Image>().color = Color.white;   
+                _lastShorMenuButtonSelected = _eventSystem.currentSelectedGameObject;
+                _eventSystem.currentSelectedGameObject.GetComponent<Image>().color = _selectedButtonColor;
+            }
+        }
+    }
     public void ToglePauseMenu()
     {
         _pauseMenu.SetActive(!_pauseMenu.activeSelf);
+        if(_pauseMenu.activeSelf) 
+            GameManager.Instance.SetGameState(GameState.Pause);
+        else
+            GameManager.Instance.SetGameState(GameState.InGame);
     }
 
     public bool SetInteractionMessage
@@ -56,8 +101,20 @@ public class UIController : MonoBehaviour
     { 
         get =>_shortMenu.activeSelf; 
         set {
-                shortMenuDynamicContainer.SetActive(false);
-                _shortMenu.SetActive(!_shortMenu.activeSelf);
+            if(GameManager.Instance.CurrentGameState == GameState.Pause) return;
+                if(GameManager.Instance.CurrentControlType == ControlType.Touch)
+                {
+                    shortMenuDynamicContainer.SetActive(false);
+                    
+                    _shortMenu.SetActive(!_shortMenu.activeSelf);
+                }
+                else
+                {
+                    _shortMenuDynamicContainerWorldCanvas.SetActive(false);
+                    DestroyChildren(_shortMenuDynamicContainerWorldCanvas.transform);
+                    _shortMenuWorldCanvas.SetActive(!_shortMenuWorldCanvas.activeSelf);
+                }
+                
             }
     }
     
@@ -65,27 +122,49 @@ public class UIController : MonoBehaviour
     { 
         get =>shortMenuDynamicContainer.activeSelf; 
         set {
+            if(GameManager.Instance.CurrentGameState == GameState.Pause) return;
+            if(GameManager.Instance.CurrentControlType == ControlType.Touch)
+            {
                 if(shortMenuDynamicContainer.transform.childCount > 0)
                 {
                     _shortMenu.SetActive(false);
                     shortMenuDynamicContainer.SetActive(value);
                 }
             }
+            else
+            {
+                if(_shortMenuDynamicContainerWorldCanvas.transform.childCount > 0)
+                {
+                    _shortMenuWorldCanvas.SetActive(false);
+                    _shortMenuDynamicContainerWorldCanvas.SetActive(value);
+                }
+            }
+                
+            }
     }
 
     public void HideShortMenu()
     {
+        if(GameManager.Instance.CurrentControlType == ControlType.Touch)
         _shortMenu.SetActive(false);
+        else
+        _shortMenuWorldCanvas.SetActive(false);
     }
 
+    public bool ShowingShortMenu()
+    {
+        if(_shortMenuWorldCanvas.activeSelf || _shortMenuDynamicContainerWorldCanvas.activeSelf)
+        return true;
+        else 
+        return false;
+    }
     void Update()
     {
+        SetCurrentSelectedShortMenuButtonColor();
         if(_inventoryObjects.Count > 0 && !_objectMessageContainer.activeSelf) 
         {
             ShowFoundObjectMessage();
         }
-
-        //if(_pauseMenu.activeSelf) GameManager.Instance.setGameState(pause);
     }
 
     public void SetInteractionMessageIcon()
@@ -101,16 +180,18 @@ public class UIController : MonoBehaviour
 
     public void SetShortMenuItems(string type)
     {
-        Debug.Log(type);
+        GameObject DynamicContainer = 
+        GameManager.Instance.CurrentControlType == ControlType.Touch? 
+        shortMenuDynamicContainer : _shortMenuDynamicContainerWorldCanvas;
         ObjectType objType = GetTypeByString(type);
-        if(shortMenuDynamicContainer.transform.childCount > 0)
+        if(DynamicContainer.transform.childCount > 0)
         {
-            DistroyChildren(shortMenuDynamicContainer.transform);
+            DestroyChildren(DynamicContainer.transform);
         }
         List<InventoryObject> objects = GameManager.Instance.playerInventory.GetObjectsByType(objType);
         foreach (InventoryObject invObject in objects)
         {
-            GameObject itemPrefab = Instantiate(_shortMenuItemPrefab, shortMenuDynamicContainer.transform);
+            GameObject itemPrefab = Instantiate(_shortMenuItemPrefab, DynamicContainer.transform);
             itemPrefab.GetComponent<Image>().sprite = invObject.sprite;
             UIInventoryButton inventoryButton = itemPrefab.GetComponent<UIInventoryButton>();
             inventoryButton.objectId = invObject.id;
@@ -137,6 +218,7 @@ public class UIController : MonoBehaviour
         SetActiveTouchControls = false;
         SetActiveHud = false;
         _objectMessageContainer.SetActive(true);
+        GameManager.Instance.SetGameState(GameState.Pause);
     }
 
     public void HideFoundObjectMessage()
@@ -147,9 +229,10 @@ public class UIController : MonoBehaviour
         SetActiveTouchControls = true;
         SetActiveHud = true;
         SetInteractionMessage = false;
+        GameManager.Instance.SetGameState(GameState.InGame);
     }
 
-    public void DistroyChildren(Transform parent)
+    public void DestroyChildren(Transform parent)
     {
         foreach (Transform item in parent)
             {
